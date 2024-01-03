@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -13,6 +15,30 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
+
+        val keystoreFile = project.rootProject.file("local.properties")
+        val properties = Properties()
+        properties.load(keystoreFile.inputStream())
+
+        val mqttHost = properties.getProperty("MQTT_HOST") ?: ""
+        val mqttUsername = properties.getProperty("MQTT_USERNAME") ?: ""
+        val mqttPassword = properties.getProperty("MQTT_PASSWORD") ?: ""
+
+        buildConfigField(
+            type = "String",
+            name = "MQTT_HOST",
+            value = mqttHost
+        )
+        buildConfigField(
+            type = "String",
+            name = "MQTT_USERNAME",
+            value = mqttUsername
+        )
+        buildConfigField(
+            type = "String",
+            name = "MQTT_PASSWORD",
+            value = mqttPassword
+        )
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -38,6 +64,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
@@ -66,4 +93,7 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+    //PAHO MQTT
+    implementation("org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.1.0")
+    implementation("org.eclipse.paho:org.eclipse.paho.android.service:1.1.1")
 }
