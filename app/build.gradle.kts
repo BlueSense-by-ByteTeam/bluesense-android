@@ -96,4 +96,7 @@ dependencies {
     //PAHO MQTT
     implementation("org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.1.0")
     implementation("org.eclipse.paho:org.eclipse.paho.android.service:1.1.1")
+    //QR Scanner
+    implementation("com.google.android.gms:play-services-code-scanner:16.1.0")
+
 }
