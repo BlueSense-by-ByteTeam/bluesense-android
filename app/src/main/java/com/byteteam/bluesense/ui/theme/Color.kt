@@ -3,6 +3,7 @@ package com.byteteam.bluesense.ui.theme
 import androidx.compose.ui.graphics.Color
 
 val PrimaryBlue = Color(0xFF3E00FF)
+val RedDanger = Color(0xFFDB222A)
 val PurpleGrey80 = Color(0xFFCCC2DC)
 val Pink80 = Color(0xFFEFB8C8)
 
