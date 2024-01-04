@@ -23,19 +23,17 @@ import androidx.compose.ui.unit.dp
 import com.byteteam.bluesense.ui.theme.BlueSenseTheme
 
 @Composable
-fun DotButtons(callbackOnTap: (Int) -> Unit = {},  modifier: Modifier = Modifier){
+fun DotButtons(activeIndex: Int = 0, callbackOnTap: (Int) -> Unit = {},  modifier: Modifier = Modifier){
     val dotColor = Color(0xFFD9D9D9)
-    var activeIndex by remember { mutableIntStateOf(0) }
 
-    LazyRow(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+    LazyRow(horizontalArrangement = Arrangement.spacedBy(12.dp), modifier = modifier) {
         items(4){
             Box(modifier = Modifier
                 .size(10.dp)
                 .clip(CircleShape)
                 .background(if(activeIndex == it) Color.Black else dotColor)
                 .clickable {
-                    activeIndex = it
-                    callbackOnTap(activeIndex)
+                    callbackOnTap(it)
                 }
             )
         }
