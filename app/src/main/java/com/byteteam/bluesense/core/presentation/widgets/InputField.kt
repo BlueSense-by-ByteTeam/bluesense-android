@@ -7,6 +7,9 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -40,6 +43,11 @@ fun InputField(
 ) {
     var text by remember { mutableStateOf(TextFieldValue("")) }
     var isSecure by remember { mutableStateOf(keyboardType == KeyboardType.Password) }
+    val icon = if (isSecure) Icons.Filled.Visibility
+    else Icons.Outlined.VisibilityOff
+
+    val description = if (isSecure) "Hide password" else "Show password"
+
     Column {
         if (outlined) {
 
@@ -54,11 +62,6 @@ fun InputField(
                     text = it
                 },
                 trailingIcon = {
-                    val icon = if (isSecure) Icons.Filled.KeyboardArrowDown
-                    else Icons.Filled.KeyboardArrowUp
-
-                    val description = if (isSecure) "Hide password" else "Show password"
-
                     if (keyboardType == KeyboardType.Password)
                         IconButton(onClick = { isSecure = !isSecure }) {
                             Icon(imageVector = icon, description)
@@ -76,11 +79,6 @@ fun InputField(
                 },
                 label = { Text(text = label) },
                 trailingIcon = {
-                    val icon = if (isSecure) Icons.Filled.KeyboardArrowDown
-                    else Icons.Filled.KeyboardArrowUp
-
-                    val description = if (isSecure) "Hide password" else "Show password"
-
                     if (keyboardType == KeyboardType.Password)
                         IconButton(onClick = { isSecure = !isSecure }) {
                             Icon(imageVector = icon, description)

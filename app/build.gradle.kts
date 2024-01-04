@@ -77,6 +77,8 @@ android {
 }
 
 dependencies {
+    val nav_version = "2.7.6"
+    val compose_version =  "1.5.1"
 
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
@@ -99,5 +101,12 @@ dependencies {
     //QR Scanner
     implementation("com.google.android.gms:play-services-code-scanner:16.1.0")
     //Icon
-    implementation("androidx.compose.material:material-icons-extended:1.8.1")
+    implementation("androidx.compose.material:material-icons-extended:$compose_version")
+    //Navigation
+    implementation("androidx.navigation:navigation-compose:$nav_version")
+    //Retrofit
+    implementation("com.google.code.gson:gson:2.6.2")
+//    implementation("com.squareup.retrofit2:converter-gson:2.1.0")
+//    implementation("com.squareup.okhttp3:logging-interceptor:3.4.1")
+//    implementation("com.squareup.okhttp3:okhttps:3.4.1")
 }
