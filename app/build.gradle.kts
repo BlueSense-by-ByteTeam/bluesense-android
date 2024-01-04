@@ -98,5 +98,6 @@ dependencies {
     implementation("org.eclipse.paho:org.eclipse.paho.android.service:1.1.1")
     //QR Scanner
     implementation("com.google.android.gms:play-services-code-scanner:16.1.0")
-
+    //Icon
+    implementation("androidx.compose.material:material-icons-extended:1.8.1")
 }
