@@ -13,11 +13,13 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -53,21 +55,25 @@ fun OnBoardScreen(modifier: Modifier = Modifier){
     fun nextPage(){
         coroutineScope.launch {
             // Call scroll to on pagerState
-            if(currentPageIndex < onBoardPageContents.size) {
-                currentPageIndex += 1
-                pagerState.animateScrollToPage(currentPageIndex)
+            if(pagerState.currentPage < onBoardPageContents.size) {
+                pagerState.animateScrollToPage(pagerState.currentPage + 1)
             }
         }
     }
+
+//    LaunchedEffect(pagerState) {
+//        // Collect from the a snapshotFlow reading the currentPage
+//        snapshotFlow { pagerState.currentPage }.collect { page ->
+//            currentPageIndex = page
+//        }
+//    }
 
     Box(modifier.fillMaxSize()) {
         HorizontalPager(state = pagerState) { page ->
             // Our page content
             OnBoardContent(onBoardPageContents[page])
         }
-        DotButtons(activeIndex = currentPageIndex, callbackOnTap = {index ->  coroutineScope.launch {
-            // Call scroll to on pagerState
-            currentPageIndex = index
+        DotButtons(activeIndex = pagerState.currentPage, callbackOnTap = {index ->  coroutineScope.launch {
             pagerState.animateScrollToPage(index)
         }},  modifier = Modifier
             .align(Alignment.BottomCenter)
