@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.byteteam.bluesense.core.helper.MqttHandler
 import com.byteteam.bluesense.core.presentation.views.device.scan.ScanViewModel
 import com.byteteam.bluesense.ui.theme.BlueSenseTheme
@@ -38,7 +39,7 @@ class MainActivity : ComponentActivity() {
     private val scanViewModel: ScanViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        installSplashScreen()
 
         val mqttConnectOptions = MqttConnectOptions()
         mqttConnectOptions.apply {

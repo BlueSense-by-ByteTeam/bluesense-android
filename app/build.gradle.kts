@@ -104,9 +104,12 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended:$compose_version")
     //Navigation
     implementation("androidx.navigation:navigation-compose:$nav_version")
+    //Splash screen
+    implementation("androidx.core:core-splashscreen:1.0.0-beta02")
+
     //Retrofit
     implementation("com.google.code.gson:gson:2.6.2")
-//    implementation("com.squareup.retrofit2:converter-gson:2.1.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.1.0")
 //    implementation("com.squareup.okhttp3:logging-interceptor:3.4.1")
 //    implementation("com.squareup.okhttp3:okhttps:3.4.1")
 }

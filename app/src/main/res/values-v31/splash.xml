@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.BlueSense.Splash" parent="Theme.SplashScreen">
+        <item name="android:windowSplashScreenBackground">#FFFFFF</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/bluesense_logo_splash</item>
+        <item name="postSplashScreenTheme">@style/Theme.BlueSense</item>
+    </style>
+</resources>

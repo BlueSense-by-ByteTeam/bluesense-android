@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="Theme.BlueSense.Splash" parent="Theme.SplashScreen">
+        <item name="android:windowSplashScreenBackground" tools:ignore="NewApi">#000000</item>
+        <item name="android:windowSplashScreenAnimatedIcon" tools:ignore="NewApi">@drawable/splash_ic</item>
+        <item name="android:windowSplashScreenIconBackgroundColor" tools:ignore="NewApi">#252525</item>
+        <item name="postSplashScreenTheme">@style/Theme.SplashScreen</item>
+    </style>
+</resources>
