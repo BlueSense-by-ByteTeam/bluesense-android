@@ -19,6 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.byteteam.bluesense.core.helper.MqttHandler
 import com.byteteam.bluesense.core.presentation.views.device.scan.ScanViewModel
+import com.byteteam.bluesense.core.presentation.views.signup.SignupScreen
 import com.byteteam.bluesense.ui.theme.BlueSenseTheme
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
@@ -71,16 +72,17 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Column {
-
-                        Greeting("Android")
-                        Button(onClick = {
-                            scanViewModel.startScan(context)
-
-                        }) {
-                            Text(text = "Start scan qr")
-                        }
-                    }
+                    SignupScreen()
+//                    Column {
+//
+//                        Greeting("Android")
+//                        Button(onClick = {
+//                            scanViewModel.startScan(context)
+//
+//                        }) {
+//                            Text(text = "Start scan qr")
+//                        }
+//                    }
                 }
             }
         }

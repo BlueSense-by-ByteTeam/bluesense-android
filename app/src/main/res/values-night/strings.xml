@@ -7,4 +7,11 @@
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="sign_in">Masuk</string>
+    <string name="signup_now">Daftar Sekarang</string>
+    <string name="signup_w_google">Daftar dengan Google</string>
+    <string name="full_name">Nama Lengkap</string>
+    <string name="password_confirm">Konfirmasi Password</string>
+    <string name="already_have_account">Sudah punya akun?</string>
+    <string name="signin_now">Masuk sekarang</string>
+    <string name="signup_desc">Daftar sekarang dan mulailah deteksi kebersihan air secara real-time bersama Bluesense!</string>
 </resources>

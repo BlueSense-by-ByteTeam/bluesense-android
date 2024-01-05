@@ -33,7 +33,7 @@ fun SigninScreenContent(modifier: Modifier = Modifier){
             ),
             modifier = Modifier.padding(bottom = 60.dp)
         )
-        SigninForm()
+        SignupForm()
         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
             Text(text = "Belum punya akun?")
             Text(text = "Buat sekarang", color = MaterialTheme.colorScheme.primary)
