@@ -35,8 +35,8 @@ fun SigninScreenContent(modifier: Modifier = Modifier){
         )
         SignupForm()
         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-            Text(text = "Belum punya akun?")
-            Text(text = "Buat sekarang", color = MaterialTheme.colorScheme.primary)
+            Text(text = stringResource(R.string.dont_have_account))
+            Text(text = stringResource(R.string.create_now), color = MaterialTheme.colorScheme.primary)
         }
     }
 }

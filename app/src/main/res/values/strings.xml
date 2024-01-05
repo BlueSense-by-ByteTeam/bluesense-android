@@ -14,4 +14,16 @@
     <string name="already_have_account">Sudah punya akun?</string>
     <string name="signin_now">Masuk sekarang</string>
     <string name="signup_desc">Daftar sekarang dan mulailah deteksi kebersihan air secara real-time bersama Bluesense!</string>
+    <string name="term_privacy_opening">Dengan membuat akun maka anda menyetujui</string>
+    <string name="usage_policy">" Kebijakan Penggunaan "</string>
+    <string name="and">dan</string>
+    <string name="term">term</string>
+    <string name="privacy">privacy</string>
+    <string name="privacy_policy">" Kebijakan Privasi "</string>
+    <string name="us">kami.</string>
+    <string name="dont_have_account">Belum punya akun?</string>
+    <string name="create_now">Buat sekarang</string>
+    <string name="forgot_password">Lupa Password?</string>
+    <string name="get_started_image">get started image</string>
+    <string name="enter">Masuk</string>
 </resources>

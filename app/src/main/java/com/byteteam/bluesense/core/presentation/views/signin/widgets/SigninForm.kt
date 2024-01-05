@@ -45,10 +45,12 @@ fun SignupForm(){
             Text(text = stringResource(R.string.or))
             InputField(label = stringResource(R.string.email), outlined = true, modifier = Modifier.fillMaxWidth(), keyboardType = KeyboardType.Email)
             InputField(label = stringResource(R.string.password), outlined = true, modifier = Modifier.fillMaxWidth(), keyboardType = KeyboardType.Password)
-            Text(text = "Lupa Password?", color = MaterialTheme.colorScheme.primary, modifier = Modifier.align(
+            Text(text = stringResource(R.string.forgot_password), color = MaterialTheme.colorScheme.primary, modifier = Modifier.align(
                 Alignment.End))
         }
-        Button(onClick = { /*TODO*/ }, modifier = Modifier.fillMaxWidth().padding(bottom = 12.dp), shape = RoundedCornerShape(12.dp)) {
+        Button(onClick = { /*TODO*/ }, modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 12.dp), shape = RoundedCornerShape(12.dp)) {
             Text(
                 text = stringResource(R.string.sign_in),
                 color = MaterialTheme.colorScheme.onPrimary

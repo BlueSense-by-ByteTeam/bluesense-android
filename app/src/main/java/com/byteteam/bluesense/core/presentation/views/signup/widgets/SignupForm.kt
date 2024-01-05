@@ -19,11 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.byteteam.bluesense.R
 import com.byteteam.bluesense.core.presentation.widgets.InputField
@@ -31,47 +27,7 @@ import com.byteteam.bluesense.core.presentation.widgets.InputField
 @Composable
 fun SignupForm() {
     val context = LocalContext.current
-    val termAndPrivacyText = buildAnnotatedString {
-        withStyle(
-            SpanStyle(
-                color = MaterialTheme.colorScheme.onBackground
-            )
-        ) {
-            append("Dengan membuat akun maka anda menyetujui")
-        }
-        pushStringAnnotation(tag = "term", annotation = "term")
-        withStyle(
-            SpanStyle(
-                color = MaterialTheme.colorScheme.primary
-            )
-        ) {
-            append(" Kebijakan Penggunaan ")
-        }
-        pop()
-        withStyle(
-            SpanStyle(
-                color = MaterialTheme.colorScheme.onBackground
-            )
-        ) {
-            append("dan")
-        }
-        pushStringAnnotation(tag = "privacy", annotation = "privacy")
-        withStyle(
-            SpanStyle(
-                color = MaterialTheme.colorScheme.primary
-            )
-        ) {
-            append(" Kebijakan Privasi ")
-        }
-        pop()
-        withStyle(
-            SpanStyle(
-                color = MaterialTheme.colorScheme.onBackground
-            )
-        ) {
-            append("kami.")
-        }
-    }
+
     Column {
         Column(
             modifier = Modifier.padding(bottom = 24.dp),
@@ -103,25 +59,14 @@ fun SignupForm() {
                 keyboardType = KeyboardType.Password
             )
         }
-        ClickableText(
-            text = termAndPrivacyText, onClick = { offset ->
-                termAndPrivacyText.getStringAnnotations(tag = "term", start = offset, end = offset)
-                    .firstOrNull()
-                    ?.let {
-                        // on click operation here
-                        Toast.makeText(context, "term", Toast.LENGTH_SHORT).show()
-                    }
-                termAndPrivacyText.getStringAnnotations(
-                    tag = "privacy",
-                    start = offset,
-                    end = offset
-                ).firstOrNull()
-                    ?.let {
-                        // on click operation here
-                        Toast.makeText(context, "privacy", Toast.LENGTH_SHORT).show()
-                    }
+        TermAndPrivacyText(
+            callbackOnTapTerm =
+            {
+                Toast.makeText(context, "term", Toast.LENGTH_SHORT).show()
             },
-            style = MaterialTheme.typography.bodyLarge
+            callbackOnTapPrivacy = {
+                Toast.makeText(context, "privacy", Toast.LENGTH_SHORT).show()
+            },
         )
         Button(
             onClick = { /*TODO*/ }, modifier = Modifier
