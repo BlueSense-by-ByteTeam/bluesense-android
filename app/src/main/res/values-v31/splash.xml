@@ -3,7 +3,7 @@
 
     <style name="Theme.BlueSense.Splash" parent="Theme.SplashScreen">
         <item name="android:windowSplashScreenBackground">#FFFFFF</item>
-        <item name="android:windowSplashScreenAnimatedIcon">@drawable/bluesense_logo_splash</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/bluesense_logo_with_text</item>
         <item name="postSplashScreenTheme">@style/Theme.BlueSense</item>
     </style>
 </resources>

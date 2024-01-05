@@ -50,9 +50,9 @@ fun InputField(
 
     Column {
         if (outlined) {
-
             OutlinedTextField(
                 value = text,
+                modifier = modifier,
                 visualTransformation = if (!isSecure) VisualTransformation.None else PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
                 shape = RoundedCornerShape(12.dp),
@@ -71,6 +71,7 @@ fun InputField(
         } else {
             TextField(
                 value = text,
+                modifier = modifier,
                 visualTransformation = if (!isSecure) VisualTransformation.None else PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
                 isError = errorMessage != null,

@@ -1,5 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">BlueSense</string>
     <string name="bluesense_logo_with_text">bluesense logo with text</string>
     <string name="google_ic">google ic</string>
     <string name="signin_w_google">Masuk dengan Google</string>
