@@ -1,24 +1,24 @@
-package com.byteteam.bluesense.core.data.network.response.local_address_api
+package com.byteteam.bluesense.core.data.remote.network.response.local_address_api
 
 import kotlinx.parcelize.Parcelize
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 
 @Parcelize
-data class GetProvinces(
+data class GetCities(
 
-	@field:SerializedName("result")
-	val result: List<ResultItem?>? = null,
+    @field:SerializedName("result")
+	val result: List<ProvinceResultItem?>? = null,
 
-	@field:SerializedName("message")
+    @field:SerializedName("message")
 	val message: String? = null,
 
-	@field:SerializedName("status")
+    @field:SerializedName("status")
 	val status: Int? = null
 ) : Parcelable
 
 @Parcelize
-data class ResultItem(
+data class CityResultItem(
 
 	@field:SerializedName("id")
 	val id: String? = null,

@@ -35,4 +35,11 @@
     <string name="city">Kota/Kabupaten</string>
     <string name="province">Provinsi</string>
     <string name="id_device">ID Alat</string>
+    <string name="home_text">Bagaimana kualitas airmu hari ini?</string>
+    <string name="device_image">device image</string>
+    <string name="add_icon">add icon</string>
+    <string name="device">Alat</string>
+    <string name="no_device_added">Belum ada alat terpasang</string>
+    <string name="elevate_your_water_quality">Tingkatkan kebersihan airmu!</string>
+    <string name="filter_product">filter product</string>
 </resources>
