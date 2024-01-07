@@ -1,0 +1,55 @@
+package com.byteteam.bluesense.core.presentation.views.device.add
+
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.byteteam.bluesense.R
+import com.byteteam.bluesense.ui.theme.BlueSenseTheme
+
+@Composable
+fun AddScreen(modifier: Modifier = Modifier){
+    Column(modifier.fillMaxSize().padding(horizontal = 24.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+        Image(painter = painterResource(id = R.drawable.dummy_device_product), contentDescription = stringResource(
+            id = R.string.device_image
+        ))
+        Text(text = stringResource(R.string.detect_water_quality), textAlign = TextAlign.Center,
+            style = MaterialTheme.typography.titleLarge,
+            fontWeight = FontWeight.Bold, modifier = Modifier.padding(bottom=12.dp))
+        Text(stringResource(R.string.add_device_desc_2), textAlign = TextAlign.Center, modifier = Modifier.padding(bottom=24.dp))
+        Button(onClick = { /*TODO*/ }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp)) {
+            Text(text = stringResource(id = R.string.add_device))
+        }
+        OutlinedButton(onClick = { /*TODO*/ }, modifier = Modifier.fillMaxWidth(), border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.primary), shape = RoundedCornerShape(12.dp)) {
+            Text(text = stringResource(R.string.beli_sekarang))
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun Preview(){
+    BlueSenseTheme {
+        Surface {
+            AddScreen()
+        }
+    }
+}

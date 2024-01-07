@@ -1,4 +1,4 @@
-package com.byteteam.bluesense.core.presentation.views.device.add
+package com.byteteam.bluesense.core.presentation.views.device.add_form
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,7 +14,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Devices.PIXEL_4
@@ -26,7 +25,7 @@ import com.byteteam.bluesense.core.presentation.widgets.InputField
 import com.byteteam.bluesense.ui.theme.BlueSenseTheme
 
 @Composable
-fun AddDeviceScreen(){
+fun AddDeviceFormScreen(){
     Column(
         Modifier
             .fillMaxWidth()
@@ -58,7 +57,7 @@ fun AddDeviceScreen(){
 private fun Preview(){
     BlueSenseTheme {
         Surface {
-            AddDeviceScreen()
+            AddDeviceFormScreen()
         }
     }
 }

@@ -42,4 +42,9 @@
     <string name="no_device_added">Belum ada alat terpasang</string>
     <string name="elevate_your_water_quality">Tingkatkan kebersihan airmu!</string>
     <string name="filter_product">filter product</string>
+    <string name="bluesense">Bluesense</string>
+    <string name="icon_notification">icon notification</string>
+    <string name="detect_water_quality">Deteksi Kebersihan Air</string>
+    <string name="add_device_desc_2">Optimalkan kualitas air di rumahmu! Gunakan alat deteksi kebersihan air terbaik dari Bluesense.</string>
+    <string name="beli_sekarang">Beli Sekarang</string>
 </resources>
