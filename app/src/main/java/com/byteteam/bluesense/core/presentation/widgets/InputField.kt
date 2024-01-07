@@ -30,6 +30,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.byteteam.bluesense.core.presentation.tokens.TextFieldStyle
 import com.byteteam.bluesense.ui.theme.BlueSenseTheme
 import com.byteteam.bluesense.ui.theme.RedDanger
 
@@ -78,6 +79,7 @@ fun InputField(
                 onValueChange = {
                     text = it
                 },
+                colors = TextFieldStyle.backgroundSurface(),
                 label = { Text(text = label) },
                 trailingIcon = {
                     if (keyboardType == KeyboardType.Password)

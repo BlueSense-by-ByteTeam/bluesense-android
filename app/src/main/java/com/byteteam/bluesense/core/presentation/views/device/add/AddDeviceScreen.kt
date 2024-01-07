@@ -21,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Devices.PIXEL_4
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.byteteam.bluesense.R
+import com.byteteam.bluesense.core.presentation.widgets.DropDownInput
 import com.byteteam.bluesense.core.presentation.widgets.InputField
 import com.byteteam.bluesense.ui.theme.BlueSenseTheme
 
@@ -44,6 +45,7 @@ fun AddDeviceScreen(){
             InputField(label = stringResource(R.string.district), modifier = Modifier.fillMaxWidth())
             InputField(label = stringResource(R.string.address), modifier = Modifier.fillMaxWidth())
             InputField(label = stringResource(R.string.water_source), modifier = Modifier.fillMaxWidth())
+            DropDownInput(label = "test", modifier = Modifier.fillMaxWidth())
         }
         Button(onClick = { /*TODO*/ }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp)) {
             Text(text = stringResource(R.string.add_device))
