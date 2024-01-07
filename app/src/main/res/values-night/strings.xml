@@ -47,4 +47,6 @@
     <string name="detect_water_quality">Deteksi Kebersihan Air</string>
     <string name="add_device_desc_2">Optimalkan kualitas air di rumahmu! Gunakan alat deteksi kebersihan air terbaik dari Bluesense.</string>
     <string name="beli_sekarang">Beli Sekarang</string>
+    <string name="delete_icon">delete icon</string>
+    <string name="back_icon">back icon</string>
 </resources>

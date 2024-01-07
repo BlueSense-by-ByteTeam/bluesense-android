@@ -25,9 +25,22 @@
         <State />
       </entry>
       <entry key="Preview (2)">
-        <State />
+        <State>
+          <targetSelectedWithDropDown>
+            <Target>
+              <type value="QUICK_BOOT_TARGET" />
+              <deviceKey>
+                <Key>
+                  <type value="VIRTUAL_DEVICE_PATH" />
+                  <value value="C:\Users\alfau\.android\avd\Resizable_Experimental_API_34.avd" />
+                </Key>
+              </deviceKey>
+            </Target>
+          </targetSelectedWithDropDown>
+          <timeTargetWasSelectedWithDropDown value="2024-01-07T08:29:29.833527Z" />
+        </State>
       </entry>
-      <entry key="Preview (5)">
+      <entry key="Preview (3)">
         <State />
       </entry>
       <entry key="app">
