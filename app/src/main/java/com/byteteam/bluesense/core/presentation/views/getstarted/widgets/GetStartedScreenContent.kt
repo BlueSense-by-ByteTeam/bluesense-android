@@ -20,18 +20,23 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.byteteam.bluesense.R
+import com.byteteam.bluesense.core.helper.Screens
 
 @Composable
-fun GetStartedScreenContent(modifier: Modifier = Modifier){
-    Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center, modifier = modifier.fillMaxSize().padding(horizontal = 24.dp)) {
+fun GetStartedScreenContent(navHostController: NavHostController = rememberNavController(), modifier: Modifier = Modifier){
+    Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center, modifier = modifier
+        .fillMaxSize()
+        .padding(horizontal = 24.dp)) {
         Image(painter = painterResource(id = R.drawable.hydratation), contentDescription = stringResource(
             R.string.get_started_image), modifier = Modifier.size(336.dp))
-        Text(text = "Ayo mulai cek kualitas airmu dengan Bluesense sekarang!", modifier = Modifier.padding(top = 4.dp, bottom = 48.dp), style = MaterialTheme.typography.titleLarge, textAlign = TextAlign.Center)
-        Button(onClick = { /*TODO*/ }, shape = RoundedCornerShape(12.dp), modifier = Modifier.fillMaxWidth()) {
+        Text(text = stringResource(R.string.lets_check_your_water_with_bluesense), modifier = Modifier.padding(top = 4.dp, bottom = 48.dp), style = MaterialTheme.typography.titleLarge, textAlign = TextAlign.Center)
+        Button(onClick = { navHostController.navigate(Screens.SignIn.route) }, shape = RoundedCornerShape(12.dp), modifier = Modifier.fillMaxWidth()) {
             Text(text = stringResource(R.string.enter))
         }
-        OutlinedButton(onClick = { /*TODO*/ }, shape = RoundedCornerShape(12.dp), modifier = Modifier.fillMaxWidth(), border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.primary)) {
+        OutlinedButton(onClick = { navHostController.navigate(Screens.SignUp.route) }, shape = RoundedCornerShape(12.dp), modifier = Modifier.fillMaxWidth(), border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.primary)) {
             Text(text = stringResource(R.string.dont_have_account))
         }
     }

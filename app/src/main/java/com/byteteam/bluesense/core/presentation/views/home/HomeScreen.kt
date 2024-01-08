@@ -1,5 +1,6 @@
 package com.byteteam.bluesense.core.presentation.views.home
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -25,14 +26,40 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.byteteam.bluesense.BuildConfig
 import com.byteteam.bluesense.R
+import com.byteteam.bluesense.core.helper.MqttHandler
 import com.byteteam.bluesense.core.presentation.views.home.widgets.DeviceInfoCard
 import com.byteteam.bluesense.core.presentation.views.home.widgets.HomeTopBar
 import com.byteteam.bluesense.core.presentation.views.home.widgets.WaterFilterBanner
 import com.byteteam.bluesense.ui.theme.BlueSenseTheme
+import org.eclipse.paho.client.mqttv3.MqttConnectOptions
 
 @Composable
 fun HomeScreen(modifier: Modifier = Modifier) {
+
+    val mqttConnectOptions = MqttConnectOptions()
+    mqttConnectOptions.apply {
+        this.userName = BuildConfig.MQTT_USERNAME
+        this.password = BuildConfig.MQTT_PASSWORD.toCharArray()
+    }
+
+    val mqttAndroidClient = MqttHandler()
+
+    mqttAndroidClient.connect(
+        BuildConfig.MQTT_HOST,
+        "android-client-01",
+        mqttConnectOptions
+    )
+    mqttAndroidClient.subscribe("esp32/dev")
+
+    mqttAndroidClient.listen(callbackOnMessage = { topic, message ->
+        Log.d(
+            "callback success mqtt",
+            "$topic message: $message"
+        )
+    })
+
     Scaffold(topBar = { HomeTopBar() }) {
         Column(
             modifier

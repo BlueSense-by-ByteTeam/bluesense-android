@@ -3,13 +3,16 @@ package com.byteteam.bluesense.core.presentation.views.getstarted
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.byteteam.bluesense.core.presentation.views.getstarted.widgets.GetStartedScreenContent
 
 @Composable
 fun GetStartedScreen(
+    navHostController: NavHostController = rememberNavController(),
     modifier: Modifier = Modifier
 ){
-    GetStartedScreenContent(modifier)
+    GetStartedScreenContent(navHostController=navHostController, modifier=modifier)
 }
 
 @Preview

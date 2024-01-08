@@ -1,5 +1,6 @@
 package com.byteteam.bluesense.core.presentation.views.onboard
 
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -25,7 +26,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.byteteam.bluesense.R
+import com.byteteam.bluesense.core.helper.Screens
 import com.byteteam.bluesense.core.presentation.views.onboard.common.OnBoardPageContent
 import com.byteteam.bluesense.core.presentation.views.onboard.widgets.DotButtons
 import com.byteteam.bluesense.core.presentation.views.onboard.widgets.OnBoardContent
@@ -34,7 +38,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun OnBoardScreen(modifier: Modifier = Modifier){
+fun OnBoardScreen(navHostController: NavHostController = rememberNavController(), modifier: Modifier = Modifier){
     val onBoardPageContents = listOf(
         OnBoardPageContent(
             imagePainter = painterResource(id = R.drawable.water_drop_rafiki_1), desc ="page-1", textBody =  "Bluesense akan memberikan informasi real-time untuk memastikan air di sekitarmu selalu bersih dan aman.", title = "Mulai deteksi kualitas air secara langsung!"
@@ -61,12 +65,8 @@ fun OnBoardScreen(modifier: Modifier = Modifier){
         }
     }
 
-//    LaunchedEffect(pagerState) {
-//        // Collect from the a snapshotFlow reading the currentPage
-//        snapshotFlow { pagerState.currentPage }.collect { page ->
-//            currentPageIndex = page
-//        }
-//    }
+    fun navigateToGetStared() =
+        navHostController.navigate(Screens.GetStarted.route)
 
     Box(modifier.fillMaxSize()) {
         HorizontalPager(state = pagerState) { page ->
@@ -83,8 +83,9 @@ fun OnBoardScreen(modifier: Modifier = Modifier){
             .fillMaxWidth()
             .align(Alignment.BottomCenter)
             .padding(bottom = 36.dp, start = 24.dp, end = 24.dp)) {
-            Text(text = "Lewati")
-            Text(text = "Lanjut", modifier = Modifier.clickable { nextPage() })
+            Text(text = "Lewati", modifier = Modifier.clickable { navigateToGetStared() })
+            Text(text = "Lanjut", modifier = Modifier.clickable {
+                if(pagerState.currentPage == onBoardPageContents.size-1)  navigateToGetStared() else  nextPage() })
         }
     }
 }

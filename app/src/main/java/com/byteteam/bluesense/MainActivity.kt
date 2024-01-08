@@ -13,12 +13,23 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import com.byteteam.bluesense.core.helper.MqttHandler
+import com.byteteam.bluesense.core.helper.Screens
 import com.byteteam.bluesense.core.presentation.views.device.scan.ScanViewModel
+import com.byteteam.bluesense.core.presentation.views.getstarted.GetStartedScreen
+import com.byteteam.bluesense.core.presentation.views.home.HomeScreen
+import com.byteteam.bluesense.core.presentation.views.onboard.OnBoardScreen
+import com.byteteam.bluesense.core.presentation.views.signin.SigninScreen
 import com.byteteam.bluesense.core.presentation.views.signup.SignupScreen
 import com.byteteam.bluesense.core.presentation.views.store.detail.DetailProductScreen
 import com.byteteam.bluesense.ui.theme.BlueSenseTheme
@@ -43,48 +54,32 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         installSplashScreen()
 
-        val mqttConnectOptions = MqttConnectOptions()
-        mqttConnectOptions.apply {
-            this.userName = BuildConfig.MQTT_USERNAME
-            this.password = BuildConfig.MQTT_PASSWORD.toCharArray()
-        }
-
-        val mqttAndroidClient = MqttHandler()
-
-        mqttAndroidClient.connect(
-            BuildConfig.MQTT_HOST,
-            "android-client-01",
-            mqttConnectOptions
-        )
-        mqttAndroidClient.subscribe("esp32/dev")
-
-        mqttAndroidClient.listen(callbackOnMessage = { topic, message ->
-            Log.d(
-                "callback success mqtt",
-                "$topic message: $message"
-            )
-        })
-
         setContent {
-            val context = LocalContext.current
+            val navController: NavHostController = rememberNavController()
+            val navBackStackEntry by navController.currentBackStackEntryAsState()
 
             BlueSenseTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-//                    SignupScreen()
-                    DetailProductScreen()
-//                    Column {
-//
-//                        Greeting("Android")
-//                        Button(onClick = {
-//                            scanViewModel.startScan(context)
-//
-//                        }) {
-//                            Text(text = "Start scan qr")
-//                        }
-//                    }
+                    NavHost(startDestination = Screens.OnBoarding.route, navController = navController){
+                        composable(Screens.OnBoarding.route){
+                            OnBoardScreen(navController)
+                        }
+                        composable(Screens.GetStarted.route){
+                            GetStartedScreen(navController)
+                        }
+                        composable(Screens.SignIn.route){
+                            SigninScreen()
+                        }
+                        composable(Screens.SignUp.route){
+                            SignupScreen()
+                        }
+                        composable(Screens.Home.route){
+                            HomeScreen()
+                        }
+                    }
                 }
             }
         }

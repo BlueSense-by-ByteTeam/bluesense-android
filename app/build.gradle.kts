@@ -4,6 +4,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("kotlin-parcelize")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -78,6 +79,7 @@ android {
 }
 
 dependencies {
+    implementation("com.google.firebase:firebase-auth:22.3.0")
     val nav_version = "2.7.6"
     val compose_version =  "1.5.1"
     val vico = "1.13.1"
