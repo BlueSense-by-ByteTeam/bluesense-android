@@ -11,6 +11,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.byteteam.bluesense.core.presentation.tokens.SortData
 import com.byteteam.bluesense.core.presentation.tokens.SortDateLog
@@ -29,7 +30,7 @@ fun OptionSortDateTemplate(sortDates: Map<String, SortDateLog>, selectedDate: So
             ) {
                 Text(
                     text = it,
-                    color = if (selectedDate == sortDates[it]) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.primary
+                    color = if (selectedDate == sortDates[it]) Color.White else MaterialTheme.colorScheme.primary
                 )
             }
         }

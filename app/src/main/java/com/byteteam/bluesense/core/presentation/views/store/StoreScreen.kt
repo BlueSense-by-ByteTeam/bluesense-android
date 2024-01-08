@@ -42,6 +42,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.byteteam.bluesense.R
 import com.byteteam.bluesense.core.presentation.views.store.widgets.BannerFilterDevice
+import com.byteteam.bluesense.core.presentation.views.store.widgets.StarRating
 import com.byteteam.bluesense.ui.theme.BlueSenseTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -123,6 +124,7 @@ fun StoreScreen() {
                                     ),
                                     fontWeight = FontWeight.Bold
                                 )
+                                StarRating(rating = 3.9)
                             }
                         }
                     }

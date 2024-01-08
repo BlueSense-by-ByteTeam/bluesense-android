@@ -70,7 +70,6 @@ fun StatisticScreen(modifier: Modifier = Modifier) {
 
 fun getRandomEntries() = List(4) { entryOf(it, Random.nextFloat() * 16f) }
 
-
 @Preview
 @Composable
 private fun PreviewStatisticScreen() {

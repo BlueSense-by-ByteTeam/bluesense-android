@@ -2,9 +2,6 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="Preview (1)">
-        <State />
-      </entry>
       <entry key="Preview (2)">
         <State>
           <targetSelectedWithDropDown>
@@ -24,8 +21,22 @@
       <entry key="Preview (3)">
         <State />
       </entry>
+      <entry key="PreviewStarRating">
+        <State />
+      </entry>
       <entry key="PreviewStatisticScreen">
         <State>
+          <runningDeviceTargetSelectedWithDropDown>
+            <Target>
+              <type value="RUNNING_DEVICE_TARGET" />
+              <deviceKey>
+                <Key>
+                  <type value="VIRTUAL_DEVICE_PATH" />
+                  <value value="C:\Users\alfau\.android\avd\Resizable_Experimental_API_34.avd" />
+                </Key>
+              </deviceKey>
+            </Target>
+          </runningDeviceTargetSelectedWithDropDown>
           <targetSelectedWithDropDown>
             <Target>
               <type value="QUICK_BOOT_TARGET" />
@@ -37,7 +48,7 @@
               </deviceKey>
             </Target>
           </targetSelectedWithDropDown>
-          <timeTargetWasSelectedWithDropDown value="2024-01-07T22:44:53.491706600Z" />
+          <timeTargetWasSelectedWithDropDown value="2024-01-08T02:00:04.141309Z" />
         </State>
       </entry>
       <entry key="PreviewStoreScreen">
