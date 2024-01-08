@@ -49,4 +49,16 @@
     <string name="beli_sekarang">Beli Sekarang</string>
     <string name="delete_icon">delete icon</string>
     <string name="back_icon">back icon</string>
+    <string name="day">Hari</string>
+    <string name="week">Minggu</string>
+    <string name="month">Bulan</string>
+    <string name="year">Tahun</string>
+    <string name="quality">Kualitas</string>
+    <string name="status">Status</string>
+    <string name="tds">TDS</string>
+    <string name="ph">PH</string>
+    <string name="minimal">Minimal</string>
+    <string name="average">Rata-rata</string>
+    <string name="maximal">Maksimal</string>
+    <string name="history_water_quality">Riwayat Kualitas Air</string>
 </resources>

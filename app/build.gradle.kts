@@ -80,6 +80,7 @@ android {
 dependencies {
     val nav_version = "2.7.6"
     val compose_version =  "1.5.1"
+    val vico = "1.13.1"
 
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
@@ -115,4 +116,8 @@ dependencies {
     implementation ("com.squareup.okhttp3:okhttp:4.9.0")
     implementation ("com.squareup.okhttp3:okhttp-urlconnection:4.4.1")
     implementation("com.google.code.gson:gson:2.6.2")
+    //Chart vico
+    // For Jetpack Compose.
+    implementation("com.patrykandpatrick.vico:compose:$vico")
+    implementation("com.patrykandpatrick.vico:compose-m3:$vico")
 }
