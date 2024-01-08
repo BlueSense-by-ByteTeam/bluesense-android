@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import com.byteteam.bluesense.R
 
 @Composable
-fun WaterFilterProductItem(){
+fun WaterFilterProductItem() {
     Card(
         border = BorderStroke(
             width = 1.dp,
@@ -40,9 +40,8 @@ fun WaterFilterProductItem(){
             Image(
                 painter = painterResource(id = R.drawable.water_filter_dummy_1),
                 contentDescription = stringResource(
-                    R.string.water_filter_product
+                    R.string.water_filter
                 ),
-
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.height(96.dp)
             )

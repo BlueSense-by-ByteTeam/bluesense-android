@@ -74,4 +74,10 @@
     <string name="dummy_device_desc">Bluesense membawa sensor deteksi air canggih yang memberikan pemantauan kualitas air akurat dan real-time. Dengan teknologi sensor terkini, alat ini memberikan informasi tentang kualitas air dan keberlanjutan air minum melalui parameter pH dan Total Dissolved Solids (TDS). Sensor ini beroperasi secara otomatis, menyediakan data akurat langsung ke aplikasi Bluesense. Dengan kemampuan deteksi tinggi, pengguna dapat dengan cepat memahami kondisi air di sekitarnya dan memonitor perubahan kualitas air seiring waktu.</string>
     <string name="tokopedia_logo">tokopedia logo</string>
     <string name="shopee_logo">shopee logo</string>
+    <string name="recommendation">Rekomendasi</string>
+    <string name="water_filter">Filter Air</string>
+    <string name="water_supplier">Supplier Air</string>
+    <string name="see_detail">Lihat Detail</string>
+    <string name="whatsapp_icon">whatsapp icon</string>
+    <string name="instagram_icon">instagram icon</string>
 </resources>
