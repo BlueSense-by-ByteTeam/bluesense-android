@@ -20,6 +20,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.byteteam.bluesense.core.helper.MqttHandler
 import com.byteteam.bluesense.core.presentation.views.device.scan.ScanViewModel
 import com.byteteam.bluesense.core.presentation.views.signup.SignupScreen
+import com.byteteam.bluesense.core.presentation.views.store.detail.DetailProductScreen
 import com.byteteam.bluesense.ui.theme.BlueSenseTheme
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
@@ -72,7 +73,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    SignupScreen()
+//                    SignupScreen()
+                    DetailProductScreen()
 //                    Column {
 //
 //                        Greeting("Android")

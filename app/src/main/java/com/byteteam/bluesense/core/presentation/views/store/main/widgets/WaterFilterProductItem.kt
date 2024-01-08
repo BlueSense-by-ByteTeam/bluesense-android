@@ -1,4 +1,4 @@
-package com.byteteam.bluesense.core.presentation.views.store.widgets
+package com.byteteam.bluesense.core.presentation.views.store.main.widgets
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import com.byteteam.bluesense.R
 
 @Composable
-fun SupplierItem(modifier: Modifier = Modifier){
+fun WaterFilterProductItem(){
     Card(
         border = BorderStroke(
             width = 1.dp,
@@ -31,20 +31,23 @@ fun SupplierItem(modifier: Modifier = Modifier){
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
         ),
-        modifier = modifier
+        modifier = Modifier
             .padding(end = 8.dp)
             .clip(RoundedCornerShape(12.dp))
             .width(150.dp)
     ) {
         Column(Modifier.padding(bottom = 7.dp)) {
             Image(
-                painter = painterResource(id = R.drawable.water_supplier_dummy),
-                contentDescription = stringResource(R.string.water_supplier_image),
+                painter = painterResource(id = R.drawable.water_filter_dummy_1),
+                contentDescription = stringResource(
+                    R.string.water_filter_product
+                ),
+
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.height(96.dp)
             )
             Text(
-                text = "Tirta Jaya",
+                text = "Filter Air",
                 modifier = Modifier.padding(
                     top = 8.dp,
                     start = 12.dp,
@@ -52,11 +55,15 @@ fun SupplierItem(modifier: Modifier = Modifier){
                 )
             )
             Text(
-                text = "Water tank",
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f),
-                modifier = Modifier.padding(start = 12.dp, end = 12.dp)
+                text = "Rp50.000",
+                modifier = Modifier.padding(
+                    top = 4.dp,
+                    start = 12.dp,
+                    end = 12.dp
+                ),
+                fontWeight = FontWeight.Bold
             )
+            StarRating(rating = 3.9)
         }
     }
 }

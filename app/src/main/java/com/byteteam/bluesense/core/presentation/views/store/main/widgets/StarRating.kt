@@ -1,4 +1,4 @@
-package com.byteteam.bluesense.core.presentation.views.store.widgets
+package com.byteteam.bluesense.core.presentation.views.store.main.widgets
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
