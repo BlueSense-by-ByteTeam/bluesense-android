@@ -43,6 +43,8 @@ import androidx.compose.ui.unit.dp
 import com.byteteam.bluesense.R
 import com.byteteam.bluesense.core.presentation.views.store.widgets.BannerFilterDevice
 import com.byteteam.bluesense.core.presentation.views.store.widgets.StarRating
+import com.byteteam.bluesense.core.presentation.views.store.widgets.WaterFilterProductTemplate
+import com.byteteam.bluesense.core.presentation.views.store.widgets.WaterSupplierTemplate
 import com.byteteam.bluesense.ui.theme.BlueSenseTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -58,143 +60,8 @@ fun StoreScreen() {
                 .padding(padding)
                 .verticalScroll(rememberScrollState())) {
             BannerFilterDevice(modifier = Modifier.padding(horizontal = 24.dp))
-            Column {
-                Column(
-                    Modifier
-                        .padding(horizontal = 24.dp)
-                        .padding(bottom = 20.dp, top = 24.dp)) {
-                    Row(
-                        Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.Top
-                    ) {
-                        Text(
-                            text = stringResource(R.string.increate_water_quality),
-                            fontWeight = FontWeight.Bold,
-                            style = MaterialTheme.typography.titleMedium
-                        )
-                        Text(
-                            text = stringResource(R.string.see_all),
-                            color = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.clickable { })
-                    }
-                    Text(
-                        text = stringResource(R.string.use_this_to_cleanse_your_water),
-                    )
-                }
-                LazyRow(contentPadding = PaddingValues(start = 24.dp)) {
-                    items(12) {
-                        Card(
-                            border = BorderStroke(
-                                width = 1.dp,
-                                color = MaterialTheme.colorScheme.onSurface.copy(0.1f)
-                            ),
-                            colors = CardDefaults.cardColors(
-                                containerColor = MaterialTheme.colorScheme.surface
-                            ),
-                            modifier = Modifier
-                                .padding(end = 8.dp)
-                                .clip(RoundedCornerShape(12.dp))
-                                .width(150.dp)
-                        ) {
-                            Column(Modifier.padding(bottom = 7.dp)) {
-                                Image(
-                                    painter = painterResource(id = R.drawable.water_filter_dummy_1),
-                                    contentDescription = stringResource(
-                                        R.string.water_filter_product
-                                    ),
-
-                                    contentScale = ContentScale.Crop,
-                                    modifier = Modifier.height(96.dp)
-                                )
-                                Text(
-                                    text = "Filter Air",
-                                    modifier = Modifier.padding(
-                                        top = 8.dp,
-                                        start = 12.dp,
-                                        end = 12.dp
-                                    )
-                                )
-                                Text(
-                                    text = "Rp50.000",
-                                    modifier = Modifier.padding(
-                                        top = 4.dp,
-                                        start = 12.dp,
-                                        end = 12.dp
-                                    ),
-                                    fontWeight = FontWeight.Bold
-                                )
-                                StarRating(rating = 3.9)
-                            }
-                        }
-                    }
-                }
-                Column(
-                    Modifier
-                        .padding(horizontal = 24.dp)
-                        .padding(bottom = 20.dp, top = 24.dp)
-                ) {
-
-                    Row(
-                        Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.Top
-                    ) {
-                        Text(
-                            text = stringResource(R.string.nearest_water_supplier),
-                            fontWeight = FontWeight.Bold,
-                            style = MaterialTheme.typography.titleMedium
-                        )
-                        Text(
-                            text = stringResource(R.string.see_all),
-                            color = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.clickable { })
-                    }
-                    Text(
-                        text = stringResource(R.string.your_water_need_is_here),
-                    )
-                }
-                LazyRow(contentPadding = PaddingValues(start = 24.dp)) {
-                    items(12) {
-                        Card(
-                            border = BorderStroke(
-                                width = 1.dp,
-                                color = MaterialTheme.colorScheme.onSurface.copy(0.1f)
-                            ),
-                            colors = CardDefaults.cardColors(
-                                containerColor = MaterialTheme.colorScheme.surface
-                            ),
-                            modifier = Modifier
-                                .padding(end = 8.dp)
-                                .clip(RoundedCornerShape(12.dp))
-                                .width(150.dp)
-                        ) {
-                            Column(Modifier.padding(bottom = 7.dp)) {
-                                Image(
-                                    painter = painterResource(id = R.drawable.water_supplier_dummy),
-                                    contentDescription = stringResource(R.string.water_supplier_image),
-                                    contentScale = ContentScale.Crop,
-                                    modifier = Modifier.height(96.dp)
-                                )
-                                Text(
-                                    text = "Tirta Jaya",
-                                    modifier = Modifier.padding(
-                                        top = 8.dp,
-                                        start = 12.dp,
-                                        end = 12.dp
-                                    )
-                                )
-                                Text(
-                                    text = "Water tank",
-                                    fontWeight = FontWeight.Bold,
-                                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f),
-                                    modifier = Modifier.padding(start = 12.dp, end = 12.dp)
-                                )
-                            }
-                        }
-                    }
-                }
-            }
+            WaterFilterProductTemplate()
+            WaterSupplierTemplate()
         }
     }
 }
