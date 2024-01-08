@@ -60,4 +60,14 @@
     <string name="average">Rata-rata</string>
     <string name="maximal">Maksimal</string>
     <string name="history_water_quality">Riwayat Kualitas Air</string>
+    <string name="buy_now">Beli Sekarang</string>
+    <string name="water_clean_detection">Deteksi kebersihan Air</string>
+    <string name="water_clean_detector_desc">Optimalkan kualitas air di sekitarmu! Temukan alat deteksi kebersihan air terbaik di Bluesense.</string>
+    <string name="increate_water_quality">Tingkatkan kualitas airmu!</string>
+    <string name="use_this_to_cleanse_your_water">Pakai ini buat jernihin air kamu</string>
+    <string name="water_filter_product">water filter product</string>
+    <string name="see_all">Lihat Semua</string>
+    <string name="nearest_water_supplier">Supplier Air Terdekat</string>
+    <string name="your_water_need_is_here">Kebutuhan airmu ada di sini</string>
+    <string name="water_supplier_image">water supplier image</string>
 </resources>
