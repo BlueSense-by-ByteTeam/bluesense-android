@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
@@ -32,6 +33,8 @@ import com.byteteam.bluesense.core.helper.Screens
 import com.byteteam.bluesense.core.helper.Topbars
 import com.byteteam.bluesense.core.helper.bottomNavigationItems
 import com.byteteam.bluesense.core.presentation.helper.GoogleSignInClient
+import com.byteteam.bluesense.core.presentation.views.device.add.AddScreen
+import com.byteteam.bluesense.core.presentation.views.device.add_form.AddDeviceFormScreen
 import com.byteteam.bluesense.core.presentation.views.device.scan.ScanViewModel
 import com.byteteam.bluesense.core.presentation.views.getstarted.GetStartedScreen
 import com.byteteam.bluesense.core.presentation.views.home.HomeScreen
@@ -84,6 +87,7 @@ class MainActivity : ComponentActivity() {
             val navController: NavHostController = rememberNavController()
             val navBackStackEntry by navController.currentBackStackEntryAsState()
             val currentRoute = navBackStackEntry?.destination?.route
+            val context = LocalContext.current
 
             BlueSenseTheme {
                 Scaffold(
@@ -196,10 +200,15 @@ class MainActivity : ComponentActivity() {
                                 ProfileScreen(
                                     userData = authViewModel.currentUser.collectAsState().value,
                                     onTapSignOut = {
-                                    authViewModel.signOut {
-                                        callbackOnSuccessSignout()
-                                    }
-                                })
+                                        authViewModel.signOut {
+                                            callbackOnSuccessSignout()
+                                        }
+                                    })
+                            }
+                            composable(Screens.AddDevice.route) {
+                                AddScreen(
+                                    navHostController = navController,
+                                    startScanDevice = { scanViewModel.startScan(context = context) })
                             }
                         }
                     }

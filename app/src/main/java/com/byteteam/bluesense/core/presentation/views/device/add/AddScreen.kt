@@ -22,23 +22,60 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.byteteam.bluesense.R
+import com.byteteam.bluesense.core.helper.Screens
 import com.byteteam.bluesense.ui.theme.BlueSenseTheme
 
 @Composable
-fun AddScreen(modifier: Modifier = Modifier){
-    Column(modifier.fillMaxSize().padding(horizontal = 24.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
-        Image(painter = painterResource(id = R.drawable.dummy_device_product), contentDescription = stringResource(
-            id = R.string.device_image
-        ))
-        Text(text = stringResource(R.string.detect_water_quality), textAlign = TextAlign.Center,
+fun AddScreen(
+    startScanDevice: () -> Unit = {},
+    navHostController: NavHostController = rememberNavController(),
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier
+            .fillMaxSize()
+            .padding(horizontal = 24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.dummy_device_product),
+            contentDescription = stringResource(
+                id = R.string.device_image
+            )
+        )
+        Text(
+            text = stringResource(R.string.detect_water_quality), textAlign = TextAlign.Center,
             style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.Bold, modifier = Modifier.padding(bottom=12.dp))
-        Text(stringResource(R.string.add_device_desc_2), textAlign = TextAlign.Center, modifier = Modifier.padding(bottom=24.dp))
-        Button(onClick = { /*TODO*/ }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp)) {
+            fontWeight = FontWeight.Bold, modifier = Modifier.padding(bottom = 12.dp)
+        )
+        Text(
+            stringResource(R.string.add_device_desc_2),
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(bottom = 24.dp)
+        )
+        Button(
+            onClick = startScanDevice,
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(12.dp)
+        ) {
             Text(text = stringResource(id = R.string.add_device))
         }
-        OutlinedButton(onClick = { /*TODO*/ }, modifier = Modifier.fillMaxWidth(), border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.primary), shape = RoundedCornerShape(12.dp)) {
+        OutlinedButton(
+            onClick = {
+                navHostController.navigate(Screens.Store.route) {
+                    popUpTo(Screens.AddDevice.route) {
+                        inclusive = true
+                    }
+                }
+            },
+            modifier = Modifier.fillMaxWidth(),
+            border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.primary),
+            shape = RoundedCornerShape(12.dp)
+        ) {
             Text(text = stringResource(R.string.beli_sekarang))
         }
     }
@@ -46,7 +83,7 @@ fun AddScreen(modifier: Modifier = Modifier){
 
 @Preview
 @Composable
-private fun Preview(){
+private fun Preview() {
     BlueSenseTheme {
         Surface {
             AddScreen()

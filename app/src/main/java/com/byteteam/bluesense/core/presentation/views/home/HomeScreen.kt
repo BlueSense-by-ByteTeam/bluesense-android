@@ -113,6 +113,9 @@ fun HomeScreen(
             modifier = Modifier.padding(bottom = 24.dp)
         )
         DeviceInfoCard(
+            onTapAddDevice = { navHostController.navigate(Screens.AddDevice.route) },
+            onTapDetailDevice = {},
+            deviceData = null,
             modifier = Modifier.padding(bottom = 24.dp)
         )
         Text(

@@ -31,7 +31,8 @@ import androidx.compose.ui.unit.dp
 import com.byteteam.bluesense.R
 
 @Composable
-fun DeviceInfoCard(modifier: Modifier = Modifier){
+// TODO: change the device data type
+fun DeviceInfoCard(onTapAddDevice: () -> Unit, onTapDetailDevice: () -> Unit, deviceData: String?, modifier: Modifier = Modifier) {
     Column(verticalArrangement = Arrangement.spacedBy(8.dp), modifier = modifier) {
         Box(
             modifier = Modifier
@@ -73,7 +74,7 @@ fun DeviceInfoCard(modifier: Modifier = Modifier){
                         color = Color.Red
                     )
                 }
-                IconButton(onClick = { /*TODO*/ }) {
+                IconButton(onClick = { if (deviceData == null) onTapAddDevice() }) {
                     Icon(
                         imageVector = Icons.Default.AddBox,
                         tint = MaterialTheme.colorScheme.primary,

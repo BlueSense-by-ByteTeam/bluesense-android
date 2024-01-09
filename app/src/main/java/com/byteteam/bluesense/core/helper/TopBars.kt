@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import com.byteteam.bluesense.R
+import com.byteteam.bluesense.core.presentation.widgets.NavigationBackButton
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -45,6 +46,21 @@ fun Topbars(route: String, navHostController: NavHostController) {
             title = {
                 Text(text = stringResource(id = R.string.bluesense))
             })
+
+        Screens.Notification.route ->  TopAppBar(
+            colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background),
+            title = {
+                Text(text = stringResource(R.string.notification))
+            },
+            navigationIcon = { NavigationBackButton(navHostController = navHostController) }
+        )
+
+        Screens.AddDevice.route ->  TopAppBar(colors = topAppBarColors,
+            title = {
+                Text(text = stringResource(id = R.string.bluesense))
+            },
+            navigationIcon = { NavigationBackButton(navHostController = navHostController)  }
+        )
 
         else -> null
     }

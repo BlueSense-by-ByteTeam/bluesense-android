@@ -41,21 +41,10 @@ fun NotificationScreen(
     navHostController: NavHostController = rememberNavController(),
     modifier: Modifier = Modifier
 ) {
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background),
-                title = {
-                    Text(text = stringResource(R.string.notification))
-                },
-                navigationIcon = { NavigationBackButton(navHostController = navHostController) }
-            )
-        }
-    ) { padding ->
-        LazyColumn(modifier.padding(padding)) {
-            items(12) {
-                NotificationItem()
-            }
+
+    LazyColumn(modifier) {
+        items(12) {
+            NotificationItem()
         }
     }
 }

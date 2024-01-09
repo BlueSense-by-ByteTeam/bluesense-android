@@ -7,9 +7,12 @@ import androidx.lifecycle.viewModelScope
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ScanViewModel : ViewModel() {
+@HiltViewModel
+class ScanViewModel @Inject constructor() : ViewModel() {
     fun startScan(context: Context){
         viewModelScope.launch {
 
