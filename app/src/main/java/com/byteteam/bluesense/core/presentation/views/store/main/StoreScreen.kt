@@ -23,20 +23,15 @@ import com.byteteam.bluesense.ui.theme.BlueSenseTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StoreScreen() {
-    Scaffold(
-        topBar = {
-            TopAppBar(title = { Text(text = stringResource(id = R.string.bluesense)) })
-        }
-    ) { padding ->
+
         Column(
             Modifier
-                .padding(padding)
                 .verticalScroll(rememberScrollState())) {
             BannerFilterDevice(modifier = Modifier.padding(horizontal = 24.dp))
             WaterFilterProductTemplate()
             WaterSupplierTemplate()
         }
-    }
+
 }
 
 @Preview

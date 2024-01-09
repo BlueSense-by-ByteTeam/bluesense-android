@@ -3,22 +3,23 @@ package com.byteteam.bluesense.core.helper
 import android.util.Log
 import org.eclipse.paho.client.mqttv3.*
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence
+import javax.inject.Inject
 
-class MqttHandler {
-    private var client: MqttClient? = null
-    fun connect(brokerUrl: String?, clientId: String?, connectOptions: MqttConnectOptions, cbOnFailConnect: ((String) -> Unit)? = null) {
+class MqttHandler @Inject constructor(val memoryPersistence: MemoryPersistence) {
+    var client: MqttClient? = null
+    fun connect(brokerUrl: String?, clientId: String?, connectOptions: MqttConnectOptions, memoryPersistence: MemoryPersistence, cbOnFailConnect: ((String) -> Unit)? = null) {
         try {
-            // Set up the persistence layer
-            val persistence = MemoryPersistence()
-
+//            // Set up the persistence layer
+//            val persistence = MemoryPersistence()
+//            persistence.
             // Initialize the MQTT client
-            client = MqttClient(brokerUrl, clientId, persistence)
+            client = MqttClient(brokerUrl, clientId, memoryPersistence)
 
             // Set up the connection options
             connectOptions.isCleanSession = true
 
             // Connect to the broker
-            client!!.connect(connectOptions)
+            client?.connect(connectOptions)
         } catch (e: MqttException) {
             Log.d(this::class.java.simpleName, "connect mqtt error: ${e.message}")
             e.printStackTrace()
@@ -28,7 +29,7 @@ class MqttHandler {
 
     fun disconnect() {
         try {
-            client!!.disconnect()
+            client?.disconnect()
         } catch (e: MqttException) {
             e.printStackTrace()
         }
@@ -37,7 +38,7 @@ class MqttHandler {
     fun publish(topic: String?, message: String) {
         try {
             val mqttMessage = MqttMessage(message.toByteArray())
-            client!!.publish(topic, mqttMessage)
+            client?.publish(topic, mqttMessage)
         } catch (e: MqttException) {
             e.printStackTrace()
         }
@@ -45,7 +46,15 @@ class MqttHandler {
 
     fun subscribe(topic: String?) {
         try {
-            client!!.subscribe(topic)
+            client?.subscribe(topic)
+        } catch (e: MqttException) {
+            e.printStackTrace()
+        }
+    }
+
+    fun unsubscribe(topic: String?) {
+        try {
+            client?.unsubscribe(topic)
         } catch (e: MqttException) {
             e.printStackTrace()
         }

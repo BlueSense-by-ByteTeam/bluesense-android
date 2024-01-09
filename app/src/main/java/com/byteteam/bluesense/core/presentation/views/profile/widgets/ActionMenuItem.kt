@@ -1,5 +1,6 @@
 package com.byteteam.bluesense.core.presentation.views.profile.widgets
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -25,7 +26,7 @@ fun ActionMenuItem(
     onTap: () -> Unit = {},
     modifier: Modifier = Modifier
 ){
-    Row(modifier.fillMaxWidth().height(44.dp).bottomBorder(1.dp, Color(0xFFDADADA))) {
+    Row(modifier.fillMaxWidth().height(44.dp).clickable { onTap() }.bottomBorder(1.dp, Color(0xFFDADADA))) {
         Icon(imageVector = icon, tint = MaterialTheme.colorScheme.primary, contentDescription = null)
         Text(text = title, modifier = Modifier.padding(start = 10.dp))
         Spacer(modifier = Modifier.weight(1f))

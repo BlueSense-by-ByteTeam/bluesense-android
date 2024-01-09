@@ -49,23 +49,24 @@ fun StatisticScreen(modifier: Modifier = Modifier) {
     )
     val chartEntryModelProducer = ChartEntryModelProducer(getRandomEntries())
 
-    Scaffold(
-        topBar = {
-            TopAppBar(title = { Text(text = stringResource(R.string.history_water_quality)) })
-        }
-    ) { padding ->
-        Column(
-            modifier
-                .padding(padding)
-                .verticalScroll(rememberScrollState())
-        ) {
-            OptionSortDateTemplate(sortDates = sortDates, selectedDate = selectedDate, onClick = { selectedDate = it })
-            ChartTemplate(chartEntryModelProducer = chartEntryModelProducer)
-            OptionStatTemplate(sortDatas = sortDatas, selectedData = selectedData, onClick = { selectedData = it })
-            StatsTextTemplate()
-            DescTextTemplate()
-        }
+
+    Column(
+        modifier
+            .verticalScroll(rememberScrollState())
+    ) {
+        OptionSortDateTemplate(
+            sortDates = sortDates,
+            selectedDate = selectedDate,
+            onClick = { selectedDate = it })
+        ChartTemplate(chartEntryModelProducer = chartEntryModelProducer)
+        OptionStatTemplate(
+            sortDatas = sortDatas,
+            selectedData = selectedData,
+            onClick = { selectedData = it })
+        StatsTextTemplate()
+        DescTextTemplate()
     }
+
 }
 
 fun getRandomEntries() = List(4) { entryOf(it, Random.nextFloat() * 16f) }

@@ -24,13 +24,24 @@ class AuthViewModel @Inject constructor(
         getCurrentUser()
     }
 
-    private fun getCurrentUser(){
+    fun getCurrentUser(){
         viewModelScope.launch {
             repository.getCurrentUser().collect {
                 val gson = Gson()
                 val json = gson.toJson(it)
                 Log.d("TAG", "onCreate: signed user $json")
                 _currentUser.value = it
+            }
+        }
+    }
+
+    fun signOut(callbackOnSignOut: () -> Unit){
+        viewModelScope.launch {
+            try {
+                repository.signOut()
+                callbackOnSignOut()
+            }catch (e: Exception){
+                e.printStackTrace()
             }
         }
     }

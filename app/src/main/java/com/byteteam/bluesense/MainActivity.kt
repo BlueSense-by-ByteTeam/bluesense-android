@@ -16,7 +16,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -28,7 +27,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.byteteam.bluesense.core.helper.MqttHandler
 import com.byteteam.bluesense.core.helper.Screens
+import com.byteteam.bluesense.core.helper.Topbars
+import com.byteteam.bluesense.core.helper.bottomNavigationItems
 import com.byteteam.bluesense.core.presentation.helper.GoogleSignInClient
 import com.byteteam.bluesense.core.presentation.views.device.scan.ScanViewModel
 import com.byteteam.bluesense.core.presentation.views.getstarted.GetStartedScreen
@@ -44,10 +46,10 @@ import com.byteteam.bluesense.core.presentation.views.statistic.StatisticScreen
 import com.byteteam.bluesense.core.presentation.views.store.main.StoreScreen
 import com.byteteam.bluesense.core.presentation.widgets.BottomBar
 import com.byteteam.bluesense.ui.theme.BlueSenseTheme
-import com.google.android.gms.auth.api.identity.Identity
-import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import org.eclipse.paho.client.mqttv3.MqttConnectOptions
+import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence
 import javax.inject.Inject
 
 
@@ -58,12 +60,26 @@ class MainActivity : ComponentActivity() {
     private val onBoardViewModel: OnBoardViewModel by viewModels()
 
     @Inject
+    lateinit var mqttHandlerClient: MqttHandler
+
+    @Inject
     lateinit var googleAuthUiClient: GoogleSignInClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         actionBar?.hide()
         installSplashScreen()
+
+        val mqttConnectOptions = MqttConnectOptions()
+//        val mqttAndroidClient = MqttHandler()
+        val persistence = MemoryPersistence()
+
+        mqttConnectOptions.apply {
+            this.userName = BuildConfig.MQTT_USERNAME
+            this.password = BuildConfig.MQTT_PASSWORD.toCharArray()
+        }
+
+
         setContent {
             val navController: NavHostController = rememberNavController()
             val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -71,8 +87,14 @@ class MainActivity : ComponentActivity() {
 
             BlueSenseTheme {
                 Scaffold(
+                    topBar = {
+                        Topbars(route = currentRoute ?: "", navHostController = navController)
+                    },
                     bottomBar = {
-                        BottomBar(currentRoute = currentRoute ?: "", navHostController = navController)
+                        if (bottomNavigationItems.map { it.route }
+                                .contains(currentRoute)) BottomBar(
+                            currentRoute = currentRoute ?: "", navHostController = navController
+                        )
                     }
                 ) {
                     Surface(
@@ -83,7 +105,8 @@ class MainActivity : ComponentActivity() {
                         color = MaterialTheme.colorScheme.background
                     ) {
                         val isSigned = authViewModel.currentUser.collectAsState().value != null
-                        val isFirstTimeOpen = onBoardViewModel.isFirstTimeOpen.collectAsState().value
+                        val isFirstTimeOpen =
+                            onBoardViewModel.isFirstTimeOpen.collectAsState().value
 
                         NavHost(
                             startDestination =
@@ -117,12 +140,13 @@ class MainActivity : ComponentActivity() {
                                                     googleAuthUiClient.getSignInResultFromIntent(
                                                         intent = result.data ?: return@launch
                                                     )
+                                                authViewModel.getCurrentUser()
                                                 navController.navigate(Screens.Home.route) {
                                                     popUpTo(Screens.SignIn.route) {
                                                         inclusive = true
                                                     }
                                                 }
-    //                                            Log.d("TAG", "onCreate: google sign in result ${signInResult.data}")
+                                                //                                            Log.d("TAG", "onCreate: google sign in result ${signInResult.data}")
                                             }
                                         }
                                     }
@@ -145,19 +169,37 @@ class MainActivity : ComponentActivity() {
                                 SignupScreen()
                             }
                             composable(Screens.Home.route) {
-                                HomeScreen(navController)
+                                HomeScreen(
+                                    memoryPersistence = persistence,
+                                    mqttConnectOptions = mqttConnectOptions,
+                                    mqttAndroidClient = mqttHandlerClient,
+                                    navHostController = navController
+                                )
                             }
                             composable(Screens.Notification.route) {
                                 NotificationScreen(navController)
                             }
-                            composable(Screens.History.route){
+                            composable(Screens.History.route) {
                                 StatisticScreen()
                             }
-                            composable(Screens.Store.route){
+                            composable(Screens.Store.route) {
                                 StoreScreen()
                             }
-                            composable(Screens.Profile.route){
-                                ProfileScreen()
+                            composable(Screens.Profile.route) {
+                                fun callbackOnSuccessSignout() {
+                                    navController.navigate(Screens.SignIn.route) {
+                                        popUpTo(Screens.Profile.route) {
+                                            inclusive = true
+                                        }
+                                    }
+                                }
+                                ProfileScreen(
+                                    userData = authViewModel.currentUser.collectAsState().value,
+                                    onTapSignOut = {
+                                    authViewModel.signOut {
+                                        callbackOnSuccessSignout()
+                                    }
+                                })
                             }
                         }
                     }
@@ -165,20 +207,20 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-}
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
+    @Composable
+    fun Greeting(name: String, modifier: Modifier = Modifier) {
+        Text(
+            text = "Hello $name!",
+            modifier = modifier
+        )
+    }
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    BlueSenseTheme {
-        Greeting("Android")
+    @Preview(showBackground = true)
+    @Composable
+    fun GreetingPreview() {
+        BlueSenseTheme {
+            Greeting("Android")
+        }
     }
 }
