@@ -10,6 +10,7 @@ import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,8 +21,30 @@ class AuthViewModel @Inject constructor(
     private var _currentUser: MutableStateFlow<UserData?> = MutableStateFlow(null)
     val currentUser: StateFlow<UserData?> = _currentUser
 
+    val email: MutableStateFlow<String> = MutableStateFlow("")
+    val password: MutableStateFlow<String> = MutableStateFlow("")
+
+
     init {
         getCurrentUser()
+    }
+
+    fun updateEmail(value: String){
+        email.value = value
+    }
+    fun updatePassword(value: String){
+        password.value = value
+    }
+
+    fun signInEmailPassword(){
+        viewModelScope.launch {
+            repository.signInEmail(email.value, password.value).collect{
+                val gson = Gson()
+                val json = gson.toJson(it)
+                Log.d("TAG", "onCreate: signed user $json")
+                _currentUser.value = it?.data
+            }
+        }
     }
 
     fun getCurrentUser(){

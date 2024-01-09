@@ -34,7 +34,6 @@ import com.byteteam.bluesense.core.helper.Topbars
 import com.byteteam.bluesense.core.helper.bottomNavigationItems
 import com.byteteam.bluesense.core.presentation.helper.GoogleSignInClient
 import com.byteteam.bluesense.core.presentation.views.device.add.AddScreen
-import com.byteteam.bluesense.core.presentation.views.device.add_form.AddDeviceFormScreen
 import com.byteteam.bluesense.core.presentation.views.device.scan.ScanViewModel
 import com.byteteam.bluesense.core.presentation.views.getstarted.GetStartedScreen
 import com.byteteam.bluesense.core.presentation.views.home.HomeScreen
@@ -165,7 +164,13 @@ class MainActivity : ComponentActivity() {
                                     )
                                 }
 
-                                SigninScreen(onTapGoogleAuth = {
+                                SigninScreen(
+                                    email = authViewModel.email.collectAsState().value,
+                                    password = authViewModel.password.collectAsState().value,
+                                    onUpdateEmail = { authViewModel.updateEmail(it) },
+                                    onUpdatePassword = { authViewModel.updatePassword(it) },
+                                    onTapSignInEmailPassword = { authViewModel.signInEmailPassword() },
+                                    onTapGoogleAuth = {
                                     signInGoogle()
                                 })
                             }

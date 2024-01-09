@@ -40,9 +40,10 @@ fun InputField(
     outlined: Boolean = false,
     keyboardType: KeyboardType = KeyboardType.Text,
     errorMessage: String? = null,
+    value: String? = null,
+    onUpdate: (String) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
-    var text by remember { mutableStateOf(TextFieldValue("")) }
     var isSecure by remember { mutableStateOf(keyboardType == KeyboardType.Password) }
     val icon = if (isSecure) Icons.Filled.Visibility
     else Icons.Outlined.VisibilityOff
@@ -52,16 +53,14 @@ fun InputField(
     Column {
         if (outlined) {
             OutlinedTextField(
-                value = text,
+                value = value ?: "",
                 modifier = modifier,
                 visualTransformation = if (!isSecure) VisualTransformation.None else PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
                 shape = RoundedCornerShape(12.dp),
                 isError = errorMessage != null,
                 label = { Text(text = label) },
-                onValueChange = {
-                    text = it
-                },
+                onValueChange = onUpdate,
                 trailingIcon = {
                     if (keyboardType == KeyboardType.Password)
                         IconButton(onClick = { isSecure = !isSecure }) {
@@ -71,14 +70,12 @@ fun InputField(
             )
         } else {
             TextField(
-                value = text,
+                value = value ?: "",
                 modifier = modifier,
                 visualTransformation = if (!isSecure) VisualTransformation.None else PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
                 isError = errorMessage != null,
-                onValueChange = {
-                    text = it
-                },
+                onValueChange = onUpdate,
                 colors = TextFieldStyle.backgroundSurface(),
                 label = { Text(text = label) },
                 trailingIcon = {
@@ -102,10 +99,10 @@ private fun Preview() {
         Surface(modifier = Modifier.fillMaxSize()) {
             Column(modifier = Modifier.fillMaxSize()) {
 
-                InputField(label = "regular")
-                InputField(label = "outlined", outlined = true)
-                InputField(label = "outlined", outlined = true, errorMessage = "Test")
-                InputField(label = "outlined", outlined = true, keyboardType = KeyboardType.Password)
+                InputField(value=null, label = "regular")
+                InputField(value=null, label = "outlined", outlined = true)
+                InputField(value=null, label = "outlined", outlined = true, errorMessage = "Test")
+                InputField(value=null, label = "outlined", outlined = true, keyboardType = KeyboardType.Password)
             }
         }
     }

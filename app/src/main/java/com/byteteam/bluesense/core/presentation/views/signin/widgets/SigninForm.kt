@@ -22,14 +22,27 @@ import com.byteteam.bluesense.R
 import com.byteteam.bluesense.core.presentation.widgets.InputField
 
 @Composable
-fun SignupForm(onTapGoogleAuth: () -> Unit, onTapSignInEmail: () -> Unit, modifier: Modifier = Modifier){
+fun SignupForm(
+    onTapGoogleAuth: () -> Unit,
+    onTapSignInEmail: () -> Unit,
+    email: String,
+    password: String,
+    onUpdateEmail: (String) -> Unit,
+    onUpdatePassword: (String) -> Unit,
+    modifier: Modifier = Modifier,
+) {
     Column {
         Column(
             modifier = modifier.padding(bottom = 60.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            OutlinedButton(onClick = onTapGoogleAuth, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp), border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.primary)) {
+            OutlinedButton(
+                onClick = onTapGoogleAuth,
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(12.dp),
+                border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.primary)
+            ) {
                 Image(
                     painter = painterResource(id = R.drawable.flat_color_icons_google),
                     contentDescription = stringResource(
@@ -43,14 +56,35 @@ fun SignupForm(onTapGoogleAuth: () -> Unit, onTapSignInEmail: () -> Unit, modifi
                 )
             }
             Text(text = stringResource(R.string.or))
-            InputField(label = stringResource(R.string.email), outlined = true, modifier = Modifier.fillMaxWidth(), keyboardType = KeyboardType.Email)
-            InputField(label = stringResource(R.string.password), outlined = true, modifier = Modifier.fillMaxWidth(), keyboardType = KeyboardType.Password)
-            Text(text = stringResource(R.string.forgot_password), color = MaterialTheme.colorScheme.primary, modifier = Modifier.align(
-                Alignment.End))
+            InputField(
+                value = email,
+                onUpdate = onUpdateEmail,
+                label = stringResource(R.string.email),
+                outlined = true,
+                modifier = Modifier.fillMaxWidth(),
+                keyboardType = KeyboardType.Email
+            )
+            InputField(
+                value = password,
+                onUpdate = onUpdatePassword,
+                label = stringResource(R.string.password),
+                outlined = true,
+                modifier = Modifier.fillMaxWidth(),
+                keyboardType = KeyboardType.Password
+            )
+            Text(
+                text = stringResource(R.string.forgot_password),
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.align(
+                    Alignment.End
+                )
+            )
         }
-        Button(onClick = onTapSignInEmail, modifier = Modifier
-            .fillMaxWidth()
-            .padding(bottom = 12.dp), shape = RoundedCornerShape(12.dp)) {
+        Button(
+            onClick = onTapSignInEmail, modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 12.dp), shape = RoundedCornerShape(12.dp)
+        ) {
             Text(
                 text = stringResource(R.string.sign_in),
                 color = MaterialTheme.colorScheme.onPrimary

@@ -12,6 +12,10 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -22,6 +26,8 @@ import com.byteteam.bluesense.core.domain.model.UserData
 import com.byteteam.bluesense.core.helper.Screens
 import com.byteteam.bluesense.core.presentation.views.profile.widgets.ActionMenuItem
 import com.byteteam.bluesense.core.presentation.views.profile.widgets.ProfilePic
+import com.byteteam.bluesense.core.presentation.views.profile.widgets.SignOutDialogContent
+import com.byteteam.bluesense.core.presentation.widgets.DialogContainer
 import com.byteteam.bluesense.ui.theme.BlueSenseTheme
 
 @Composable
@@ -31,13 +37,17 @@ fun ProfileScreen(
     navHostController: NavHostController = rememberNavController(),
     modifier: Modifier = Modifier,
 ) {
+    var triggerDialog by remember { mutableStateOf(false) }
+
+
     Column(
         modifier
             .padding(horizontal = 24.dp)
             .padding(top = 20.dp)
     ) {
         Row(
-            horizontalArrangement = Arrangement.spacedBy(20.dp), modifier = Modifier
+            horizontalArrangement = Arrangement.spacedBy(20.dp),
+            modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 20.dp)
         ) {
@@ -65,7 +75,26 @@ fun ProfileScreen(
                 modifier = Modifier.padding(bottom = 20.dp)
             )
             Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
-                ActionMenuItem(icon = Icons.Default.Logout, title = "Keluar", onTap =  onTapSignOut)
+                ActionMenuItem(
+                    icon = Icons.Default.Logout,
+                    title = "Keluar",
+                    onTap = { triggerDialog = true })
+            }
+        }
+
+        if (triggerDialog) {
+            DialogContainer(onDismissRequest = {
+                triggerDialog = false
+            }) {
+                SignOutDialogContent(
+                    onDismiss = {
+                        triggerDialog = false
+                    },
+                    onConfirm = {
+                        onTapSignOut()
+                        triggerDialog = false
+                    }
+                )
             }
         }
     }
