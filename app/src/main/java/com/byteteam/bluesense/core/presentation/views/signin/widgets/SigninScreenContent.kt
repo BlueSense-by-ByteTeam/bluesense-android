@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.byteteam.bluesense.R
 
 @Composable
-fun SigninScreenContent(modifier: Modifier = Modifier){
+fun SigninScreenContent(onTapGoogleAuth: () -> Unit, modifier: Modifier = Modifier){
     Column(
         modifier
             .fillMaxSize()
@@ -33,7 +33,7 @@ fun SigninScreenContent(modifier: Modifier = Modifier){
             ),
             modifier = Modifier.padding(bottom = 60.dp)
         )
-        SignupForm()
+        SignupForm(onTapGoogleAuth = onTapGoogleAuth, onTapSignInEmail = {})
         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
             Text(text = stringResource(R.string.dont_have_account))
             Text(text = stringResource(R.string.create_now), color = MaterialTheme.colorScheme.primary)

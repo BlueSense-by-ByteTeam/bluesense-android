@@ -19,10 +19,12 @@ import androidx.compose.ui.unit.dp
 import com.byteteam.bluesense.R
 
 @Composable
-fun HomeTopBar(modifier: Modifier = Modifier){
+fun HomeTopBar(
+    navigateNotificationScreen: () -> Unit = {},
+    modifier: Modifier = Modifier){
     Row(modifier.padding(24.dp).fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-        Text(text = stringResource(R.string.bluesense), fontWeight = FontWeight.Bold)
-        IconButton(onClick = { /*TODO*/ }) {
+        Text(text = stringResource(R.string.bluesense), fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleLarge)
+        IconButton(onClick = navigateNotificationScreen) {
             Icon(
                 imageVector = Icons.Default.Notifications, tint = MaterialTheme.colorScheme.primary, contentDescription = stringResource(
                     R.string.icon_notification

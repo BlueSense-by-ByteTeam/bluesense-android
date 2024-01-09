@@ -9,10 +9,11 @@ import com.byteteam.bluesense.core.presentation.views.getstarted.widgets.GetStar
 
 @Composable
 fun GetStartedScreen(
+    onFinishOnBoarding: () -> Unit = {},
     navHostController: NavHostController = rememberNavController(),
     modifier: Modifier = Modifier
 ){
-    GetStartedScreenContent(navHostController=navHostController, modifier=modifier)
+    GetStartedScreenContent(onFinishOnBoarding, navHostController=navHostController, modifier=modifier)
 }
 
 @Preview

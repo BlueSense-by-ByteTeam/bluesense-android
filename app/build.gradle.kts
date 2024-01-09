@@ -5,6 +5,8 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("kotlin-parcelize")
     id("com.google.gms.google-services")
+    id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -25,6 +27,7 @@ android {
         val mqttHost = properties.getProperty("MQTT_HOST") ?: ""
         val mqttUsername = properties.getProperty("MQTT_USERNAME") ?: ""
         val mqttPassword = properties.getProperty("MQTT_PASSWORD") ?: ""
+        val firebaseServerClientId = properties.getProperty("FIREBASE_SERVER_CLIENT_ID") ?: ""
 
         buildConfigField(
             type = "String",
@@ -40,6 +43,11 @@ android {
             type = "String",
             name = "MQTT_PASSWORD",
             value = mqttPassword
+        )
+        buildConfigField(
+            type = "String",
+            name = "FIREBASE_SERVER_CLIENT_ID",
+            value = firebaseServerClientId
         )
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -76,10 +84,15 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+
 }
+
+
 
 dependencies {
     implementation("com.google.firebase:firebase-auth:22.3.0")
+    implementation("com.google.android.gms:play-services-auth:20.7.0")
+    implementation("androidx.datastore:datastore-core:1.0.0")
     val nav_version = "2.7.6"
     val compose_version =  "1.5.1"
     val vico = "1.13.1"
@@ -119,7 +132,17 @@ dependencies {
     implementation ("com.squareup.okhttp3:okhttp-urlconnection:4.4.1")
     implementation("com.google.code.gson:gson:2.6.2")
     //Chart vico
-    // For Jetpack Compose.
     implementation("com.patrykandpatrick.vico:compose:$vico")
     implementation("com.patrykandpatrick.vico:compose-m3:$vico")
+    implementation("com.patrykandpatrick.vico:core:1.13.1")
+    //Dagger hilt
+    implementation("com.google.dagger:hilt-android:2.50")
+    kapt("com.google.dagger:hilt-compiler:2.50")
+    //Datastore
+    //datastore
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
+}
+// Allow references to generated code
+kapt {
+    correctErrorTypes=true
 }

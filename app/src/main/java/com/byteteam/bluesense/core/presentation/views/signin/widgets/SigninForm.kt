@@ -22,14 +22,14 @@ import com.byteteam.bluesense.R
 import com.byteteam.bluesense.core.presentation.widgets.InputField
 
 @Composable
-fun SignupForm(){
+fun SignupForm(onTapGoogleAuth: () -> Unit, onTapSignInEmail: () -> Unit, modifier: Modifier = Modifier){
     Column {
         Column(
-            modifier = Modifier.padding(bottom = 60.dp),
+            modifier = modifier.padding(bottom = 60.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            OutlinedButton(onClick = { /*TODO*/ }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp), border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.primary)) {
+            OutlinedButton(onClick = onTapGoogleAuth, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp), border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.primary)) {
                 Image(
                     painter = painterResource(id = R.drawable.flat_color_icons_google),
                     contentDescription = stringResource(
@@ -48,7 +48,7 @@ fun SignupForm(){
             Text(text = stringResource(R.string.forgot_password), color = MaterialTheme.colorScheme.primary, modifier = Modifier.align(
                 Alignment.End))
         }
-        Button(onClick = { /*TODO*/ }, modifier = Modifier
+        Button(onClick = onTapSignInEmail, modifier = Modifier
             .fillMaxWidth()
             .padding(bottom = 12.dp), shape = RoundedCornerShape(12.dp)) {
             Text(

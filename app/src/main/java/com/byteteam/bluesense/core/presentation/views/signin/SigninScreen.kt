@@ -8,9 +8,9 @@ import com.byteteam.bluesense.core.presentation.views.signin.widgets.SigninScree
 import com.byteteam.bluesense.ui.theme.BlueSenseTheme
 
 @Composable
-fun SigninScreen(modifier: Modifier = Modifier) {
+fun SigninScreen(onTapGoogleAuth: () -> Unit = {}, modifier: Modifier = Modifier) {
     //ui logic should be here
-    SigninScreenContent(modifier)
+    SigninScreenContent(onTapGoogleAuth = onTapGoogleAuth,  modifier = modifier)
 }
 
 @Preview

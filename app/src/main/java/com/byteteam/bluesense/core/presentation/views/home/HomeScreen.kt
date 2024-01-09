@@ -26,9 +26,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.byteteam.bluesense.BuildConfig
 import com.byteteam.bluesense.R
 import com.byteteam.bluesense.core.helper.MqttHandler
+import com.byteteam.bluesense.core.helper.Screens
 import com.byteteam.bluesense.core.presentation.views.home.widgets.DeviceInfoCard
 import com.byteteam.bluesense.core.presentation.views.home.widgets.HomeTopBar
 import com.byteteam.bluesense.core.presentation.views.home.widgets.WaterFilterBanner
@@ -36,7 +39,9 @@ import com.byteteam.bluesense.ui.theme.BlueSenseTheme
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions
 
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier) {
+fun HomeScreen(
+    navHostController: NavHostController = rememberNavController(),
+    modifier: Modifier = Modifier) {
 
     val mqttConnectOptions = MqttConnectOptions()
     mqttConnectOptions.apply {
@@ -60,7 +65,9 @@ fun HomeScreen(modifier: Modifier = Modifier) {
         )
     })
 
-    Scaffold(topBar = { HomeTopBar() }) {
+    Scaffold(topBar = { HomeTopBar(navigateNotificationScreen = {
+        navHostController.navigate(Screens.Notification.route)
+    }) }) {
         Column(
             modifier
                 .padding(it)

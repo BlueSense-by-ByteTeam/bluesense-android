@@ -38,28 +38,45 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun OnBoardScreen(navHostController: NavHostController = rememberNavController(), modifier: Modifier = Modifier){
+fun OnBoardScreen(
+    navHostController: NavHostController = rememberNavController(), modifier: Modifier = Modifier
+) {
     val onBoardPageContents = listOf(
         OnBoardPageContent(
-            imagePainter = painterResource(id = R.drawable.water_drop_rafiki_1), desc ="page-1", textBody =  "Bluesense akan memberikan informasi real-time untuk memastikan air di sekitarmu selalu bersih dan aman.", title = "Mulai deteksi kualitas air secara langsung!"
-        ), OnBoardPageContent(
-            imagePainter = painterResource(id = R.drawable.customer_survey_rafiki_1), desc ="page-2", textBody =  "Bluesense memberikan histori yang jelas dan mudah dimengerti untuk membantu kamu membuat keputusan yang lebih baik.", title = "Jelajahi riwayat kualitas air di sekitarmu!"
-        ), OnBoardPageContent(
-            imagePainter = painterResource(id = R.drawable.push_notifications_rafiki_1), desc ="page-3", textBody =  "Bluesense akan memberi tahu Anda secara langsung ketika kualitas air mencapai tingkat yang tidak diinginkan, memberi Anda kendali penuh atas kesehatan air di rumah.", title = "Tetap terinformasi!"
-        ), OnBoardPageContent(
-            imagePainter = painterResource(id = R.drawable.light_bulb_bro_1), desc ="page-4", textBody =  "Dapatkan rekomendasi alat pembersih air terbaik untuk menjaga kualitas air di rumahmu.", title = "Deteksi masalah, berikan solusi!!"
+            imagePainter = painterResource(id = R.drawable.water_drop_rafiki_1),
+            desc = "page-1",
+            textBody = "Bluesense akan memberikan informasi real-time untuk memastikan air di sekitarmu selalu bersih dan aman.",
+            title = "Mulai deteksi kualitas air secara langsung!"
+        ),
+        OnBoardPageContent(
+            imagePainter = painterResource(id = R.drawable.customer_survey_rafiki_1),
+            desc = "page-2",
+            textBody = "Bluesense memberikan histori yang jelas dan mudah dimengerti untuk membantu kamu membuat keputusan yang lebih baik.",
+            title = "Jelajahi riwayat kualitas air di sekitarmu!"
+        ),
+        OnBoardPageContent(
+            imagePainter = painterResource(id = R.drawable.push_notifications_rafiki_1),
+            desc = "page-3",
+            textBody = "Bluesense akan memberi tahu Anda secara langsung ketika kualitas air mencapai tingkat yang tidak diinginkan, memberi Anda kendali penuh atas kesehatan air di rumah.",
+            title = "Tetap terinformasi!"
+        ),
+        OnBoardPageContent(
+            imagePainter = painterResource(id = R.drawable.light_bulb_bro_1),
+            desc = "page-4",
+            textBody = "Dapatkan rekomendasi alat pembersih air terbaik untuk menjaga kualitas air di rumahmu.",
+            title = "Deteksi masalah, berikan solusi!!"
         ),
     )
     val pagerState = rememberPagerState(pageCount = {
         onBoardPageContents.size
     })
     val coroutineScope = rememberCoroutineScope()
-    var currentPageIndex by remember{ mutableIntStateOf(0) }
+    var currentPageIndex by remember { mutableIntStateOf(0) }
 
-    fun nextPage(){
+    fun nextPage() {
         coroutineScope.launch {
             // Call scroll to on pagerState
-            if(pagerState.currentPage < onBoardPageContents.size) {
+            if (pagerState.currentPage < onBoardPageContents.size) {
                 pagerState.animateScrollToPage(pagerState.currentPage + 1)
             }
         }
@@ -73,29 +90,34 @@ fun OnBoardScreen(navHostController: NavHostController = rememberNavController()
             // Our page content
             OnBoardContent(onBoardPageContents[page])
         }
-        DotButtons(activeIndex = pagerState.currentPage, callbackOnTap = {index ->  coroutineScope.launch {
-            pagerState.animateScrollToPage(index)
-        }},  modifier = Modifier
-            .align(Alignment.BottomCenter)
-            .padding(bottom = 116.dp))
+        DotButtons(
+            activeIndex = pagerState.currentPage, callbackOnTap = { index ->
+                coroutineScope.launch {
+                    pagerState.animateScrollToPage(index)
+                }
+            }, modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(bottom = 116.dp)
+        )
 
-        Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier
-            .fillMaxWidth()
-            .align(Alignment.BottomCenter)
-            .padding(bottom = 36.dp, start = 24.dp, end = 24.dp)) {
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.BottomCenter)
+                .padding(bottom = 36.dp, start = 24.dp, end = 24.dp)
+        ) {
             Text(text = "Lewati", modifier = Modifier.clickable { navigateToGetStared() })
             Text(text = "Lanjut", modifier = Modifier.clickable {
-                if(pagerState.currentPage == onBoardPageContents.size-1)  navigateToGetStared() else  nextPage() })
+                if (pagerState.currentPage == onBoardPageContents.size - 1) navigateToGetStared() else nextPage()
+            })
         }
     }
 }
 
 
-
-
 @Preview
 @Composable
-private fun Preview(){
+private fun Preview() {
     BlueSenseTheme {
         Surface {
             OnBoardScreen()
