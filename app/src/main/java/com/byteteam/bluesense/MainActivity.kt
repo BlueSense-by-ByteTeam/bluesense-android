@@ -44,6 +44,7 @@ import com.byteteam.bluesense.core.presentation.views.profile.ProfileScreen
 import com.byteteam.bluesense.core.presentation.views.signin.AuthViewModel
 import com.byteteam.bluesense.core.presentation.views.signin.SigninScreen
 import com.byteteam.bluesense.core.presentation.views.signup.SignupScreen
+import com.byteteam.bluesense.core.presentation.views.signup.widgets.SignupScreenContentData
 import com.byteteam.bluesense.core.presentation.views.statistic.StatisticScreen
 import com.byteteam.bluesense.core.presentation.views.store.main.StoreScreen
 import com.byteteam.bluesense.core.presentation.widgets.BottomBar
@@ -132,6 +133,12 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
                             composable(Screens.SignIn.route) {
+                                fun callbackOnSuccessSignIn() =
+                                    navController.navigate(Screens.Home.route) {
+                                        popUpTo(Screens.SignIn.route) {
+                                            inclusive = true
+                                        }
+                                    }
 
                                 val launcher = rememberLauncherForActivityResult(
                                     contract = ActivityResultContracts.StartIntentSenderForResult(),
@@ -144,12 +151,7 @@ class MainActivity : ComponentActivity() {
                                                         intent = result.data ?: return@launch
                                                     )
                                                 authViewModel.getCurrentUser()
-                                                navController.navigate(Screens.Home.route) {
-                                                    popUpTo(Screens.SignIn.route) {
-                                                        inclusive = true
-                                                    }
-                                                }
-                                                //                                            Log.d("TAG", "onCreate: google sign in result ${signInResult.data}")
+                                                callbackOnSuccessSignIn()
                                             }
                                         }
                                     }
@@ -169,13 +171,29 @@ class MainActivity : ComponentActivity() {
                                     password = authViewModel.password.collectAsState().value,
                                     onUpdateEmail = { authViewModel.updateEmail(it) },
                                     onUpdatePassword = { authViewModel.updatePassword(it) },
-                                    onTapSignInEmailPassword = { authViewModel.signInEmailPassword() },
+                                    onTapSignInEmailPassword = {
+                                        authViewModel.signInEmailPassword(
+                                            callbackOnSuccess = { callbackOnSuccessSignIn() }
+                                        )
+                                    },
                                     onTapGoogleAuth = {
-                                    signInGoogle()
-                                })
+                                        signInGoogle()
+                                    }, navHostController = navController
+                                )
                             }
                             composable(Screens.SignUp.route) {
-                                SignupScreen()
+                                val data = SignupScreenContentData(
+                                    email = "",
+                                    password = "",
+                                    confirmPassword = "",
+                                    onUpdateName = {},
+                                    onUpdateEmail = {},
+                                    onUpdatePassword = {},
+                                    onUpdateConfirmPassword = {},
+                                    onTapSignUpEmailPassword = {},
+                                    onTapSignUpGoogle = {}
+                                )
+                                SignupScreen(signupScreenContentData = data)
                             }
                             composable(Screens.Home.route) {
                                 HomeScreen(

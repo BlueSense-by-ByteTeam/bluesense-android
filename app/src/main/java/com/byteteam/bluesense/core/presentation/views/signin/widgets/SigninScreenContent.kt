@@ -1,6 +1,7 @@
 package com.byteteam.bluesense.core.presentation.views.signin.widgets
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,17 +16,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.byteteam.bluesense.R
+import com.byteteam.bluesense.core.helper.Screens
 
 @Composable
 fun SigninScreenContent(
     onTapGoogleAuth: () -> Unit,
     onTapSignInEmailPassword: () -> Unit,
-    modifier: Modifier = Modifier,
     email: String,
     password: String,
     onUpdateEmail: (String) -> Unit,
     onUpdatePassword: (String) -> Unit,
+    navHostController: NavHostController = rememberNavController(),
+    modifier: Modifier = Modifier,
 ) {
     Column(
         modifier
@@ -51,6 +56,7 @@ fun SigninScreenContent(
         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
             Text(text = stringResource(R.string.dont_have_account))
             Text(
+                modifier = Modifier.clickable { navHostController.navigate(Screens.SignUp.route)  },
                 text = stringResource(R.string.create_now),
                 color = MaterialTheme.colorScheme.primary
             )

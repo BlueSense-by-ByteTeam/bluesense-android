@@ -1,6 +1,7 @@
 package com.byteteam.bluesense.core.presentation.views.signup.widgets
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -22,10 +23,16 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.byteteam.bluesense.R
+import com.byteteam.bluesense.core.helper.Screens
 
 @Composable
-fun SignupScreenContent(modifier: Modifier = Modifier){
+fun SignupScreenContent(
+    signupScreenContentData: SignupScreenContentData,
+    navHostController: NavHostController = rememberNavController(),
+    modifier: Modifier = Modifier){
     Column(
         modifier
             .fillMaxWidth()
@@ -50,8 +57,21 @@ fun SignupScreenContent(modifier: Modifier = Modifier){
             .padding(bottom = 24.dp)
             .align(Alignment.Start)) {
             Text(text = stringResource(R.string.already_have_account))
-            Text(text = stringResource(R.string.signin_now) , color = MaterialTheme.colorScheme.primary)
+            Text(text = stringResource(R.string.signin_now) , color = MaterialTheme.colorScheme.primary, modifier = Modifier.clickable { navHostController.navigate(Screens.SignIn.route) })
         }
-        SignupForm()
+        SignupForm(signupScreenContentData)
     }
 }
+
+data class SignupScreenContentData(
+    val name: String? = null,
+    val email: String? = null,
+    val password: String? = null,
+    val confirmPassword: String? = null,
+    val onUpdateName: (String) -> Unit = {},
+    val onUpdateEmail: (String) -> Unit = {},
+    val onUpdatePassword: (String) -> Unit = {},
+    val onUpdateConfirmPassword: (String) -> Unit = {},
+    val onTapSignUpEmailPassword: () -> Unit = {},
+    val onTapSignUpGoogle: () -> Unit = {},
+)

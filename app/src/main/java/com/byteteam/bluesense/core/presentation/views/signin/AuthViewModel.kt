@@ -36,13 +36,14 @@ class AuthViewModel @Inject constructor(
         password.value = value
     }
 
-    fun signInEmailPassword(){
+    fun signInEmailPassword(callbackOnSuccess: () -> Unit = {}){
         viewModelScope.launch {
             repository.signInEmail(email.value, password.value).collect{
                 val gson = Gson()
                 val json = gson.toJson(it)
                 Log.d("TAG", "onCreate: signed user $json")
                 _currentUser.value = it?.data
+                callbackOnSuccess()
             }
         }
     }

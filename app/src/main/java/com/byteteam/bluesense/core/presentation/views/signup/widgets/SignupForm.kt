@@ -25,7 +25,9 @@ import com.byteteam.bluesense.R
 import com.byteteam.bluesense.core.presentation.widgets.InputField
 
 @Composable
-fun SignupForm() {
+fun SignupForm(
+    signupScreenContentData: SignupScreenContentData,
+) {
     val context = LocalContext.current
 
     Column {
@@ -35,24 +37,32 @@ fun SignupForm() {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             InputField(
+                value = signupScreenContentData.name ?: "",
+                onUpdate = signupScreenContentData.onUpdateName,
                 label = stringResource(R.string.full_name),
                 outlined = true,
                 modifier = Modifier.fillMaxWidth(),
                 keyboardType = KeyboardType.Email
             )
             InputField(
+                value = signupScreenContentData.email ?: "",
+                onUpdate = signupScreenContentData.onUpdateEmail,
                 label = stringResource(R.string.email),
                 outlined = true,
                 modifier = Modifier.fillMaxWidth(),
                 keyboardType = KeyboardType.Email
             )
             InputField(
+                value = signupScreenContentData.password ?: "",
+                onUpdate = signupScreenContentData.onUpdatePassword,
                 label = stringResource(R.string.password),
                 outlined = true,
                 modifier = Modifier.fillMaxWidth(),
                 keyboardType = KeyboardType.Password
             )
             InputField(
+                value = signupScreenContentData.confirmPassword ?: "",
+                onUpdate = signupScreenContentData.onUpdateConfirmPassword,
                 label = stringResource(R.string.password_confirm),
                 outlined = true,
                 modifier = Modifier.fillMaxWidth(),
@@ -69,7 +79,7 @@ fun SignupForm() {
             },
         )
         Button(
-            onClick = { /*TODO*/ }, modifier = Modifier
+            onClick = { signupScreenContentData.onTapSignUpEmailPassword() }, modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 12.dp, top = 20.dp), shape = RoundedCornerShape(12.dp)
         ) {
@@ -84,7 +94,7 @@ fun SignupForm() {
                 .align(Alignment.CenterHorizontally)
         )
         OutlinedButton(
-            onClick = { /*TODO*/ },
+            onClick = { signupScreenContentData.onTapSignUpGoogle() },
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(12.dp),
             border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.primary)
