@@ -1,16 +1,12 @@
 package com.byteteam.bluesense.core.data.repositories
 
-import android.util.Log
 import com.byteteam.bluesense.core.data.datastore.DataStorePreference
-import com.byteteam.bluesense.core.data.remote.network.services.LocalAddressServices
 import com.byteteam.bluesense.core.domain.model.SignInResult
 import com.byteteam.bluesense.core.domain.model.UserData
 import com.byteteam.bluesense.core.domain.repositories.AuthRepository
 import com.byteteam.bluesense.core.presentation.helper.GoogleSignInClient
 import com.google.firebase.Firebase
-import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.auth
-import com.google.gson.Gson
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.tasks.await
@@ -19,7 +15,6 @@ import javax.inject.Inject
 class AuthRepositoryImpl @Inject constructor(
     private val dataStorePreference: DataStorePreference,
     private val googleSignInClient: GoogleSignInClient,
-    private val localAddressServices: LocalAddressServices,
 ) : AuthRepository {
     override suspend fun signInEmail(email: String, password: String): Flow<SignInResult?> {
         try {
@@ -37,7 +32,7 @@ class AuthRepositoryImpl @Inject constructor(
             )
             dataStorePreference.setAuthToken(idToken.token ?: "")
             return flowOf(signInResult)
-        }catch (e: Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
             return flowOf(SignInResult(data = null, errorMessage = e.message.toString()))
         }
@@ -61,7 +56,7 @@ class AuthRepositoryImpl @Inject constructor(
             )
             dataStorePreference.setAuthToken(idToken.token ?: "")
             return flowOf(SignInResult(data = data, errorMessage = null))
-        }catch (e: Exception){
+        } catch (e: Exception) {
             result?.user?.delete()
             e.printStackTrace()
             return flowOf(SignInResult(data = null, errorMessage = e.message.toString()))
@@ -73,10 +68,6 @@ class AuthRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getCurrentUser(): Flow<UserData?> {
-
-        val gson = Gson()
-        val json = gson.toJson(localAddressServices.getProvinces())
-        Log.d("province", "province: address $json")
         return flowOf(
             googleSignInClient.getSignedUser()
         )

@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ScanViewModel @Inject constructor() : ViewModel() {
-    fun startScan(context: Context){
+    fun startScan(context: Context, callBackOnSuccess: (String?) -> Unit){
         viewModelScope.launch {
 
             val options = GmsBarcodeScannerOptions.Builder()
@@ -27,6 +27,7 @@ class ScanViewModel @Inject constructor() : ViewModel() {
             scanner.startScan()
                 .addOnSuccessListener { barcode ->
                     Log.d("TAG", "qr scan: ${barcode.rawValue}")
+                    callBackOnSuccess(barcode.rawValue)
                 }
                 .addOnCanceledListener {
                     // Task canceled

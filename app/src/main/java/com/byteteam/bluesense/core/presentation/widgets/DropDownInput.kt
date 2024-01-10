@@ -39,9 +39,8 @@ import com.byteteam.bluesense.core.presentation.tokens.TextFieldStyle
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DropDownInput(label: String, modifier: Modifier = Modifier){
+fun DropDownInput(label: String, options: List<Pair<String, Int>>, callbakOnSelect: (Int)  -> Unit, modifier: Modifier = Modifier){
     var expanded by remember { mutableStateOf(false) }
-    val suggestions = listOf("Kotlin", "Java", "Dart", "Python")
     var selectedText by remember { mutableStateOf("") }
 
     var textfieldSize by remember { mutableStateOf(Size.Zero)}
@@ -56,11 +55,13 @@ fun DropDownInput(label: String, modifier: Modifier = Modifier){
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
     }
+
     Column {
         TextField(
             value = selectedText,
             onValueChange = { selectedText = it },
             colors = TextFieldStyle.backgroundSurface(),
+            readOnly = true,
             modifier = Modifier
                 .fillMaxWidth()
                 .onGloballyPositioned { coordinates ->
@@ -71,7 +72,7 @@ fun DropDownInput(label: String, modifier: Modifier = Modifier){
                 {
                     expanded = it.hasFocus
                 },
-            label = {Text("Label")},
+            label = {Text(label)},
             trailingIcon = {
                 Icon(icon,"contentDescription",
                     Modifier.clickable { expanded = !expanded })
@@ -84,11 +85,12 @@ fun DropDownInput(label: String, modifier: Modifier = Modifier){
                 .width(with(LocalDensity.current) { textfieldSize.width.toDp() })
                 .background(MaterialTheme.colorScheme.surface)
         ) {
-            suggestions.forEach { label ->
+            options.forEach { item ->
                 DropdownMenuItem(onClick = {
-                    selectedText = label
+                    selectedText = item.first
                     expanded = false
-                }, text = {Text(text = label)})
+                    callbakOnSelect(item.second)
+                }, text = {Text(text = item.first)})
             }
         }
     }

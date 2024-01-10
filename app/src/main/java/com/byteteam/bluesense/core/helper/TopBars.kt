@@ -62,6 +62,13 @@ fun Topbars(route: String, navHostController: NavHostController) {
             navigationIcon = { NavigationBackButton(navHostController = navHostController)  }
         )
 
+        Screens.AddDeviceForm.route ->  TopAppBar(colors = topAppBarColors,
+            title = {
+                Text(text = "Tambah Alat")
+            },
+            navigationIcon = { NavigationBackButton(navHostController = navHostController)  }
+        )
+
         else -> null
     }
 }

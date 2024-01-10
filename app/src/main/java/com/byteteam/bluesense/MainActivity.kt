@@ -16,8 +16,12 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
@@ -34,6 +38,8 @@ import com.byteteam.bluesense.core.helper.Topbars
 import com.byteteam.bluesense.core.helper.bottomNavigationItems
 import com.byteteam.bluesense.core.presentation.helper.GoogleSignInClient
 import com.byteteam.bluesense.core.presentation.views.device.add.AddScreen
+import com.byteteam.bluesense.core.presentation.views.device.add_form.AddDeviceFormScreen
+import com.byteteam.bluesense.core.presentation.views.device.add_form.AddDeviceViewModel
 import com.byteteam.bluesense.core.presentation.views.device.scan.ScanViewModel
 import com.byteteam.bluesense.core.presentation.views.getstarted.GetStartedScreen
 import com.byteteam.bluesense.core.presentation.views.home.HomeScreen
@@ -50,6 +56,7 @@ import com.byteteam.bluesense.core.presentation.views.statistic.StatisticScreen
 import com.byteteam.bluesense.core.presentation.views.store.main.StoreScreen
 import com.byteteam.bluesense.core.presentation.widgets.BottomBar
 import com.byteteam.bluesense.ui.theme.BlueSenseTheme
+import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions
@@ -63,6 +70,7 @@ class MainActivity : ComponentActivity() {
     private val authViewModel: AuthViewModel by viewModels()
     private val onBoardViewModel: OnBoardViewModel by viewModels()
     private val registerViewModel: RegisterViewModel by viewModels()
+    private val addDeviceViewModel: AddDeviceViewModel by viewModels()
 
     @Inject
     lateinit var mqttHandlerClient: MqttHandler
@@ -84,12 +92,27 @@ class MainActivity : ComponentActivity() {
             this.password = BuildConfig.MQTT_PASSWORD.toCharArray()
         }
 
+//        val scanner = GmsBarcodeScanning.getClient(this)
+//
+//        scanner.startScan()
+//            .addOnSuccessListener { barcode ->
+//                Log.d("TAG", "qr scan: ${barcode.rawValue}")
+////                    callBackOnSuccess()
+//            }
+//            .addOnCanceledListener {
+//                // Task canceled
+//                Log.d("TAG", "qr scan canceled")
+//            }
+//            .addOnFailureListener { e ->
+//                // Task failed with an exception
+//                Log.d("TAG", "qr scan fail: ${e.message}")
+//            }
+
 
         setContent {
             val navController: NavHostController = rememberNavController()
             val navBackStackEntry by navController.currentBackStackEntryAsState()
             val currentRoute = navBackStackEntry?.destination?.route
-            val context = LocalContext.current
 
             fun callbackOnSuccessSignIn() =
                 navController.navigate(Screens.Home.route) {
@@ -243,9 +266,34 @@ class MainActivity : ComponentActivity() {
                                     })
                             }
                             composable(Screens.AddDevice.route) {
+                                val context = LocalContext.current
+                                var barcode: String? by remember{
+                                    mutableStateOf(null)
+                                }
+
+                                LaunchedEffect(barcode){
+                                    if(barcode != null)
+                                        navController.navigate(Screens.AddDeviceForm.route){
+                                            popUpTo(Screens.AddDevice.route){
+                                                inclusive = true
+                                            }
+                                        }
+                                }
+
                                 AddScreen(
                                     navHostController = navController,
-                                    startScanDevice = { scanViewModel.startScan(context = context) })
+                                    startScanDevice = { scanViewModel.startScan(context = context, callBackOnSuccess = {
+                                       barcode = it
+                                    }) })
+                            }
+                            composable(Screens.AddDeviceForm.route){
+                                AddDeviceFormScreen(
+                                    provinces = addDeviceViewModel.province.collectAsState().value,
+                                    cities = addDeviceViewModel.cities.collectAsState().value,
+                                    districs = addDeviceViewModel.districts.collectAsState().value,
+                                    getCitiesItem = { addDeviceViewModel.getCities(it) },
+                                    getDistrictItem = { provinceId, cityId-> addDeviceViewModel.getDistricts(provinceId, cityId) },
+                                )
                             }
                         }
                     }

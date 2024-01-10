@@ -6,8 +6,8 @@ import com.byteteam.bluesense.core.domain.model.DistrictEntity
 import com.byteteam.bluesense.core.domain.model.ProvinceEntity
 import kotlinx.coroutines.flow.Flow
 
-interface LocalAddressRepository {
-    fun getProvince(): Flow<Resource<List<ProvinceEntity>>>
-    fun getCities(provinceId: Int): Flow<Resource<List<CityEntity>>>
-    fun getDistricts(cityId: Int): Flow<Resource<List<DistrictEntity>>>
+interface IndoLocalAddressRepository {
+    suspend fun getProvince(): Flow<List<ProvinceEntity>>
+    suspend fun getCities(provinceId: Int): Flow<List<CityEntity>>
+    suspend fun getDistricts(provinceId: Int, cityId: Int): Flow<List<DistrictEntity>>
 }

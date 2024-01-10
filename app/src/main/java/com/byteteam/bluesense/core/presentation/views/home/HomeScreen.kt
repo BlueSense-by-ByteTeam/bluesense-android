@@ -124,16 +124,6 @@ fun HomeScreen(
             .padding(horizontal = 24.dp)
     ) {
 
-//        AlertDialog(onDismissRequest = { /*TODO*/ }) {
-//            Column {
-//
-////
-//                Button(onClick = { /*TODO*/ }) {
-//
-//                Text(text = "testaa")
-//                }
-//            }
-//        }
         Text(
             text = stringResource(R.string.home_text),
             style = MaterialTheme.typography.titleLarge,

@@ -1,9 +1,9 @@
 package com.byteteam.bluesense.core.di.module
 
-import com.byteteam.bluesense.core.data.datastore.DataStorePreference
+import com.byteteam.bluesense.core.data.remote.network.services.IndonesianLocationAddressService
 import com.byteteam.bluesense.core.data.repositories.AuthRepositoryImpl
-import com.byteteam.bluesense.core.domain.repositories.AuthRepository
-import com.byteteam.bluesense.core.presentation.helper.GoogleSignInClient
+import com.byteteam.bluesense.core.data.repositories.IndoLocalAddressRepositoryImpl
+import com.byteteam.bluesense.core.domain.repositories.IndoLocalAddressRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -12,13 +12,12 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object AuthModule {
+object AddDeviceModule {
     @Provides
     @Singleton
-    fun provideAuthRepository(
-        dataStorePreference: DataStorePreference,
-        googleSignInClient: GoogleSignInClient,
-    ) : AuthRepository = AuthRepositoryImpl(dataStorePreference, googleSignInClient)
+    fun provideIndoLocalRepository(
+        localAddressServices: IndonesianLocationAddressService,
+    ) : IndoLocalAddressRepository = IndoLocalAddressRepositoryImpl(localAddressServices)
 
 //    @Provides
 //    @Singleton
