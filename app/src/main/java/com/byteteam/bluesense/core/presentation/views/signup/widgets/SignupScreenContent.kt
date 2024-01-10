@@ -74,4 +74,5 @@ data class SignupScreenContentData(
     val onUpdateConfirmPassword: (String) -> Unit = {},
     val onTapSignUpEmailPassword: () -> Unit = {},
     val onTapSignUpGoogle: () -> Unit = {},
+    val disableButton: Boolean = false
 )

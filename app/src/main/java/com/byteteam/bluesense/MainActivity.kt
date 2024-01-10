@@ -43,6 +43,7 @@ import com.byteteam.bluesense.core.presentation.views.onboard.OnBoardViewModel
 import com.byteteam.bluesense.core.presentation.views.profile.ProfileScreen
 import com.byteteam.bluesense.core.presentation.views.signin.AuthViewModel
 import com.byteteam.bluesense.core.presentation.views.signin.SigninScreen
+import com.byteteam.bluesense.core.presentation.views.signup.RegisterViewModel
 import com.byteteam.bluesense.core.presentation.views.signup.SignupScreen
 import com.byteteam.bluesense.core.presentation.views.signup.widgets.SignupScreenContentData
 import com.byteteam.bluesense.core.presentation.views.statistic.StatisticScreen
@@ -61,6 +62,7 @@ class MainActivity : ComponentActivity() {
     private val scanViewModel: ScanViewModel by viewModels()
     private val authViewModel: AuthViewModel by viewModels()
     private val onBoardViewModel: OnBoardViewModel by viewModels()
+    private val registerViewModel: RegisterViewModel by viewModels()
 
     @Inject
     lateinit var mqttHandlerClient: MqttHandler
@@ -88,6 +90,39 @@ class MainActivity : ComponentActivity() {
             val navBackStackEntry by navController.currentBackStackEntryAsState()
             val currentRoute = navBackStackEntry?.destination?.route
             val context = LocalContext.current
+
+            fun callbackOnSuccessSignIn() =
+                navController.navigate(Screens.Home.route) {
+                    popUpTo(Screens.SignIn.route) {
+                        inclusive = true
+                    }
+                }
+
+            val launcher = rememberLauncherForActivityResult(
+                contract = ActivityResultContracts.StartIntentSenderForResult(),
+                onResult = { result ->
+                    Log.d("TAG", "onCreate: $result")
+                    if (result.resultCode == RESULT_OK) {
+                        lifecycleScope.launch {
+                            val signInResult =
+                                googleAuthUiClient.getSignInResultFromIntent(
+                                    intent = result.data ?: return@launch
+                                )
+                            authViewModel.getCurrentUser()
+                            callbackOnSuccessSignIn()
+                        }
+                    }
+                }
+            )
+
+            fun signInGoogle() = lifecycleScope.launch {
+                val signInIntentSender = googleAuthUiClient.signIn()
+                launcher.launch(
+                    IntentSenderRequest.Builder(
+                        signInIntentSender ?: return@launch
+                    ).build()
+                )
+            }
 
             BlueSenseTheme {
                 Scaffold(
@@ -133,38 +168,6 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
                             composable(Screens.SignIn.route) {
-                                fun callbackOnSuccessSignIn() =
-                                    navController.navigate(Screens.Home.route) {
-                                        popUpTo(Screens.SignIn.route) {
-                                            inclusive = true
-                                        }
-                                    }
-
-                                val launcher = rememberLauncherForActivityResult(
-                                    contract = ActivityResultContracts.StartIntentSenderForResult(),
-                                    onResult = { result ->
-                                        Log.d("TAG", "onCreate: $result")
-                                        if (result.resultCode == RESULT_OK) {
-                                            lifecycleScope.launch {
-                                                val signInResult =
-                                                    googleAuthUiClient.getSignInResultFromIntent(
-                                                        intent = result.data ?: return@launch
-                                                    )
-                                                authViewModel.getCurrentUser()
-                                                callbackOnSuccessSignIn()
-                                            }
-                                        }
-                                    }
-                                )
-
-                                fun signInGoogle() = lifecycleScope.launch {
-                                    val signInIntentSender = googleAuthUiClient.signIn()
-                                    launcher.launch(
-                                        IntentSenderRequest.Builder(
-                                            signInIntentSender ?: return@launch
-                                        ).build()
-                                    )
-                                }
 
                                 SigninScreen(
                                     email = authViewModel.email.collectAsState().value,
@@ -178,20 +181,31 @@ class MainActivity : ComponentActivity() {
                                     },
                                     onTapGoogleAuth = {
                                         signInGoogle()
-                                    }, navHostController = navController
+                                    },
+                                    enableButton = authViewModel.buttonEnabled.collectAsState().value,
+                                    navHostController = navController,
                                 )
                             }
                             composable(Screens.SignUp.route) {
                                 val data = SignupScreenContentData(
-                                    email = "",
-                                    password = "",
-                                    confirmPassword = "",
-                                    onUpdateName = {},
-                                    onUpdateEmail = {},
-                                    onUpdatePassword = {},
-                                    onUpdateConfirmPassword = {},
-                                    onTapSignUpEmailPassword = {},
-                                    onTapSignUpGoogle = {}
+                                    name = registerViewModel.name.collectAsState().value,
+                                    email = registerViewModel.email.collectAsState().value,
+                                    password = registerViewModel.password.collectAsState().value,
+                                    confirmPassword = registerViewModel.confirmPassword.collectAsState().value,
+                                    onUpdateName = { registerViewModel.updateName(it) },
+                                    onUpdateEmail = { registerViewModel.updateEmail(it) },
+                                    onUpdatePassword = { registerViewModel.updatePassword(it) },
+                                    onUpdateConfirmPassword = { registerViewModel.updateConfirmPassword(it) },
+                                    onTapSignUpEmailPassword = {  registerViewModel.register(callbackOnSuccess = {
+                                        authViewModel.getCurrentUser()
+                                        navController.navigate(Screens.Home.route){
+                                            popUpTo(Screens.SignUp.route){
+                                                inclusive=true
+                                            }
+                                        }
+                                    })  },
+                                    onTapSignUpGoogle = { signInGoogle() },
+                                    disableButton = !registerViewModel.buttonEnabled.collectAsState().value
                                 )
                                 SignupScreen(signupScreenContentData = data)
                             }

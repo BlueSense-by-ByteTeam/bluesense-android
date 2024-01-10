@@ -10,12 +10,12 @@ import retrofit2.http.Query
 
 
 interface LocalAddressServices{
-    @GET("/provinsi/get")
+    @GET("provinsi/get")
     suspend fun getProvinces(): GetProvinces
 
-    @GET("/kabkota/get/")
+    @GET("kabkota/get/")
     fun getCities(@Query("d_provinsi_id") id: Int): GetCities
 
-    @GET("/kecamatan/get/")
+    @GET("kecamatan/get/")
     fun getDistricts(@Query("d_kabkota_id") id: Int): GetDistricts
 }

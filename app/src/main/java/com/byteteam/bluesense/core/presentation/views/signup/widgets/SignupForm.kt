@@ -79,7 +79,8 @@ fun SignupForm(
             },
         )
         Button(
-            onClick = { signupScreenContentData.onTapSignUpEmailPassword() }, modifier = Modifier
+            enabled = !signupScreenContentData.disableButton,
+            onClick = { if(!signupScreenContentData.disableButton) signupScreenContentData.onTapSignUpEmailPassword() }, modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 12.dp, top = 20.dp), shape = RoundedCornerShape(12.dp)
         ) {
@@ -94,7 +95,7 @@ fun SignupForm(
                 .align(Alignment.CenterHorizontally)
         )
         OutlinedButton(
-            onClick = { signupScreenContentData.onTapSignUpGoogle() },
+            onClick = {  signupScreenContentData.onTapSignUpGoogle() },
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(12.dp),
             border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.primary)

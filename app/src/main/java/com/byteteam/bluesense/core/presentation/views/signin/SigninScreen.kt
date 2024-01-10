@@ -13,6 +13,7 @@ import com.byteteam.bluesense.ui.theme.BlueSenseTheme
 fun SigninScreen(
     email: String,
     password: String,
+    enableButton: Boolean,
     onUpdateEmail: (String) -> Unit = {},
     onUpdatePassword: (String) -> Unit = {},
     onTapSignInEmailPassword: () -> Unit = {},
@@ -28,6 +29,7 @@ fun SigninScreen(
         onUpdatePassword=onUpdatePassword,
         onTapSignInEmailPassword = onTapSignInEmailPassword,
         navHostController = navHostController,
+        enableButton = enableButton,
         onTapGoogleAuth = onTapGoogleAuth,  modifier = modifier)
 }
 
@@ -36,7 +38,7 @@ fun SigninScreen(
 private fun Preview() {
     BlueSenseTheme {
         Surface {
-            SigninScreen("", "")
+            SigninScreen("", "",true)
         }
     }
 }

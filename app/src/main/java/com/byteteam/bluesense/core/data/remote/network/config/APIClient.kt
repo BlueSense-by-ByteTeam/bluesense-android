@@ -8,15 +8,18 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object APIClient {
     private var retrofit: Retrofit? = null
-    fun clientLocalAddress(): Retrofit?{
-            val interceptor = HttpLoggingInterceptor()
-            interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
-            val client = OkHttpClient.Builder().addInterceptor(interceptor).build()
-            retrofit = Retrofit.Builder()
-                .baseUrl("https://alamat.thecloudalert.com/api")
-                .addConverterFactory(GsonConverterFactory.create())
-                .client(client)
-                .build()
-            return retrofit
-        }
+
+    private fun getRetrofitApi(baseUrl: String) : Retrofit?{
+        val interceptor = HttpLoggingInterceptor()
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
+        val client = OkHttpClient.Builder().addInterceptor(interceptor).build()
+        retrofit = Retrofit.Builder()
+            .baseUrl(baseUrl)
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(client)
+            .build()
+        return retrofit
+    }
+    fun clientLocalAddress(): Retrofit? = getRetrofitApi("https://alamat.thecloudalert.com/api")
+    fun clientBluesense(): Retrofit? = getRetrofitApi("https://bluesenseapi-1-l2019661.deta.app")
 }

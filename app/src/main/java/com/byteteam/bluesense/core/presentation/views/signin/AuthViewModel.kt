@@ -23,7 +23,7 @@ class AuthViewModel @Inject constructor(
 
     val email: MutableStateFlow<String> = MutableStateFlow("")
     val password: MutableStateFlow<String> = MutableStateFlow("")
-
+    val buttonEnabled: MutableStateFlow<Boolean> = MutableStateFlow(false)
 
     init {
         getCurrentUser()
@@ -31,9 +31,15 @@ class AuthViewModel @Inject constructor(
 
     fun updateEmail(value: String){
         email.value = value
+        updateEnableButton()
     }
     fun updatePassword(value: String){
         password.value = value
+        updateEnableButton()
+    }
+
+    private fun updateEnableButton(){
+        buttonEnabled.value = email.value.isNotEmpty() && password.value.isNotEmpty()
     }
 
     fun signInEmailPassword(callbackOnSuccess: () -> Unit = {}){

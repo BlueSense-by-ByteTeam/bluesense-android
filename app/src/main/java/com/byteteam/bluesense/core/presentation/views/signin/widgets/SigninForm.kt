@@ -27,6 +27,7 @@ fun SignupForm(
     onTapSignInEmail: () -> Unit,
     email: String,
     password: String,
+    enableButton: Boolean,
     onUpdateEmail: (String) -> Unit,
     onUpdatePassword: (String) -> Unit,
     modifier: Modifier = Modifier,
@@ -81,7 +82,8 @@ fun SignupForm(
             )
         }
         Button(
-            onClick = onTapSignInEmail, modifier = Modifier
+            enabled = enableButton,
+            onClick = { if(enableButton) onTapSignInEmail() }, modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 12.dp), shape = RoundedCornerShape(12.dp)
         ) {

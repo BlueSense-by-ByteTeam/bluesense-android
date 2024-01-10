@@ -27,6 +27,7 @@ fun SigninScreenContent(
     onTapSignInEmailPassword: () -> Unit,
     email: String,
     password: String,
+    enableButton: Boolean,
     onUpdateEmail: (String) -> Unit,
     onUpdatePassword: (String) -> Unit,
     navHostController: NavHostController = rememberNavController(),
@@ -52,7 +53,9 @@ fun SigninScreenContent(
             password = password,
             onUpdateEmail = onUpdateEmail,
             onUpdatePassword = onUpdatePassword,
-            onTapSignInEmail = onTapSignInEmailPassword)
+            enableButton=enableButton,
+            onTapSignInEmail = onTapSignInEmailPassword
+        )
         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
             Text(text = stringResource(R.string.dont_have_account))
             Text(
