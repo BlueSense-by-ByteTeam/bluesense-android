@@ -7,6 +7,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.byteteam.bluesense.core.data.event.SingleEvent
+import com.byteteam.bluesense.core.domain.model.InputData
 import com.byteteam.bluesense.core.presentation.views.signin.widgets.SigninScreenContent
 import com.byteteam.bluesense.ui.theme.BlueSenseTheme
 import kotlinx.coroutines.flow.Flow
@@ -14,36 +15,34 @@ import kotlinx.coroutines.flow.flowOf
 
 @Composable
 fun SigninScreen(
-    email: String,
-    password: String,
-    enableButton: Boolean,
-    eventMessage: Flow<SingleEvent>,
-    onUpdateEmail: (String) -> Unit = {},
-    onUpdatePassword: (String) -> Unit = {},
-    onTapSignInEmailPassword: () -> Unit = {},
-    onTapGoogleAuth: () -> Unit = {},
+    signInData: SignInData = SignInData(),
     navHostController: NavHostController = rememberNavController(),
     modifier: Modifier = Modifier,
 ) {
     //ui logic should be here
     SigninScreenContent(
-        email=email,
-        password=password,
-        onUpdateEmail=onUpdateEmail,
-        onUpdatePassword=onUpdatePassword,
-        onTapSignInEmailPassword = onTapSignInEmailPassword,
-        navHostController = navHostController,
-        enableButton = enableButton,
-        eventMessage = eventMessage,
-        onTapGoogleAuth = onTapGoogleAuth,  modifier = modifier)
+            signInData=signInData,
+
+         modifier = modifier)
 }
+
+data class SignInData(
+    val email: InputData = InputData(""),
+    val password: InputData = InputData(""),
+    val enableButton: Boolean = true,
+    val eventMessage: Flow<SingleEvent> = flowOf(),
+    val onUpdateEmail: (String) -> Unit = {},
+    val onUpdatePassword: (String) -> Unit = {},
+    val onTapSignInEmailPassword: () -> Unit = {},
+    val onTapGoogleAuth: () -> Unit = {},
+)
 
 @Preview
 @Composable
 private fun Preview() {
     BlueSenseTheme {
         Surface {
-            SigninScreen("", "",true, flowOf())
+            SigninScreen(SignInData())
         }
     }
 }

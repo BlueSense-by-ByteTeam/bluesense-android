@@ -19,14 +19,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.byteteam.bluesense.R
+import com.byteteam.bluesense.core.domain.model.InputData
 import com.byteteam.bluesense.core.presentation.widgets.InputField
 
 @Composable
 fun SignupForm(
     onTapGoogleAuth: () -> Unit,
     onTapSignInEmail: () -> Unit,
-    email: String,
-    password: String,
+    email: InputData,
+    password: InputData,
     enableButton: Boolean,
     onUpdateEmail: (String) -> Unit,
     onUpdatePassword: (String) -> Unit,
@@ -58,7 +59,8 @@ fun SignupForm(
             }
             Text(text = stringResource(R.string.or))
             InputField(
-                value = email,
+                value = email.data,
+                errorMessage = email.errorMessage,
                 onUpdate = onUpdateEmail,
                 label = stringResource(R.string.email),
                 outlined = true,
@@ -66,7 +68,8 @@ fun SignupForm(
                 keyboardType = KeyboardType.Email
             )
             InputField(
-                value = password,
+                value = password.data,
+                errorMessage = password.errorMessage,
                 onUpdate = onUpdatePassword,
                 label = stringResource(R.string.password),
                 outlined = true,

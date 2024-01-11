@@ -37,7 +37,8 @@ fun SignupForm(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             InputField(
-                value = signupScreenContentData.name ?: "",
+                value = signupScreenContentData.name?.data ?: "",
+                errorMessage = signupScreenContentData.name?.errorMessage,
                 onUpdate = signupScreenContentData.onUpdateName,
                 label = stringResource(R.string.full_name),
                 outlined = true,
@@ -45,7 +46,8 @@ fun SignupForm(
                 keyboardType = KeyboardType.Email
             )
             InputField(
-                value = signupScreenContentData.email ?: "",
+                value = signupScreenContentData.email?.data ?: "",
+                errorMessage = signupScreenContentData.email?.errorMessage,
                 onUpdate = signupScreenContentData.onUpdateEmail,
                 label = stringResource(R.string.email),
                 outlined = true,
@@ -53,7 +55,8 @@ fun SignupForm(
                 keyboardType = KeyboardType.Email
             )
             InputField(
-                value = signupScreenContentData.password ?: "",
+                value = signupScreenContentData.password?.data ?: "",
+                errorMessage = signupScreenContentData.password?.errorMessage,
                 onUpdate = signupScreenContentData.onUpdatePassword,
                 label = stringResource(R.string.password),
                 outlined = true,
@@ -61,7 +64,8 @@ fun SignupForm(
                 keyboardType = KeyboardType.Password
             )
             InputField(
-                value = signupScreenContentData.confirmPassword ?: "",
+                value = signupScreenContentData.confirmPassword?.data ?: "",
+                errorMessage = signupScreenContentData.confirmPassword?.errorMessage,
                 onUpdate = signupScreenContentData.onUpdateConfirmPassword,
                 label = stringResource(R.string.password_confirm),
                 outlined = true,

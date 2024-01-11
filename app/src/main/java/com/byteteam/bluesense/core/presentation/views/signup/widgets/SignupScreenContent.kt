@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.byteteam.bluesense.R
+import com.byteteam.bluesense.core.domain.model.InputData
 import com.byteteam.bluesense.core.helper.Screens
 
 @Composable
@@ -64,10 +65,10 @@ fun SignupScreenContent(
 }
 
 data class SignupScreenContentData(
-    val name: String? = null,
-    val email: String? = null,
-    val password: String? = null,
-    val confirmPassword: String? = null,
+    val name: InputData? = null,
+    val email: InputData? = null,
+    val password: InputData? = null,
+    val confirmPassword: InputData? = null,
     val onUpdateName: (String) -> Unit = {},
     val onUpdateEmail: (String) -> Unit = {},
     val onUpdatePassword: (String) -> Unit = {},

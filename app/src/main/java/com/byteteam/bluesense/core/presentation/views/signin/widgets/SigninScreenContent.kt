@@ -35,25 +35,19 @@ import com.byteteam.bluesense.R
 import com.byteteam.bluesense.core.data.event.SingleEvent
 import com.byteteam.bluesense.core.helper.Screens
 import com.byteteam.bluesense.core.presentation.views.profile.widgets.SignOutDialogContent
+import com.byteteam.bluesense.core.presentation.views.signin.SignInData
 import com.byteteam.bluesense.core.presentation.widgets.DialogContainer
 import kotlinx.coroutines.flow.Flow
 
 @Composable
 fun SigninScreenContent(
-    onTapGoogleAuth: () -> Unit,
-    onTapSignInEmailPassword: () -> Unit,
-    email: String,
-    password: String,
-    enableButton: Boolean,
-    onUpdateEmail: (String) -> Unit,
-    eventMessage: Flow<SingleEvent>,
-    onUpdatePassword: (String) -> Unit,
+    signInData: SignInData,
     navHostController: NavHostController = rememberNavController(),
     modifier: Modifier = Modifier,
 ) {
     var errorMessage: String? by remember { mutableStateOf(null) }
     LaunchedEffect(Unit) {
-        eventMessage.collect { event ->
+        signInData.eventMessage?.collect { event ->
             when (event) {
                 is SingleEvent.MessageEvent -> errorMessage = event.message
             }
@@ -70,7 +64,9 @@ fun SigninScreenContent(
             DialogContainer(onDismissRequest = {
                 errorMessage = null
             }) {
-                Column(modifier = Modifier.height(412.dp).padding(24.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                Column(modifier = Modifier
+                    .height(412.dp)
+                    .padding(24.dp), horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(text = "Signin Error!", style = MaterialTheme.typography.titleLarge, textAlign = TextAlign.Center, fontWeight = FontWeight.Bold)
                     Text(text = it, textAlign = TextAlign.Center)
                     Spacer(Modifier.weight(1f))
@@ -90,13 +86,13 @@ fun SigninScreenContent(
             modifier = Modifier.padding(bottom = 60.dp)
         )
         SignupForm(
-            onTapGoogleAuth = onTapGoogleAuth,
-            email = email,
-            password = password,
-            onUpdateEmail = onUpdateEmail,
-            onUpdatePassword = onUpdatePassword,
-            enableButton = enableButton,
-            onTapSignInEmail = onTapSignInEmailPassword
+            onTapGoogleAuth = { signInData.onTapGoogleAuth()  },
+            email = signInData.email,
+            password = signInData.password,
+            onUpdateEmail = signInData.onUpdateEmail,
+            onUpdatePassword = signInData.onUpdatePassword,
+            enableButton = signInData.enableButton,
+            onTapSignInEmail = signInData.onTapSignInEmailPassword
         )
         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
             Text(text = stringResource(R.string.dont_have_account))

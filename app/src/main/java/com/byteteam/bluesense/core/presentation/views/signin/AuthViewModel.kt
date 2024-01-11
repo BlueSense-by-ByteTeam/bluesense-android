@@ -4,9 +4,11 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.byteteam.bluesense.core.data.event.SingleEvent
+import com.byteteam.bluesense.core.domain.model.InputData
 import com.byteteam.bluesense.core.domain.model.SignInResult
 import com.byteteam.bluesense.core.domain.model.UserData
 import com.byteteam.bluesense.core.domain.repositories.AuthRepository
+import com.byteteam.bluesense.core.presentation.tokens.EMAIL_REGEX
 import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -24,8 +26,8 @@ class AuthViewModel @Inject constructor(
     private var _currentUser: MutableStateFlow<UserData?> = MutableStateFlow(null)
     val currentUser: StateFlow<UserData?> = _currentUser
 
-    val email: MutableStateFlow<String> = MutableStateFlow("")
-    val password: MutableStateFlow<String> = MutableStateFlow("")
+    val email: MutableStateFlow<InputData> = MutableStateFlow(InputData(""))
+    val password: MutableStateFlow<InputData> = MutableStateFlow(InputData(""))
     val buttonEnabled: MutableStateFlow<Boolean> = MutableStateFlow(false)
 
     private val eventChannel = Channel<SingleEvent>()
@@ -36,22 +38,38 @@ class AuthViewModel @Inject constructor(
     }
 
     fun updateEmail(value: String){
-        email.value = value
+        val data = InputData(value).copy(
+            data = value,
+            errorMessage = when{
+                value == "" -> "Email tidak boleh kosong"
+                !value.matches(EMAIL_REGEX.toRegex()) -> "Format input email salah!"
+                else -> null
+            }
+        )
+        email.value = data
         updateEnableButton()
     }
     fun updatePassword(value: String){
-        password.value = value
+        val data = InputData(value).copy(
+            data = value,
+            errorMessage = when{
+                value == "" -> "Password tidak boleh kosong!"
+                value.length < 6 -> "Password minimal harus 6 karakter!"
+                else -> null
+            }
+        )
+        password.value = data
         updateEnableButton()
     }
 
     private fun updateEnableButton(){
-        buttonEnabled.value = email.value.isNotEmpty() && password.value.isNotEmpty()
+        buttonEnabled.value = email.value.data.isNotEmpty() && password.value.data.isNotEmpty()
     }
 
     fun signInEmailPassword(callbackOnSuccess: () -> Unit = {}){
         buttonEnabled.value = false
         viewModelScope.launch {
-            repository.signInEmail(email.value, password.value).collect{
+            repository.signInEmail(email.value.data, password.value.data).collect{
                 val gson = Gson()
                 val json = gson.toJson(it)
                 Log.d("TAG", "onCreate: signed user $json")
@@ -59,7 +77,7 @@ class AuthViewModel @Inject constructor(
                 buttonEnabled.value = true
                 if(it?.errorMessage == null) callbackOnSuccess()
                 it?.errorMessage?.let {
-                    eventChannel.send(SingleEvent.MessageEvent("Signin Error: $it"))
+                    eventChannel.send(SingleEvent.MessageEvent(it))
                 }
             }
         }

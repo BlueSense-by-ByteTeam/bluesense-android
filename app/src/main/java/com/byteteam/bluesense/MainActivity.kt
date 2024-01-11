@@ -48,6 +48,7 @@ import com.byteteam.bluesense.core.presentation.views.onboard.OnBoardScreen
 import com.byteteam.bluesense.core.presentation.views.onboard.OnBoardViewModel
 import com.byteteam.bluesense.core.presentation.views.profile.ProfileScreen
 import com.byteteam.bluesense.core.presentation.views.signin.AuthViewModel
+import com.byteteam.bluesense.core.presentation.views.signin.SignInData
 import com.byteteam.bluesense.core.presentation.views.signin.SigninScreen
 import com.byteteam.bluesense.core.presentation.views.signup.RegisterViewModel
 import com.byteteam.bluesense.core.presentation.views.signup.SignupScreen
@@ -191,8 +192,7 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
                             composable(Screens.SignIn.route) {
-
-                                SigninScreen(
+                                val signInData = SignInData(
                                     email = authViewModel.email.collectAsState().value,
                                     password = authViewModel.password.collectAsState().value,
                                     onUpdateEmail = { authViewModel.updateEmail(it) },
@@ -207,6 +207,9 @@ class MainActivity : ComponentActivity() {
                                     },
                                     enableButton = authViewModel.buttonEnabled.collectAsState().value,
                                     eventMessage = authViewModel.eventFlow,
+                                )
+                                SigninScreen(
+                                    signInData,
                                     navHostController = navController,
                                 )
                             }
@@ -219,15 +222,21 @@ class MainActivity : ComponentActivity() {
                                     onUpdateName = { registerViewModel.updateName(it) },
                                     onUpdateEmail = { registerViewModel.updateEmail(it) },
                                     onUpdatePassword = { registerViewModel.updatePassword(it) },
-                                    onUpdateConfirmPassword = { registerViewModel.updateConfirmPassword(it) },
-                                    onTapSignUpEmailPassword = {  registerViewModel.register(callbackOnSuccess = {
-                                        authViewModel.getCurrentUser()
-                                        navController.navigate(Screens.Home.route){
-                                            popUpTo(Screens.SignUp.route){
-                                                inclusive=true
+                                    onUpdateConfirmPassword = {
+                                        registerViewModel.updateConfirmPassword(
+                                            it
+                                        )
+                                    },
+                                    onTapSignUpEmailPassword = {
+                                        registerViewModel.register(callbackOnSuccess = {
+                                            authViewModel.getCurrentUser()
+                                            navController.navigate(Screens.Home.route) {
+                                                popUpTo(Screens.SignUp.route) {
+                                                    inclusive = true
+                                                }
                                             }
-                                        }
-                                    })  },
+                                        })
+                                    },
                                     onTapSignUpGoogle = { signInGoogle() },
                                     disableButton = !registerViewModel.buttonEnabled.collectAsState().value
                                 )
@@ -268,14 +277,14 @@ class MainActivity : ComponentActivity() {
                             }
                             composable(Screens.AddDevice.route) {
                                 val context = LocalContext.current
-                                var barcode: String? by remember{
+                                var barcode: String? by remember {
                                     mutableStateOf(null)
                                 }
 
-                                LaunchedEffect(barcode){
-                                    if(barcode != null)
-                                        navController.navigate(Screens.AddDeviceForm.route){
-                                            popUpTo(Screens.AddDevice.route){
+                                LaunchedEffect(barcode) {
+                                    if (barcode != null)
+                                        navController.navigate(Screens.AddDeviceForm.route) {
+                                            popUpTo(Screens.AddDevice.route) {
                                                 inclusive = true
                                             }
                                         }
@@ -283,17 +292,26 @@ class MainActivity : ComponentActivity() {
 
                                 AddScreen(
                                     navHostController = navController,
-                                    startScanDevice = { scanViewModel.startScan(context = context, callBackOnSuccess = {
-                                       barcode = it
-                                    }) })
+                                    startScanDevice = {
+                                        scanViewModel.startScan(
+                                            context = context,
+                                            callBackOnSuccess = {
+                                                barcode = it
+                                            })
+                                    })
                             }
-                            composable(Screens.AddDeviceForm.route){
+                            composable(Screens.AddDeviceForm.route) {
                                 AddDeviceFormScreen(
                                     provinces = addDeviceViewModel.province.collectAsState().value,
                                     cities = addDeviceViewModel.cities.collectAsState().value,
                                     districs = addDeviceViewModel.districts.collectAsState().value,
                                     getCitiesItem = { addDeviceViewModel.getCities(it) },
-                                    getDistrictItem = { provinceId, cityId-> addDeviceViewModel.getDistricts(provinceId, cityId) },
+                                    getDistrictItem = { provinceId, cityId ->
+                                        addDeviceViewModel.getDistricts(
+                                            provinceId,
+                                            cityId
+                                        )
+                                    },
                                 )
                             }
                         }
