@@ -41,6 +41,7 @@ import com.byteteam.bluesense.core.presentation.helper.GoogleSignInClient
 import com.byteteam.bluesense.core.presentation.views.device.add.AddScreen
 import com.byteteam.bluesense.core.presentation.views.device.add_form.AddDeviceFormScreen
 import com.byteteam.bluesense.core.presentation.views.device.add_form.AddDeviceViewModel
+import com.byteteam.bluesense.core.presentation.views.device.detail.DetailScreen
 import com.byteteam.bluesense.core.presentation.views.device.scan.ScanViewModel
 import com.byteteam.bluesense.core.presentation.views.getstarted.GetStartedScreen
 import com.byteteam.bluesense.core.presentation.views.home.HomeScreen
@@ -236,22 +237,14 @@ class MainActivity : ComponentActivity() {
                                 SignupScreen(signupScreenContentData = data)
                             }
                             composable(Screens.Home.route) {
-                                LaunchedEffect(Unit){
-                                    homeViewModel.getDevices()
-                                }
-                                homeViewModel.devices.collectAsState().value.let {
-                                    when(it){
-                                        is Resource.Loading -> Text(text = "Loading")
-                                        is Resource.Success -> Text(text = "data sebanyak ${it.data?.size}")
-                                        is Resource.Error -> Text(text = "Error: ${it.message}")
-                                    }
-                                }
-//                                HomeScreen(
-//                                    memoryPersistence = persistence,
-//                                    mqttConnectOptions = mqttConnectOptions,
-//                                    mqttAndroidClient = mqttHandlerClient,
-//                                    navHostController = navController
-//                                )
+                                HomeScreen(
+                                    memoryPersistence = persistence,
+                                    mqttConnectOptions = mqttConnectOptions,
+                                    mqttAndroidClient = mqttHandlerClient,
+                                    devices = homeViewModel.devices,
+                                    getDevices = { homeViewModel.getDevices() },
+                                    navHostController = navController
+                                )
                             }
                             composable(Screens.Notification.route) {
                                 NotificationScreen(navController)
@@ -316,6 +309,10 @@ class MainActivity : ComponentActivity() {
                                         )
                                     },
                                 )
+                            }
+                            composable(Screens.DetailDevice.route){
+                                val id = it.arguments?.getString("id")
+                                DetailScreen()
                             }
                         }
                     }

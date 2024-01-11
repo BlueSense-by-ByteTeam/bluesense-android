@@ -2,6 +2,7 @@ package com.byteteam.bluesense.core.presentation.views.home.widgets
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -11,12 +12,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.AddBox
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,10 +34,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.byteteam.bluesense.R
+import com.byteteam.bluesense.core.domain.model.DeviceEntity
 
 @Composable
 // TODO: change the device data type
-fun DeviceInfoCard(onTapAddDevice: () -> Unit, onTapDetailDevice: () -> Unit, deviceData: String?, modifier: Modifier = Modifier) {
+fun DeviceInfoCard(
+    onTapAddDevice: () -> Unit,
+    onTapDetailDevice: (String) -> Unit,
+    deviceData: DeviceEntity?,
+    modifier: Modifier = Modifier
+) {
     Column(verticalArrangement = Arrangement.spacedBy(8.dp), modifier = modifier) {
         Box(
             modifier = Modifier
@@ -74,10 +85,17 @@ fun DeviceInfoCard(onTapAddDevice: () -> Unit, onTapDetailDevice: () -> Unit, de
                         color = Color.Red
                     )
                 }
-                IconButton(onClick = { if (deviceData == null) onTapAddDevice() }) {
+                Box(
+                    modifier = Modifier
+                        .background(if (deviceData == null) MaterialTheme.colorScheme.primary else Color.LightGray)
+                        .clip(RoundedCornerShape(4.dp))
+                        .size(24.dp)
+                        .clickable {
+                            if (deviceData == null) onTapAddDevice()
+                        }) {
                     Icon(
-                        imageVector = Icons.Default.AddBox,
-                        tint = MaterialTheme.colorScheme.primary,
+                        imageVector = Icons.Default.Add,
+                        tint = Color.White,
                         contentDescription = stringResource(R.string.add_icon)
                     )
                 }
@@ -87,6 +105,7 @@ fun DeviceInfoCard(onTapAddDevice: () -> Unit, onTapDetailDevice: () -> Unit, de
             modifier = Modifier
                 .background(MaterialTheme.colorScheme.primary)
                 .fillMaxWidth()
+                .clickable { if(deviceData != null) onTapDetailDevice(deviceData.id) }
                 .padding(horizontal = 20.dp, vertical = 12.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {

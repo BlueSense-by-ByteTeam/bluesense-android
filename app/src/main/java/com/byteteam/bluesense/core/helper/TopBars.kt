@@ -1,6 +1,8 @@
 package com.byteteam.bluesense.core.helper
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -68,6 +70,29 @@ fun Topbars(route: String, navHostController: NavHostController) {
             },
             navigationIcon = { NavigationBackButton(navHostController = navHostController)  }
         )
+
+        Screens.DetailDevice.route -> TopAppBar(
+            colors = topAppBarColors,
+            navigationIcon = {
+                IconButton(onClick = { navHostController.popBackStack() }) {
+                    Icon(
+                        imageVector = Icons.Default.ArrowBack,
+                        contentDescription = stringResource(R.string.back_icon)
+                    )
+                }
+            },
+            title = { Text(text = "Detail") },
+            actions = {
+                IconButton(onClick = { navHostController.popBackStack() }) {
+                    Icon(
+                        imageVector = Icons.Default.Delete,
+                        tint = MaterialTheme.colorScheme.primary,
+                        contentDescription = stringResource(
+                            R.string.delete_icon
+                        )
+                    )
+                }
+            })
 
         else -> null
     }

@@ -9,7 +9,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -23,10 +22,14 @@ class HomeViewModel @Inject constructor(
     fun getDevices(){
         viewModelScope.launch {
             _devices.value = Resource.Loading()
-            deviceRepository.getDevices().catch {
-                _devices.value = Resource.Error(it.message ?: "Error fetching device data")
-            }.collect{
-                _devices.value = Resource.Success(it)
+            try {
+                deviceRepository.getDevices().catch {
+                    _devices.value = Resource.Error(it.message ?: "Error fetching device data")
+                }.collect{
+                    _devices.value = Resource.Success(it)
+                }
+            }catch (e: Exception){
+                    _devices.value = Resource.Error(e.message.toString())
             }
         }
     }

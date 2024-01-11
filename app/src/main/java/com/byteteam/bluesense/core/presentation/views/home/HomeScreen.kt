@@ -23,6 +23,7 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -33,6 +34,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -57,14 +59,19 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.byteteam.bluesense.BuildConfig
 import com.byteteam.bluesense.R
+import com.byteteam.bluesense.core.data.common.Resource
+import com.byteteam.bluesense.core.domain.model.DeviceEntity
 import com.byteteam.bluesense.core.helper.MqttHandler
 import com.byteteam.bluesense.core.helper.Screens
 import com.byteteam.bluesense.core.presentation.views.home.widgets.DeviceInfoCard
+import com.byteteam.bluesense.core.presentation.views.home.widgets.HomeScreenContent
 import com.byteteam.bluesense.core.presentation.views.home.widgets.HomeTopBar
 import com.byteteam.bluesense.core.presentation.views.home.widgets.WaterFilterBanner
 import com.byteteam.bluesense.ui.theme.BlueSenseTheme
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.eclipse.paho.android.service.MqttAndroidClient
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions
@@ -77,6 +84,8 @@ fun HomeScreen(
     mqttAndroidClient: MqttHandler? = null,
     memoryPersistence: MemoryPersistence? = null,
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
+    devices: StateFlow<Resource<List<DeviceEntity>>> = MutableStateFlow(Resource.Success(listOf())),
+    getDevices: () -> Unit = {},
     navHostController: NavHostController = rememberNavController(),
     modifier: Modifier = Modifier
 ) {
@@ -123,27 +132,16 @@ fun HomeScreen(
             .verticalScroll(rememberScrollState())
             .padding(horizontal = 24.dp)
     ) {
-
-        Text(
-            text = stringResource(R.string.home_text),
-            style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(bottom = 24.dp)
-        )
-        DeviceInfoCard(
-            onTapAddDevice = { navHostController.navigate(Screens.AddDevice.route) },
-            onTapDetailDevice = {},
-            deviceData = null,
-            modifier = Modifier.padding(bottom = 24.dp)
-        )
-        Text(
-            text = stringResource(R.string.elevate_your_water_quality),
-            style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(bottom = 20.dp)
-        )
-        WaterFilterBanner()
-
+        devices.collectAsState().value.let {
+            when(it){
+                is Resource.Loading -> {
+                    getDevices()
+                    CircularProgressIndicator()
+                }
+                is Resource.Error -> Text(text = it.message ?: "Error")
+                is Resource.Success -> HomeScreenContent(device = if(it.data?.size == 0) null else it.data?.get(0)!!,  navHostController = navHostController)
+            }
+        }
     }
 
 }

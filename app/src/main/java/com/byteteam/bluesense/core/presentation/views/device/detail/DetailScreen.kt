@@ -37,65 +37,38 @@ import com.byteteam.bluesense.R
 import com.byteteam.bluesense.core.presentation.views.device.detail.widgets.BannerWaterStatus
 import com.byteteam.bluesense.core.presentation.views.device.detail.widgets.CardStatusTemplate
 import com.byteteam.bluesense.ui.theme.BlueSenseTheme
+import com.byteteam.bluesense.ui.theme.Green
 import com.byteteam.bluesense.ui.theme.LightBlue
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailScreen(modifier: Modifier = Modifier) {
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                navigationIcon = {
-                    IconButton(onClick = { /*TODO*/ }) {
-                        Icon(
-                            imageVector = Icons.Default.ArrowBack,
-                            contentDescription = stringResource(R.string.back_icon)
-                        )
-                    }
-                },
-                title = { Text(text = "Detail") },
-                actions = {
-                IconButton(onClick = { /*TODO*/ }) {
-                    Icon(
-                        imageVector = Icons.Default.Delete,
-                        tint = MaterialTheme.colorScheme.primary,
-                        contentDescription = stringResource(
-                            R.string.delete_icon
-                        )
-                    )
-                }
-            })
-        }
+    Column(
+        modifier
+            .padding(horizontal = 24.dp)
     ) {
-        Column(
-            modifier
-                .padding(it)
-                .padding(horizontal = 24.dp)
-        ) {
-            Text(
-                "Penampungan Air",
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(bottom = 20.dp)
-            )
-            Row(modifier = Modifier.padding(bottom = 20.dp)) {
-                Text("Status Alat :")
-                Text(" Terhubung", color = Color.Green)
-            }
-            BannerWaterStatus(modifier = Modifier.padding(bottom = 36.dp))
-            Image(
-                painter = painterResource(id = R.drawable.dummy_device_product),
-                contentDescription = stringResource(
-                    id = R.string.device_image
-                ),
-                modifier = Modifier
-                    .padding(bottom = 12.dp)
-                    .align(Alignment.CenterHorizontally)
-                    .width(312.dp)
-                    .height(268.dp)
-            )
-            CardStatusTemplate()
+        Text(
+            "Penampungan Air",
+            style = MaterialTheme.typography.titleLarge,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(bottom = 20.dp)
+        )
+        Row(modifier = Modifier.padding(bottom = 20.dp)) {
+            Text("Status Alat :")
+            Text(" Terhubung", color = Green)
         }
+        BannerWaterStatus(modifier = Modifier.padding(bottom = 36.dp))
+        Image(
+            painter = painterResource(id = R.drawable.dummy_device_product),
+            contentDescription = stringResource(
+                id = R.string.device_image
+            ),
+            modifier = Modifier
+                .padding(bottom = 12.dp)
+                .align(Alignment.CenterHorizontally)
+                .width(312.dp)
+                .height(268.dp)
+        )
+        CardStatusTemplate()
     }
 }
 

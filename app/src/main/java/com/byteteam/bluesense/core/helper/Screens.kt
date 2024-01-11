@@ -8,7 +8,9 @@ sealed class Screens(val route: String) {
     object AddDevice : Screens(route = "add_device")
     object AddDeviceForm : Screens(route = "add_device_form")
     object GetStartedScan : Screens(route = "get_started_scan")
-    object DetailDevice : Screens(route = "detail_device")
+    object DetailDevice : Screens(route = "detail_device/{id}"){
+        fun createRoute(id: String) = "detail_device/$id"
+    }
     object History : Screens(route = "history")
     object Store : Screens(route = "store")
     object FilterRecommendation : Screens(route = "filter_recommendation")

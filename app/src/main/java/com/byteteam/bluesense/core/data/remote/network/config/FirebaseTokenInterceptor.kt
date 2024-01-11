@@ -19,6 +19,7 @@ class FirebaseTokenInterceptor @Inject constructor(
         if(response.code == 200) Log.d("TAG", "intercept firebase token interceptor: okay")
         // Check if the response indicates that the access token is expired
         if (response.code == 401) {
+            Log.d( this.javaClass.simpleName, "intercept: get new token")
             // Call the refresh token API to obtain a new access token
             val newAccessToken =
                 runBlocking {
