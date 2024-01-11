@@ -29,6 +29,7 @@ import com.byteteam.bluesense.core.helper.Screens
 import com.byteteam.bluesense.core.presentation.views.profile.widgets.ActionMenuItem
 import com.byteteam.bluesense.core.presentation.views.profile.widgets.ProfilePic
 import com.byteteam.bluesense.core.presentation.views.profile.widgets.SignOutDialogContent
+import com.byteteam.bluesense.core.presentation.widgets.BottomDialog
 import com.byteteam.bluesense.core.presentation.widgets.DialogContainer
 import com.byteteam.bluesense.ui.theme.BlueSenseTheme
 
@@ -44,7 +45,7 @@ fun ProfileScreen(
 
     Box(modifier = Modifier.fillMaxSize()){
         if (triggerDialog) {
-            DialogContainer(onDismissRequest = {
+            BottomDialog(onDismissRequest = {
                 triggerDialog = false
             }) {
                 SignOutDialogContent(
@@ -77,20 +78,9 @@ fun ProfileScreen(
                     Text(text = userData?.email ?: "-")
                 }
             }
-            Column(Modifier.padding(bottom = 26.dp)) {
-                Text(
-                    text = "Akun",
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(bottom = 20.dp)
-                )
-                Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
-                    ActionMenuItem(icon = Icons.Default.Person, title = "Profil")
-                    ActionMenuItem(icon = Icons.Default.Notifications, title = "Notifikasi")
-                }
-            }
             Column {
                 Text(
-                    text = "Umum",
+                    text = "Akun",
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding(bottom = 20.dp)
                 )

@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
@@ -34,9 +35,12 @@ import androidx.navigation.compose.rememberNavController
 import com.byteteam.bluesense.R
 import com.byteteam.bluesense.core.data.event.SingleEvent
 import com.byteteam.bluesense.core.helper.Screens
+import com.byteteam.bluesense.core.helper.verticalScrollDisabled
 import com.byteteam.bluesense.core.presentation.views.profile.widgets.SignOutDialogContent
 import com.byteteam.bluesense.core.presentation.views.signin.SignInData
+import com.byteteam.bluesense.core.presentation.widgets.BottomDialog
 import com.byteteam.bluesense.core.presentation.widgets.DialogContainer
+import com.byteteam.bluesense.core.presentation.widgets.ErrorAlertContent
 import kotlinx.coroutines.flow.Flow
 
 @Composable
@@ -61,21 +65,10 @@ fun SigninScreenContent(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         errorMessage?.let {
-            DialogContainer(onDismissRequest = {
+            BottomDialog(onDismissRequest = {
                 errorMessage = null
             }) {
-                Column(modifier = Modifier
-                    .height(412.dp)
-                    .padding(24.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(text = "Signin Error!", style = MaterialTheme.typography.titleLarge, textAlign = TextAlign.Center, fontWeight = FontWeight.Bold)
-                    Text(text = it, textAlign = TextAlign.Center)
-                    Spacer(Modifier.weight(1f))
-                    Button(onClick = {
-                        errorMessage = null
-                    }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp)) {
-                        Text(text = "Tutup")
-                    }
-                }
+                ErrorAlertContent(title = "Oops! Terjadi kesalahan saat masuk", error = it, onDismiss = {errorMessage = null})
             }
         }
         Image(

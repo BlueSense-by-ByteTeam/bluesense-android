@@ -14,6 +14,10 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -26,6 +30,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.byteteam.bluesense.R
 import com.byteteam.bluesense.core.helper.Screens
+import com.byteteam.bluesense.core.presentation.views.device.add.widgets.AddDeviceAlertContent
+import com.byteteam.bluesense.core.presentation.widgets.BottomDialog
+import com.byteteam.bluesense.core.presentation.widgets.ErrorAlertContent
 import com.byteteam.bluesense.ui.theme.BlueSenseTheme
 
 @Composable
@@ -34,6 +41,8 @@ fun AddScreen(
     navHostController: NavHostController = rememberNavController(),
     modifier: Modifier = Modifier
 ) {
+    var openDialog by remember { mutableStateOf(false) }
+
     Column(
         modifier
             .fillMaxSize()
@@ -41,6 +50,24 @@ fun AddScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
+        if (openDialog) {
+            BottomDialog(onDismissRequest = {
+                openDialog = false
+            }) {
+                AddDeviceAlertContent(onScan = {
+                    openDialog = false
+                    startScanDevice()
+               }, onManual = {
+                    openDialog = false
+                    navHostController.navigate(Screens.AddDeviceForm.createRoute(null)) {
+                        popUpTo(Screens.AddDevice.route) {
+                            inclusive = true
+                        }
+                    }
+                })
+            }
+        }
+
         Image(
             painter = painterResource(id = R.drawable.dummy_device_product),
             contentDescription = stringResource(
@@ -58,7 +85,7 @@ fun AddScreen(
             modifier = Modifier.padding(bottom = 24.dp)
         )
         Button(
-            onClick = startScanDevice,
+            onClick = { openDialog = true  },
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(12.dp)
         ) {

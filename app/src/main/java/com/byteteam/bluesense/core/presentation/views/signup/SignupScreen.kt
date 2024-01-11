@@ -11,9 +11,16 @@ import com.byteteam.bluesense.core.presentation.views.signup.widgets.SignupScree
 import com.byteteam.bluesense.ui.theme.BlueSenseTheme
 
 @Composable
-fun SignupScreen(signupScreenContentData: SignupScreenContentData, navHostController: NavHostController = rememberNavController(), modifier: Modifier = Modifier) {
-    //ui logic should be here
-    SignupScreenContent(signupScreenContentData = signupScreenContentData, navHostController = navHostController,  modifier = modifier)
+fun SignupScreen(
+    signupScreenContentData: SignupScreenContentData,
+    navHostController: NavHostController = rememberNavController(),
+    modifier: Modifier = Modifier
+) {
+    SignupScreenContent(
+        signupScreenContentData = signupScreenContentData,
+        navHostController = navHostController,
+        modifier = modifier
+    )
 }
 
 @Preview

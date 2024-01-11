@@ -37,7 +37,6 @@ import com.byteteam.bluesense.R
 import com.byteteam.bluesense.core.domain.model.DeviceEntity
 
 @Composable
-// TODO: change the device data type
 fun DeviceInfoCard(
     onTapAddDevice: () -> Unit,
     onTapDetailDevice: (String) -> Unit,
@@ -103,7 +102,7 @@ fun DeviceInfoCard(
         }
         Row(
             modifier = Modifier
-                .background(MaterialTheme.colorScheme.primary)
+                .background(if(deviceData != null) MaterialTheme.colorScheme.primary else Color.LightGray)
                 .fillMaxWidth()
                 .clickable { if(deviceData != null) onTapDetailDevice(deviceData.id) }
                 .padding(horizontal = 20.dp, vertical = 12.dp),
@@ -127,7 +126,7 @@ fun DeviceInfoCard(
             Box(
                 modifier = Modifier
                     .clip(RoundedCornerShape(bottomStart = 12.dp))
-                    .background(MaterialTheme.colorScheme.primary)
+                    .background(if(deviceData != null) MaterialTheme.colorScheme.primary else Color.LightGray)
                     .weight(1f)
                     .padding(horizontal = 16.dp, vertical = 20.dp)
             ) {
@@ -145,7 +144,7 @@ fun DeviceInfoCard(
             Box(
                 modifier = Modifier
                     .clip(RoundedCornerShape(bottomEnd = 12.dp))
-                    .background(MaterialTheme.colorScheme.primary)
+                    .background(if(deviceData != null) MaterialTheme.colorScheme.primary else Color.LightGray)
                     .weight(1f)
                     .padding(horizontal = 16.dp, vertical = 20.dp)
             ) {

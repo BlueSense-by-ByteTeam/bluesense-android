@@ -2,6 +2,8 @@ package com.byteteam.bluesense
 
 import android.os.Bundle
 import android.util.Log
+import android.webkit.URLUtil
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
@@ -221,6 +223,7 @@ class MainActivity : ComponentActivity() {
                                             it
                                         )
                                     },
+                                    eventMessage = registerViewModel.eventFlow,
                                     onTapSignUpEmailPassword = {
                                         registerViewModel.register(callbackOnSuccess = {
                                             authViewModel.getCurrentUser()
@@ -234,7 +237,7 @@ class MainActivity : ComponentActivity() {
                                     onTapSignUpGoogle = { signInGoogle() },
                                     disableButton = !registerViewModel.buttonEnabled.collectAsState().value
                                 )
-                                SignupScreen(signupScreenContentData = data)
+                                SignupScreen(signupScreenContentData = data, navHostController = navController)
                             }
                             composable(Screens.Home.route) {
                                 HomeScreen(
@@ -279,7 +282,7 @@ class MainActivity : ComponentActivity() {
 
                                 LaunchedEffect(barcode) {
                                     if (barcode != null)
-                                        navController.navigate(Screens.AddDeviceForm.route) {
+                                        navController.navigate(Screens.AddDeviceForm.createRoute(barcode)) {
                                             popUpTo(Screens.AddDevice.route) {
                                                 inclusive = true
                                             }
@@ -292,11 +295,16 @@ class MainActivity : ComponentActivity() {
                                         scanViewModel.startScan(
                                             context = context,
                                             callBackOnSuccess = {
-                                                barcode = it
+                                                if(!URLUtil.isValidUrl(it)) {
+                                                    barcode = it
+                                                }else{
+                                                    Toast.makeText(context, "QR code tidak valid!", Toast.LENGTH_SHORT).show()
+                                                }
                                             })
                                     })
                             }
                             composable(Screens.AddDeviceForm.route) {
+                                val id = it.arguments?.getString("id")
                                 AddDeviceFormScreen(
                                     provinces = addDeviceViewModel.province.collectAsState().value,
                                     cities = addDeviceViewModel.cities.collectAsState().value,

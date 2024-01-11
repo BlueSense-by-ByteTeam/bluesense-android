@@ -19,11 +19,11 @@ fun SigninScreen(
     navHostController: NavHostController = rememberNavController(),
     modifier: Modifier = Modifier,
 ) {
-    //ui logic should be here
     SigninScreenContent(
-            signInData=signInData,
-
-         modifier = modifier)
+        signInData = signInData,
+        navHostController = navHostController,
+        modifier = modifier
+    )
 }
 
 data class SignInData(

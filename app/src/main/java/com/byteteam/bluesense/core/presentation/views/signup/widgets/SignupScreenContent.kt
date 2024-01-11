@@ -17,6 +17,11 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -26,19 +31,33 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.byteteam.bluesense.R
+import com.byteteam.bluesense.core.data.event.SingleEvent
 import com.byteteam.bluesense.core.domain.model.InputData
 import com.byteteam.bluesense.core.helper.Screens
+import com.byteteam.bluesense.core.presentation.widgets.BottomDialog
+import com.byteteam.bluesense.core.presentation.widgets.ErrorAlertContent
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 
 @Composable
 fun SignupScreenContent(
     signupScreenContentData: SignupScreenContentData,
     navHostController: NavHostController = rememberNavController(),
     modifier: Modifier = Modifier){
+
+    var errorMessage: String? by remember { mutableStateOf(null) }
+    LaunchedEffect(Unit) {
+        signupScreenContentData.eventMessage?.collect { event ->
+            when (event) {
+                is SingleEvent.MessageEvent -> errorMessage = event.message
+            }
+        }
+    }
+
     Column(
         modifier
             .fillMaxWidth()
             .wrapContentHeight()
-//            .navigationBarsPadding()
             .imePadding()
             .verticalScroll(rememberScrollState())
             .fillMaxHeight()
@@ -46,6 +65,14 @@ fun SignupScreenContent(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
+        errorMessage?.let {
+            BottomDialog(onDismissRequest = {
+                errorMessage = null
+            }) {
+                ErrorAlertContent(title = "Oops! Terjadi kesalahan saat daftar", error = it, onDismiss = {errorMessage = null})
+            }
+        }
+
         Image(
             painter = painterResource(id = if (!isSystemInDarkTheme()) R.drawable.bluesense_logo_with_text else R.drawable.bluesense_logo_w_text_darktheme),
             contentDescription = stringResource(
@@ -74,6 +101,7 @@ data class SignupScreenContentData(
     val onUpdatePassword: (String) -> Unit = {},
     val onUpdateConfirmPassword: (String) -> Unit = {},
     val onTapSignUpEmailPassword: () -> Unit = {},
+    val eventMessage: Flow<SingleEvent> = flowOf(),
     val onTapSignUpGoogle: () -> Unit = {},
     val disableButton: Boolean = false
 )
