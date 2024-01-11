@@ -39,7 +39,7 @@ import com.byteteam.bluesense.core.presentation.tokens.TextFieldStyle
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DropDownInput(label: String, options: List<Pair<String, Int>>, callbakOnSelect: (Int)  -> Unit, modifier: Modifier = Modifier){
+fun DropDownInput(label: String, options: List<Pair<String, Int>>, callbakOnSelect: (Int, String)  -> Unit, modifier: Modifier = Modifier){
     var expanded by remember { mutableStateOf(false) }
     var selectedText by remember { mutableStateOf("") }
 
@@ -89,7 +89,7 @@ fun DropDownInput(label: String, options: List<Pair<String, Int>>, callbakOnSele
                 DropdownMenuItem(onClick = {
                     selectedText = item.first
                     expanded = false
-                    callbakOnSelect(item.second)
+                    callbakOnSelect(item.second, item.first)
                 }, text = {Text(text = item.first)})
             }
         }

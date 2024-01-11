@@ -59,7 +59,7 @@ fun AddScreen(
                     startScanDevice()
                }, onManual = {
                     openDialog = false
-                    navHostController.navigate(Screens.AddDeviceForm.createRoute(null)) {
+                    navHostController.navigate(Screens.AddDeviceForm.createRoute("no_data")) {
                         popUpTo(Screens.AddDevice.route) {
                             inclusive = true
                         }

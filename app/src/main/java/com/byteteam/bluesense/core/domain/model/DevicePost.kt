@@ -7,6 +7,7 @@ data class DevicePost(
     val name: String,
     val province: String,
     val city: String,
+    val district: String,
     val address: String,
     @SerializedName("water_source") val waterSource: String
 )

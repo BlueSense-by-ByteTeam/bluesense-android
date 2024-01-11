@@ -42,6 +42,8 @@ import com.byteteam.bluesense.core.helper.bottomNavigationItems
 import com.byteteam.bluesense.core.presentation.helper.GoogleSignInClient
 import com.byteteam.bluesense.core.presentation.views.device.add.AddScreen
 import com.byteteam.bluesense.core.presentation.views.device.add_form.AddDeviceFormScreen
+import com.byteteam.bluesense.core.presentation.views.device.add_form.AddDeviceFormViewModel
+import com.byteteam.bluesense.core.presentation.views.device.add_form.AddDeviceScreenData
 import com.byteteam.bluesense.core.presentation.views.device.add_form.AddDeviceViewModel
 import com.byteteam.bluesense.core.presentation.views.device.detail.DetailScreen
 import com.byteteam.bluesense.core.presentation.views.device.scan.ScanViewModel
@@ -78,6 +80,7 @@ class MainActivity : ComponentActivity() {
     private val registerViewModel: RegisterViewModel by viewModels()
     private val addDeviceViewModel: AddDeviceViewModel by viewModels()
     private val homeViewModel: HomeViewModel  by viewModels()
+    private val addDeviceFormViewModel: AddDeviceFormViewModel  by viewModels()
 
     @Inject
     lateinit var mqttHandlerClient: MqttHandler
@@ -305,6 +308,36 @@ class MainActivity : ComponentActivity() {
                             }
                             composable(Screens.AddDeviceForm.route) {
                                 val id = it.arguments?.getString("id")
+
+                               val data = AddDeviceScreenData(
+                                 name= addDeviceFormViewModel.name.collectAsState().value,
+                                 id= addDeviceFormViewModel.id.collectAsState().value,
+                                 province= addDeviceFormViewModel.province.collectAsState().value,
+                                 city= addDeviceFormViewModel.city.collectAsState().value,
+                                 district= addDeviceFormViewModel.district.collectAsState().value,
+                                 address= addDeviceFormViewModel.address.collectAsState().value,
+                                 waterSource= addDeviceFormViewModel.waterSource.collectAsState().value,
+                                 buttonEnabled= addDeviceFormViewModel.buttonEnabled.collectAsState().value,
+                                 updateId= {  addDeviceFormViewModel.updateId(it) },
+                                 updateName= { addDeviceFormViewModel.updateName(it)},
+                                 updateProvince= { addDeviceFormViewModel.updateProvince(it)},
+                                 updateCity= { addDeviceFormViewModel.updateCity(it)},
+                                 updateDistrict= { addDeviceFormViewModel.updateDistrict(it)},
+                                 updateAddress= { addDeviceFormViewModel.updateAddress(it)},
+                                 updateWaterSource= { addDeviceFormViewModel.updateWaterSource(it)},
+                                 eventMessage= addDeviceFormViewModel.eventFlow,
+                                 postDevice= { addDeviceFormViewModel.postDevice(
+                                     callbackOnSuccess = {
+                                         navController.navigate(Screens.Home.route) {
+                                             popUpTo(Screens.AddDeviceForm.route) {
+                                                 inclusive = true
+                                             }
+                                         }
+                                         homeViewModel.getDevices()
+                                     }
+                                 ) },
+                                )
+
                                 AddDeviceFormScreen(
                                     provinces = addDeviceViewModel.province.collectAsState().value,
                                     cities = addDeviceViewModel.cities.collectAsState().value,
@@ -316,6 +349,8 @@ class MainActivity : ComponentActivity() {
                                             cityId
                                         )
                                     },
+                                    idDeviceFromUrl = id,
+                                    addDeviceScreenData = data
                                 )
                             }
                             composable(Screens.DetailDevice.route){
