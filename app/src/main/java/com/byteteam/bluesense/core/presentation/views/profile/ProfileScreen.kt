@@ -71,7 +71,7 @@ fun ProfileScreen(
                     .fillMaxWidth()
                     .padding(bottom = 20.dp)
             ) {
-                ProfilePic()
+                ProfilePic(userData?.profilePicUrl)
                 Column {
                     Text(text = userData?.userName ?: "-", fontWeight = FontWeight.Bold)
                     Text(text = userData?.email ?: "-")

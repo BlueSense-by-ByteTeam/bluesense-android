@@ -1,5 +1,6 @@
 package com.byteteam.bluesense.core.helper
 
+import com.byteteam.bluesense.core.data.remote.network.response.devices.GetDevicesResponse
 import com.byteteam.bluesense.core.data.remote.network.response.indonesian_location.GetCities
 import com.byteteam.bluesense.core.data.remote.network.response.indonesian_location.GetCitiesItem
 import com.byteteam.bluesense.core.data.remote.network.response.indonesian_location.GetDistricts
@@ -7,6 +8,7 @@ import com.byteteam.bluesense.core.data.remote.network.response.indonesian_locat
 import com.byteteam.bluesense.core.data.remote.network.response.indonesian_location.GetProvince
 import com.byteteam.bluesense.core.data.remote.network.response.indonesian_location.GetProvinceItem
 import com.byteteam.bluesense.core.domain.model.CityEntity
+import com.byteteam.bluesense.core.domain.model.DeviceEntity
 import com.byteteam.bluesense.core.domain.model.DistrictEntity
 import com.byteteam.bluesense.core.domain.model.ProvinceEntity
 
@@ -22,3 +24,14 @@ fun GetDistricts.toDistrictEntities(): List<DistrictEntity> = this.getDistricts?
 fun GetProvinceItem.toProvinceEntity(): ProvinceEntity =  ProvinceEntity(id= this!!.code!!, text = this.name!!)
 fun GetCitiesItem.toCitiesEntity(): CityEntity =  CityEntity(id= this!!.code!!, text = this.name!!)
 fun GetDistrictsItem.toDistrictEntity(): DistrictEntity =  DistrictEntity(id= this!!.code!!, text = this.name!!)
+fun GetDevicesResponse.toDeviceEntities(): List<DeviceEntity> = this.data?.map {
+    DeviceEntity(
+        id=it?.id!!,
+    name= it?.deviceDetail?.name!!,
+    waterSource= it?.deviceDetail?.waterSource!!,
+    address= it?.deviceDetail?.address!!,
+    district= it?.deviceDetail?.address!!, // TODO: replace with district data
+    city= it?.deviceDetail?.city!!,
+    province= it?.deviceDetail?.province!!,
+
+) } ?: listOf()

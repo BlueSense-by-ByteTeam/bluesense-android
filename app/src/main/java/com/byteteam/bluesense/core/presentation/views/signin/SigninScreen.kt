@@ -30,6 +30,7 @@ data class SignInData(
     val email: InputData = InputData(""),
     val password: InputData = InputData(""),
     val enableButton: Boolean = true,
+    val enableGooogleSigninButton: Boolean = true,
     val eventMessage: Flow<SingleEvent> = flowOf(),
     val onUpdateEmail: (String) -> Unit = {},
     val onUpdatePassword: (String) -> Unit = {},

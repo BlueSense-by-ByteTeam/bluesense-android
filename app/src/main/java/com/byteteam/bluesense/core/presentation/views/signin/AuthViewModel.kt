@@ -29,6 +29,8 @@ class AuthViewModel @Inject constructor(
     val email: MutableStateFlow<InputData> = MutableStateFlow(InputData(""))
     val password: MutableStateFlow<InputData> = MutableStateFlow(InputData(""))
     val buttonEnabled: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val googleSigninEnabled: MutableStateFlow<Boolean> = MutableStateFlow(true)
+
 
     private val eventChannel = Channel<SingleEvent>()
     val eventFlow = eventChannel.receiveAsFlow()
@@ -83,6 +85,7 @@ class AuthViewModel @Inject constructor(
         }
     }
 
+
     fun getCurrentUser(){
         viewModelScope.launch {
             repository.getCurrentUser().collect {
@@ -103,5 +106,13 @@ class AuthViewModel @Inject constructor(
                 e.printStackTrace()
             }
         }
+    }
+
+    fun disableGoogleSigninButton(){
+        googleSigninEnabled.value = false
+    }
+
+    fun enableGoogleSigninButton(){
+        googleSigninEnabled.value = true
     }
 }

@@ -3,6 +3,7 @@ package com.byteteam.bluesense.core.data.remote.network.services.bluesense
 import android.service.autofill.UserData
 import com.byteteam.bluesense.core.data.remote.network.response.MessageResponse
 import com.byteteam.bluesense.core.data.remote.network.response.devices.GetDevicesResponse
+import com.byteteam.bluesense.core.domain.model.DevicePost
 import com.byteteam.bluesense.core.domain.model.SignUpPost
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -21,7 +22,7 @@ interface DeviceServices {
     @POST("api/devices")
     suspend fun postDevice(
         @Header("Authorization") authToken: String,
-        @Body devicePoset: SignUpPost
+        @Body devicePost: DevicePost
     ): MessageResponse
 
     @DELETE("api/devices/{id}")

@@ -92,6 +92,7 @@ fun SigninScreenContent(
             onUpdateEmail = signInData.onUpdateEmail,
             onUpdatePassword = signInData.onUpdatePassword,
             enableButton = signInData.enableButton,
+            enableGoogleSigninButton = signInData.enableGooogleSigninButton,
             onTapSignInEmail = signInData.onTapSignInEmailPassword
         )
         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {

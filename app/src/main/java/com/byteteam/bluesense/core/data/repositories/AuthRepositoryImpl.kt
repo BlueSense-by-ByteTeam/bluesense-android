@@ -1,5 +1,6 @@
 package com.byteteam.bluesense.core.data.repositories
 
+import android.util.Log
 import com.byteteam.bluesense.core.data.datastore.DataStorePreference
 import com.byteteam.bluesense.core.data.remote.network.services.bluesense.AuthServices
 import com.byteteam.bluesense.core.domain.model.SignInResult
@@ -42,6 +43,8 @@ class AuthRepositoryImpl @Inject constructor(
         }
     }
 
+
+
     override suspend fun signUpEmail(
         name: String,
         email: String,
@@ -78,27 +81,64 @@ class AuthRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun signInGoogle(): Flow<SignInResult?> {
-        TODO("Not yet implemented")
+    override suspend fun signupGoogle(name: String, email: String): Flow<SignInResult?> {
+        try {
+            val user = Firebase.auth.currentUser
+            val idToken = user!!.getIdToken(true).await()
+            dataStorePreference.setAuthToken(idToken.token ?: "")
+
+
+            Log.d("signup google", "getCurrentUser: ${idToken.token}")
+
+            val signUpPost = SignUpPost(
+                name = name,
+                email = email
+            )
+            authServices.registerUser(
+                authToken = "Bearer ${idToken.token}",
+                signUpData = signUpPost
+            )
+
+            val data = UserData(
+                userId = user?.uid ?: "",
+                userName = user?.displayName ?: name,
+                email = user?.email ?: "-",
+                profilePicUrl = user?.photoUrl.toString() ,
+                credential = idToken.token ?: ""
+            )
+            return flowOf(SignInResult(data = data, errorMessage = null))
+        }catch (e: Exception){
+            return flowOf(SignInResult(data = null, errorMessage = e.message))
+        }
     }
 
     override suspend fun getCurrentUser(): Flow<UserData?> {
-        val user = Firebase.auth.currentUser
-        val token = dataStorePreference.getAuthToken().firstOrNull()
-        // TODO: get data from api bluesense
-        val data = user?.let {
-            UserData(
-                userId = it.uid ?: "-",
-                userName = it.displayName ?: "-",
-                profilePicUrl = it.photoUrl.toString(),
-                email = it.email ?: "-",
-                credential = token ?: ""
-            )
+        try {
+
+            val user = Firebase.auth.currentUser
+    //        val user = Firebase.auth.currentUser
+            val idToken = user!!.getIdToken(true).await()
+            val token = dataStorePreference.getAuthToken().firstOrNull()
+
+            Log.d("TAG", "getCurrentUser: ${idToken.token}")
+            // TODO: get data from api bluesense
+            val data = user?.let {
+                UserData(
+                    userId = it.uid ?: "-",
+                    userName = it.displayName ?: "-",
+                    profilePicUrl = it.photoUrl.toString(),
+                    email = it.email ?: "-",
+                    credential = token ?: ""
+                )
+            }
+            return flowOf(data)
+        }catch (e: Exception){
+            e.printStackTrace()
+            return flowOf(null)
         }
-        return flowOf(data)
     }
 
     override suspend fun signOut() = googleSignInClient.signOut()
 
-    private fun generateAvatar(name: String): String =         "https://ui-avatars.com/api/?size=128&background=0D8ABC&color=fff&name=$name"
+    private fun generateAvatar(name: String): String = "https://ui-avatars.com/api/?size=128&background=0D8ABC&color=fff&name=$name"
 }

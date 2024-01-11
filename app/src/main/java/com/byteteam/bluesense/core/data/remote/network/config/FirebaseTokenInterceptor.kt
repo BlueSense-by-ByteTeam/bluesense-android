@@ -24,6 +24,7 @@ class FirebaseTokenInterceptor @Inject constructor(
                 runBlocking {
                     callRefreshTokenAPI()
                 }
+            response.close()
             // Create a new request with the updated access token
             val newRequest = originalRequest.newBuilder()
                 .header("Authorization", "Bearer $newAccessToken")

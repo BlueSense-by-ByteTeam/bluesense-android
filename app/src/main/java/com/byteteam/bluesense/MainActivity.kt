@@ -32,6 +32,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.byteteam.bluesense.core.data.common.Resource
 import com.byteteam.bluesense.core.helper.MqttHandler
 import com.byteteam.bluesense.core.helper.Screens
 import com.byteteam.bluesense.core.helper.Topbars
@@ -43,6 +44,7 @@ import com.byteteam.bluesense.core.presentation.views.device.add_form.AddDeviceV
 import com.byteteam.bluesense.core.presentation.views.device.scan.ScanViewModel
 import com.byteteam.bluesense.core.presentation.views.getstarted.GetStartedScreen
 import com.byteteam.bluesense.core.presentation.views.home.HomeScreen
+import com.byteteam.bluesense.core.presentation.views.home.HomeViewModel
 import com.byteteam.bluesense.core.presentation.views.notification.NotificationScreen
 import com.byteteam.bluesense.core.presentation.views.onboard.OnBoardScreen
 import com.byteteam.bluesense.core.presentation.views.onboard.OnBoardViewModel
@@ -72,6 +74,7 @@ class MainActivity : ComponentActivity() {
     private val onBoardViewModel: OnBoardViewModel by viewModels()
     private val registerViewModel: RegisterViewModel by viewModels()
     private val addDeviceViewModel: AddDeviceViewModel by viewModels()
+    private val homeViewModel: HomeViewModel  by viewModels()
 
     @Inject
     lateinit var mqttHandlerClient: MqttHandler
@@ -92,22 +95,6 @@ class MainActivity : ComponentActivity() {
             this.userName = BuildConfig.MQTT_USERNAME
             this.password = BuildConfig.MQTT_PASSWORD.toCharArray()
         }
-
-//        val scanner = GmsBarcodeScanning.getClient(this)
-//
-//        scanner.startScan()
-//            .addOnSuccessListener { barcode ->
-//                Log.d("TAG", "qr scan: ${barcode.rawValue}")
-////                    callBackOnSuccess()
-//            }
-//            .addOnCanceledListener {
-//                // Task canceled
-//                Log.d("TAG", "qr scan canceled")
-//            }
-//            .addOnFailureListener { e ->
-//                // Task failed with an exception
-//                Log.d("TAG", "qr scan fail: ${e.message}")
-//            }
 
 
         setContent {
@@ -132,6 +119,9 @@ class MainActivity : ComponentActivity() {
                                 googleAuthUiClient.getSignInResultFromIntent(
                                     intent = result.data ?: return@launch
                                 )
+                            signInResult.data?.let {
+                                registerViewModel.googleSignup(it)
+                            }
                             authViewModel.getCurrentUser()
                             callbackOnSuccessSignIn()
                         }
@@ -140,12 +130,14 @@ class MainActivity : ComponentActivity() {
             )
 
             fun signInGoogle() = lifecycleScope.launch {
+                authViewModel.disableGoogleSigninButton()
                 val signInIntentSender = googleAuthUiClient.signIn()
                 launcher.launch(
                     IntentSenderRequest.Builder(
                         signInIntentSender ?: return@launch
                     ).build()
                 )
+                authViewModel.enableGoogleSigninButton()
             }
 
             BlueSenseTheme {
@@ -206,6 +198,7 @@ class MainActivity : ComponentActivity() {
                                         signInGoogle()
                                     },
                                     enableButton = authViewModel.buttonEnabled.collectAsState().value,
+                                    enableGooogleSigninButton = authViewModel.googleSigninEnabled.collectAsState().value,
                                     eventMessage = authViewModel.eventFlow,
                                 )
                                 SigninScreen(
@@ -243,12 +236,22 @@ class MainActivity : ComponentActivity() {
                                 SignupScreen(signupScreenContentData = data)
                             }
                             composable(Screens.Home.route) {
-                                HomeScreen(
-                                    memoryPersistence = persistence,
-                                    mqttConnectOptions = mqttConnectOptions,
-                                    mqttAndroidClient = mqttHandlerClient,
-                                    navHostController = navController
-                                )
+                                LaunchedEffect(Unit){
+                                    homeViewModel.getDevices()
+                                }
+                                homeViewModel.devices.collectAsState().value.let {
+                                    when(it){
+                                        is Resource.Loading -> Text(text = "Loading")
+                                        is Resource.Success -> Text(text = "data sebanyak ${it.data?.size}")
+                                        is Resource.Error -> Text(text = "Error: ${it.message}")
+                                    }
+                                }
+//                                HomeScreen(
+//                                    memoryPersistence = persistence,
+//                                    mqttConnectOptions = mqttConnectOptions,
+//                                    mqttAndroidClient = mqttHandlerClient,
+//                                    navHostController = navController
+//                                )
                             }
                             composable(Screens.Notification.route) {
                                 NotificationScreen(navController)

@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.byteteam.bluesense.core.data.event.SingleEvent
 import com.byteteam.bluesense.core.domain.model.InputData
 import com.byteteam.bluesense.core.domain.model.SignInResult
+import com.byteteam.bluesense.core.domain.model.UserData
 import com.byteteam.bluesense.core.domain.repositories.AuthRepository
 import com.byteteam.bluesense.core.helper.UiState
 import com.byteteam.bluesense.core.presentation.tokens.EMAIL_REGEX
@@ -99,6 +100,12 @@ class RegisterViewModel @Inject constructor(private val authRepository: AuthRepo
                 }
                 buttonEnabled.value = true
             }
+        }
+    }
+
+    fun googleSignup(signUpData: UserData){
+        viewModelScope.launch {
+            authRepository.signupGoogle(signUpData.userName, signUpData.email)
         }
     }
 }

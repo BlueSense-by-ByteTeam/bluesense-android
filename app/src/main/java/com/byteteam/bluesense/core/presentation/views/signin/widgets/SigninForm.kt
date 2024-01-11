@@ -29,6 +29,7 @@ fun SignupForm(
     email: InputData,
     password: InputData,
     enableButton: Boolean,
+    enableGoogleSigninButton: Boolean,
     onUpdateEmail: (String) -> Unit,
     onUpdatePassword: (String) -> Unit,
     modifier: Modifier = Modifier,
@@ -40,6 +41,7 @@ fun SignupForm(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             OutlinedButton(
+                enabled = enableGoogleSigninButton,
                 onClick = onTapGoogleAuth,
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),

@@ -17,23 +17,34 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.byteteam.bluesense.R
 
 @Composable
-fun ProfilePic(modifier: Modifier = Modifier) {
+fun ProfilePic(photoUrl: String?, modifier: Modifier = Modifier) {
     Box(
         modifier = modifier
             .clip(RoundedCornerShape(12.dp))
             .size(64.dp)
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.profile_pic),
-            contentDescription = stringResource(
-                R.string.profile_pic
-            ),
-            contentScale = ContentScale.Crop,
-            alignment = Alignment.Center,
-            modifier = Modifier.fillMaxSize()
-        )
+        if (photoUrl != null) {
+            AsyncImage(
+                model = photoUrl,
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                alignment = Alignment.Center,
+                modifier = Modifier.fillMaxSize()
+            )
+        } else {
+            Image(
+                painter = painterResource(id = R.drawable.profile_pic),
+                contentDescription = stringResource(
+                    R.string.profile_pic
+                ),
+                contentScale = ContentScale.Crop,
+                alignment = Alignment.Center,
+                modifier = Modifier.fillMaxSize()
+            )
+        }
     }
 }
