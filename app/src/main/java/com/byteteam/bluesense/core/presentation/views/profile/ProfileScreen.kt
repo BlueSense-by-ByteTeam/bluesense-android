@@ -1,8 +1,10 @@
 package com.byteteam.bluesense.core.presentation.views.profile
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -40,48 +42,7 @@ fun ProfileScreen(
     var triggerDialog by remember { mutableStateOf(false) }
 
 
-    Column(
-        modifier
-            .padding(horizontal = 24.dp)
-            .padding(top = 20.dp)
-    ) {
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(20.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 20.dp)
-        ) {
-            ProfilePic()
-            Column {
-                Text(text = userData?.userName ?: "-", fontWeight = FontWeight.Bold)
-                Text(text = userData?.email ?: "-")
-            }
-        }
-        Column(Modifier.padding(bottom = 26.dp)) {
-            Text(
-                text = "Akun",
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(bottom = 20.dp)
-            )
-            Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
-                ActionMenuItem(icon = Icons.Default.Person, title = "Profil")
-                ActionMenuItem(icon = Icons.Default.Notifications, title = "Notifikasi")
-            }
-        }
-        Column {
-            Text(
-                text = "Umum",
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(bottom = 20.dp)
-            )
-            Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
-                ActionMenuItem(
-                    icon = Icons.Default.Logout,
-                    title = "Keluar",
-                    onTap = { triggerDialog = true })
-            }
-        }
-
+    Box(modifier = Modifier.fillMaxSize()){
         if (triggerDialog) {
             DialogContainer(onDismissRequest = {
                 triggerDialog = false
@@ -97,7 +58,52 @@ fun ProfileScreen(
                 )
             }
         }
+
+        Column(
+            modifier
+                .padding(horizontal = 24.dp)
+                .padding(top = 20.dp)
+        ) {
+
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(20.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 20.dp)
+            ) {
+                ProfilePic()
+                Column {
+                    Text(text = userData?.userName ?: "-", fontWeight = FontWeight.Bold)
+                    Text(text = userData?.email ?: "-")
+                }
+            }
+            Column(Modifier.padding(bottom = 26.dp)) {
+                Text(
+                    text = "Akun",
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(bottom = 20.dp)
+                )
+                Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
+                    ActionMenuItem(icon = Icons.Default.Person, title = "Profil")
+                    ActionMenuItem(icon = Icons.Default.Notifications, title = "Notifikasi")
+                }
+            }
+            Column {
+                Text(
+                    text = "Umum",
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(bottom = 20.dp)
+                )
+                Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
+                    ActionMenuItem(
+                        icon = Icons.Default.Logout,
+                        title = "Keluar",
+                        onTap = { triggerDialog = true })
+                }
+            }
+        }
     }
+
 }
 
 @Preview

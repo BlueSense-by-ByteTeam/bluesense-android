@@ -206,6 +206,7 @@ class MainActivity : ComponentActivity() {
                                         signInGoogle()
                                     },
                                     enableButton = authViewModel.buttonEnabled.collectAsState().value,
+                                    eventMessage = authViewModel.eventFlow,
                                     navHostController = navController,
                                 )
                             }

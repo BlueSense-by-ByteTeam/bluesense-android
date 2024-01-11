@@ -1,4 +1,4 @@
-package com.byteteam.bluesense.core.data.remote.network.services
+package com.byteteam.bluesense.core.data.remote.network.services.location
 
 import com.byteteam.bluesense.core.data.remote.network.response.indonesian_location.GetCitiesItem
 import com.byteteam.bluesense.core.data.remote.network.response.indonesian_location.GetDistrictsItem

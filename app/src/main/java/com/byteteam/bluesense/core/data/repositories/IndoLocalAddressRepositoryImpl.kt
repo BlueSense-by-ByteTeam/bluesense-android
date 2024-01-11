@@ -1,7 +1,6 @@
 package com.byteteam.bluesense.core.data.repositories
 
-import com.byteteam.bluesense.core.data.common.Resource
-import com.byteteam.bluesense.core.data.remote.network.services.IndonesianLocationAddressService
+import com.byteteam.bluesense.core.data.remote.network.services.location.IndonesianLocationAddressService
 import com.byteteam.bluesense.core.domain.model.CityEntity
 import com.byteteam.bluesense.core.domain.model.DistrictEntity
 import com.byteteam.bluesense.core.domain.model.ProvinceEntity

@@ -1,6 +1,7 @@
-package com.byteteam.bluesense.core.data.remote.network.services
+package com.byteteam.bluesense.core.data.remote.network.services.bluesense
 
 import android.service.autofill.UserData
+import com.byteteam.bluesense.core.data.remote.network.response.auth.UserDataResponse
 import com.byteteam.bluesense.core.domain.model.SignUpPost
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -9,12 +10,12 @@ import retrofit2.http.POST
 
 
 interface AuthServices{
-    @GET("/api/users")
+    @GET("api/users")
     suspend fun getUserData(
         @Header("Authorization") authToken: String
-    ): UserData
-    @POST("/api/users/register")
-    fun registerUser(
+    ): UserDataResponse
+    @POST("api/users/register")
+    suspend fun registerUser(
         @Header("Authorization") authToken: String,
-        @Body signUpData: SignUpPost): UserData
+        @Body signUpData: SignUpPost): UserDataResponse
 }

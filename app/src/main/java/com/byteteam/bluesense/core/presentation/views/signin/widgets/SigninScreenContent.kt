@@ -1,25 +1,42 @@
 package com.byteteam.bluesense.core.presentation.views.signin.widgets
 
+import android.widget.Space
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.byteteam.bluesense.R
+import com.byteteam.bluesense.core.data.event.SingleEvent
 import com.byteteam.bluesense.core.helper.Screens
+import com.byteteam.bluesense.core.presentation.views.profile.widgets.SignOutDialogContent
+import com.byteteam.bluesense.core.presentation.widgets.DialogContainer
+import kotlinx.coroutines.flow.Flow
 
 @Composable
 fun SigninScreenContent(
@@ -29,10 +46,19 @@ fun SigninScreenContent(
     password: String,
     enableButton: Boolean,
     onUpdateEmail: (String) -> Unit,
+    eventMessage: Flow<SingleEvent>,
     onUpdatePassword: (String) -> Unit,
     navHostController: NavHostController = rememberNavController(),
     modifier: Modifier = Modifier,
 ) {
+    var errorMessage: String? by remember { mutableStateOf(null) }
+    LaunchedEffect(Unit) {
+        eventMessage.collect { event ->
+            when (event) {
+                is SingleEvent.MessageEvent -> errorMessage = event.message
+            }
+        }
+    }
     Column(
         modifier
             .fillMaxSize()
@@ -40,6 +66,22 @@ fun SigninScreenContent(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
+        errorMessage?.let {
+            DialogContainer(onDismissRequest = {
+                errorMessage = null
+            }) {
+                Column(modifier = Modifier.height(412.dp).padding(24.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(text = "Signin Error!", style = MaterialTheme.typography.titleLarge, textAlign = TextAlign.Center, fontWeight = FontWeight.Bold)
+                    Text(text = it, textAlign = TextAlign.Center)
+                    Spacer(Modifier.weight(1f))
+                    Button(onClick = {
+                        errorMessage = null
+                    }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp)) {
+                        Text(text = "Tutup")
+                    }
+                }
+            }
+        }
         Image(
             painter = painterResource(id = if (!isSystemInDarkTheme()) R.drawable.bluesense_logo_with_text else R.drawable.bluesense_logo_w_text_darktheme),
             contentDescription = stringResource(
@@ -53,13 +95,13 @@ fun SigninScreenContent(
             password = password,
             onUpdateEmail = onUpdateEmail,
             onUpdatePassword = onUpdatePassword,
-            enableButton=enableButton,
+            enableButton = enableButton,
             onTapSignInEmail = onTapSignInEmailPassword
         )
         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
             Text(text = stringResource(R.string.dont_have_account))
             Text(
-                modifier = Modifier.clickable { navHostController.navigate(Screens.SignUp.route)  },
+                modifier = Modifier.clickable { navHostController.navigate(Screens.SignUp.route) },
                 text = stringResource(R.string.create_now),
                 color = MaterialTheme.colorScheme.primary
             )

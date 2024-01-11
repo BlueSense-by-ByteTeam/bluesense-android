@@ -3,14 +3,17 @@ package com.byteteam.bluesense.core.presentation.views.signin
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.byteteam.bluesense.core.data.event.SingleEvent
 import com.byteteam.bluesense.core.domain.model.SignInResult
 import com.byteteam.bluesense.core.domain.model.UserData
 import com.byteteam.bluesense.core.domain.repositories.AuthRepository
 import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -24,6 +27,9 @@ class AuthViewModel @Inject constructor(
     val email: MutableStateFlow<String> = MutableStateFlow("")
     val password: MutableStateFlow<String> = MutableStateFlow("")
     val buttonEnabled: MutableStateFlow<Boolean> = MutableStateFlow(false)
+
+    private val eventChannel = Channel<SingleEvent>()
+    val eventFlow = eventChannel.receiveAsFlow()
 
     init {
         getCurrentUser()
@@ -43,13 +49,18 @@ class AuthViewModel @Inject constructor(
     }
 
     fun signInEmailPassword(callbackOnSuccess: () -> Unit = {}){
+        buttonEnabled.value = false
         viewModelScope.launch {
             repository.signInEmail(email.value, password.value).collect{
                 val gson = Gson()
                 val json = gson.toJson(it)
                 Log.d("TAG", "onCreate: signed user $json")
                 _currentUser.value = it?.data
-                callbackOnSuccess()
+                buttonEnabled.value = true
+                if(it?.errorMessage == null) callbackOnSuccess()
+                it?.errorMessage?.let {
+                    eventChannel.send(SingleEvent.MessageEvent("Signin Error: $it"))
+                }
             }
         }
     }
