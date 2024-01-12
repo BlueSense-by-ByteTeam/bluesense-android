@@ -1,39 +1,16 @@
 package com.byteteam.bluesense.core.presentation.views.home
 
-import android.util.Log
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -41,39 +18,24 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.byteteam.bluesense.BuildConfig
-import com.byteteam.bluesense.R
 import com.byteteam.bluesense.core.data.common.Resource
 import com.byteteam.bluesense.core.domain.model.DeviceEntity
+import com.byteteam.bluesense.core.domain.model.DeviceLatestInfoEntity
 import com.byteteam.bluesense.core.helper.MqttHandler
-import com.byteteam.bluesense.core.helper.Screens
-import com.byteteam.bluesense.core.presentation.views.home.widgets.DeviceInfoCard
 import com.byteteam.bluesense.core.presentation.views.home.widgets.HomeScreenContent
-import com.byteteam.bluesense.core.presentation.views.home.widgets.HomeTopBar
-import com.byteteam.bluesense.core.presentation.views.home.widgets.WaterFilterBanner
 import com.byteteam.bluesense.ui.theme.BlueSenseTheme
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
+import eu.bambooapps.material3.pullrefresh.PullRefreshIndicator
+import eu.bambooapps.material3.pullrefresh.pullRefresh
+import eu.bambooapps.material3.pullrefresh.rememberPullRefreshState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
-import org.eclipse.paho.android.service.MqttAndroidClient
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence
 
@@ -85,6 +47,7 @@ fun HomeScreen(
     memoryPersistence: MemoryPersistence? = null,
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
     devices: StateFlow<Resource<List<DeviceEntity>>> = MutableStateFlow(Resource.Success(listOf())),
+    detailDevice: StateFlow<Resource<DeviceLatestInfoEntity?>> = MutableStateFlow(Resource.Loading()),
     getDevices: () -> Unit = {},
     navHostController: NavHostController = rememberNavController(),
     modifier: Modifier = Modifier
@@ -127,20 +90,42 @@ fun HomeScreen(
 //        }
 //    }
 
+    val isRefreshing by remember {
+        mutableStateOf(false)
+    }
+    val state = rememberPullRefreshState(refreshing = isRefreshing, onRefresh = {
+        getDevices()
+    })
+
+
     Column(
         modifier
             .verticalScroll(rememberScrollState())
             .padding(horizontal = 24.dp)
     ) {
-        devices.collectAsState().value.let {
-            when(it){
-                is Resource.Loading -> {
-                    getDevices()
-                    CircularProgressIndicator()
+        Box() {
+            devices.collectAsState().value.let {
+                when (it) {
+                    is Resource.Loading -> {
+                        getDevices()
+                        CircularProgressIndicator()
+                    }
+                    is Resource.Error -> Text(text = "error x${it.message}" ?: "Error")
+                    is Resource.Success -> HomeScreenContent(
+                        deviceEntity = it.data?.get(0),
+                        deviceInfo = detailDevice,
+                        navHostController = navHostController,
+                        modifier = modifier
+//                            .fillMaxSize()
+//                            .verticalScroll(rememberScrollState())
+                            .pullRefresh(state),
+                    )
                 }
-                is Resource.Error -> Text(text = it.message ?: "Error")
-                is Resource.Success -> HomeScreenContent(device = if(it.data?.size == 0) null else it.data?.get(0)!!,  navHostController = navHostController)
             }
+            PullRefreshIndicator(refreshing = isRefreshing, state = state,
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
+            )
         }
     }
 

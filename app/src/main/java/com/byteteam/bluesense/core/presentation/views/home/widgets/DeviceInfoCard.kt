@@ -17,14 +17,16 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.AddBox
-import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -34,15 +36,23 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.byteteam.bluesense.R
+import com.byteteam.bluesense.core.data.common.Resource
 import com.byteteam.bluesense.core.domain.model.DeviceEntity
+import com.byteteam.bluesense.core.domain.model.DeviceLatestInfoEntity
+import com.byteteam.bluesense.ui.theme.Green
+import com.byteteam.bluesense.ui.theme.Yellow
+import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 fun DeviceInfoCard(
     onTapAddDevice: () -> Unit,
     onTapDetailDevice: (String) -> Unit,
-    deviceData: DeviceEntity?,
-    modifier: Modifier = Modifier
+    deviceEntity: DeviceEntity?,
+    deviceData: StateFlow<Resource<DeviceLatestInfoEntity?>>,
+    modifier: Modifier = Modifier,
 ) {
+    var isBad by remember { mutableStateOf(false)  }
+
     Column(verticalArrangement = Arrangement.spacedBy(8.dp), modifier = modifier) {
         Box(
             modifier = Modifier
@@ -61,10 +71,9 @@ fun DeviceInfoCard(
             Image(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
-                    .width(166.dp)
-                    .offset(y = 68.dp),
+                    .width(166.dp),
                 //                    contentScale = ContentScale.Crop,
-                painter = painterResource(id = R.drawable.dummy_device_product),
+                painter = painterResource(id = R.drawable.box_device),
                 contentDescription = stringResource(
                     R.string.device_image
                 )
@@ -79,18 +88,20 @@ fun DeviceInfoCard(
                         style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold)
                     )
                     Text(
-                        text = stringResource(R.string.no_device_added),
+                        text = if (deviceEntity == null) stringResource(R.string.no_device_added) else stringResource(
+                            R.string.connected
+                        ),
                         style = MaterialTheme.typography.titleMedium,
-                        color = Color.Red
+                        color = if (deviceEntity == null) Color.Red else Green
                     )
                 }
                 Box(
                     modifier = Modifier
-                        .background(if (deviceData == null) MaterialTheme.colorScheme.primary else Color.LightGray)
+                        .background(if (deviceEntity == null) MaterialTheme.colorScheme.primary else Color.LightGray)
                         .clip(RoundedCornerShape(4.dp))
                         .size(24.dp)
                         .clickable {
-                            if (deviceData == null) onTapAddDevice()
+                            if (deviceEntity == null) onTapAddDevice()
                         }) {
                     Icon(
                         imageVector = Icons.Default.Add,
@@ -102,20 +113,39 @@ fun DeviceInfoCard(
         }
         Row(
             modifier = Modifier
-                .background(if(deviceData != null) MaterialTheme.colorScheme.primary else Color.LightGray)
+                .background(
+                    if (deviceEntity != null) {
+                        if (isBad) Yellow else MaterialTheme.colorScheme.primary
+                    } else Color.LightGray
+                )
                 .fillMaxWidth()
-                .clickable { if(deviceData != null) onTapDetailDevice(deviceData.id) }
+                .clickable { if (deviceEntity != null) onTapDetailDevice(deviceEntity.id) }
                 .padding(horizontal = 20.dp, vertical = 12.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(
-                text = "-",
-                color = MaterialTheme.colorScheme.onPrimary,
-                fontWeight = FontWeight.SemiBold
-            )
+            deviceData.collectAsState().value.let {
+                when (it) {
+                    is Resource.Loading -> CircularProgressIndicator(color = MaterialTheme.colorScheme.onPrimary, strokeWidth = 2.dp, modifier = Modifier.size(16.dp))
+                    is Resource.Error -> Text(
+                        text = it.message ?: "-",
+                        color = if(isBad) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onPrimary,
+                        fontWeight = FontWeight.SemiBold
+                    )
+
+                    is Resource.Success -> {
+                        isBad = it.data?.quality == "buruk"
+                        Text(
+                            text = it.data?.quality ?: "belum ada data",
+                            color = if(isBad) Color.Black else  MaterialTheme.colorScheme.onPrimary,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    }
+                }
+            }
+
             Text(
                 text = "Detail",
-                color = MaterialTheme.colorScheme.onPrimary,
+                color = if(isBad) MaterialTheme.colorScheme.primary else  MaterialTheme.colorScheme.onPrimary,
                 fontWeight = FontWeight.SemiBold
             )
         }
@@ -126,7 +156,7 @@ fun DeviceInfoCard(
             Box(
                 modifier = Modifier
                     .clip(RoundedCornerShape(bottomStart = 12.dp))
-                    .background(if(deviceData != null) MaterialTheme.colorScheme.primary else Color.LightGray)
+                    .background(if (deviceEntity != null) MaterialTheme.colorScheme.primary else Color.LightGray)
                     .weight(1f)
                     .padding(horizontal = 16.dp, vertical = 20.dp)
             ) {
@@ -135,16 +165,28 @@ fun DeviceInfoCard(
                         text = "Kualitas Air",
                         color = MaterialTheme.colorScheme.onPrimary
                     )
-                    Text(
-                        text = "-",
-                        color = MaterialTheme.colorScheme.onPrimary
-                    )
+
+                    deviceData.collectAsState().value.let {
+                        when (it) {
+                            is Resource.Loading -> CircularProgressIndicator(color = MaterialTheme.colorScheme.onPrimary, strokeWidth = 2.dp, modifier = Modifier.size(16.dp))
+                            is Resource.Error -> Text(
+                                text = it.message ?: "-",
+                                color = MaterialTheme.colorScheme.onPrimary
+                            )
+                            is Resource.Success -> Text(
+                                text = it.data?.quality ?: "belum ada data",
+                                color = MaterialTheme.colorScheme.onPrimary,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                    }
+
                 }
             }
             Box(
                 modifier = Modifier
                     .clip(RoundedCornerShape(bottomEnd = 12.dp))
-                    .background(if(deviceData != null) MaterialTheme.colorScheme.primary else Color.LightGray)
+                    .background(if (deviceEntity != null) MaterialTheme.colorScheme.primary else Color.LightGray)
                     .weight(1f)
                     .padding(horizontal = 16.dp, vertical = 20.dp)
             ) {
@@ -153,10 +195,20 @@ fun DeviceInfoCard(
                         text = "Status Air",
                         color = MaterialTheme.colorScheme.onPrimary
                     )
-                    Text(
-                        text = "lorem",
-                        color = MaterialTheme.colorScheme.onPrimary
-                    )
+                    deviceData.collectAsState().value.let {
+                        when (it) {
+                            is Resource.Loading -> CircularProgressIndicator(color = MaterialTheme.colorScheme.onPrimary, strokeWidth = 2.dp, modifier = Modifier.size(16.dp))
+                            is Resource.Error -> Text(
+                                text = it.message ?: "-",
+                                color = MaterialTheme.colorScheme.onPrimary
+                            )
+                            is Resource.Success -> Text(
+                                text = it.data?.status ?: "belum ada data",
+                                color = MaterialTheme.colorScheme.onPrimary,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                    }
                 }
             }
         }

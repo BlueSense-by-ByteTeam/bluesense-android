@@ -248,6 +248,7 @@ class MainActivity : ComponentActivity() {
                                     mqttConnectOptions = mqttConnectOptions,
                                     mqttAndroidClient = mqttHandlerClient,
                                     devices = homeViewModel.devices,
+                                    detailDevice = homeViewModel.detailDeviceLatestInfo,
                                     getDevices = { homeViewModel.getDevices() },
                                     navHostController = navController
                                 )

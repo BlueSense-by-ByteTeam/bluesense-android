@@ -143,6 +143,8 @@ dependencies {
     implementation("androidx.datastore:datastore-preferences:1.0.0")
     //Coil
     implementation("io.coil-kt:coil-compose:2.5.0")
+    //Pull Refresh
+    implementation("eu.bambooapps:compose-material3-pullrefresh:1.0.1")
 }
 // Allow references to generated code
 kapt {

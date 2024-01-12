@@ -2,6 +2,7 @@ package com.byteteam.bluesense.core.presentation.views.store.main.widgets
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -31,6 +32,7 @@ fun BannerFilterDevice(modifier: Modifier = Modifier) {
             .clip(RoundedCornerShape(12.dp))
             .background(Color(0xFFF2F2F2))
             .padding(12.dp)
+        , horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Box(
             modifier = Modifier
@@ -38,11 +40,11 @@ fun BannerFilterDevice(modifier: Modifier = Modifier) {
                 .height(125.dp)
         ) {
             Image(
-                painter = painterResource(id = R.drawable.filter_device_sm),
+                painter = painterResource(id = R.drawable.box_device),
                 contentDescription = stringResource(
                     id = R.string.device_image
                 ),
-                alignment = Alignment.Center
+                modifier = Modifier.align(Alignment.Center),
             )
         }
         Column {

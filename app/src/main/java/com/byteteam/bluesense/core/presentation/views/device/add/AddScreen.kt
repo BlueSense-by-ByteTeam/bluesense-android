@@ -69,7 +69,7 @@ fun AddScreen(
         }
 
         Image(
-            painter = painterResource(id = R.drawable.dummy_device_product),
+            painter = painterResource(id = R.drawable.box_device),
             contentDescription = stringResource(
                 id = R.string.device_image
             )

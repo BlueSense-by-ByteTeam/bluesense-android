@@ -8,4 +8,6 @@ data class DeviceEntity(
     val district: String,
     val city: String,
     val province: String,
+    val mqttBaseUrl: String,
+    val mqttTopic: String,
 )

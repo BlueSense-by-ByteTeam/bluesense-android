@@ -1,10 +1,10 @@
 package com.byteteam.bluesense.core.data.remote.network.services.bluesense
 
-import android.service.autofill.UserData
 import com.byteteam.bluesense.core.data.remote.network.response.MessageResponse
+import com.byteteam.bluesense.core.data.remote.network.response.devices.GetDeviceLatestInfoResponse
 import com.byteteam.bluesense.core.data.remote.network.response.devices.GetDevicesResponse
+import com.byteteam.bluesense.core.data.remote.network.response.devices.GetDevicesResponseOld
 import com.byteteam.bluesense.core.domain.model.DevicePost
-import com.byteteam.bluesense.core.domain.model.SignUpPost
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -18,6 +18,12 @@ interface DeviceServices {
     suspend fun getDevices(
         @Header("Authorization") authToken: String
     ): GetDevicesResponse
+
+    @GET("api/devices/logs/{id}")
+    suspend fun getDeviceLatestInfo(
+        @Header("Authorization") authToken: String,
+        @Path("id") id: String
+    ) : GetDeviceLatestInfoResponse
 
     @POST("api/devices")
     suspend fun postDevice(

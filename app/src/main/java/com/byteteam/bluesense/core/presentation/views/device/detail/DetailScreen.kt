@@ -58,15 +58,13 @@ fun DetailScreen(modifier: Modifier = Modifier) {
         }
         BannerWaterStatus(modifier = Modifier.padding(bottom = 36.dp))
         Image(
-            painter = painterResource(id = R.drawable.dummy_device_product),
+            painter = painterResource(id = R.drawable.box_device),
             contentDescription = stringResource(
                 id = R.string.device_image
             ),
             modifier = Modifier
                 .padding(bottom = 12.dp)
                 .align(Alignment.CenterHorizontally)
-                .width(312.dp)
-                .height(268.dp)
         )
         CardStatusTemplate()
     }
