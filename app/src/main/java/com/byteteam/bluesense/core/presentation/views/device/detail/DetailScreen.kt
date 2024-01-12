@@ -24,6 +24,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -34,14 +35,21 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.byteteam.bluesense.R
+import com.byteteam.bluesense.core.domain.model.SensorData
 import com.byteteam.bluesense.core.presentation.views.device.detail.widgets.BannerWaterStatus
 import com.byteteam.bluesense.core.presentation.views.device.detail.widgets.CardStatusTemplate
 import com.byteteam.bluesense.ui.theme.BlueSenseTheme
 import com.byteteam.bluesense.ui.theme.Green
 import com.byteteam.bluesense.ui.theme.LightBlue
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 @Composable
-fun DetailScreen(modifier: Modifier = Modifier) {
+fun DetailScreen(
+    statusDevice: StateFlow<Boolean>,
+    sensorData: StateFlow<SensorData?>,
+    modifier: Modifier = Modifier
+) {
     Column(
         modifier
             .padding(horizontal = 24.dp)
@@ -54,7 +62,10 @@ fun DetailScreen(modifier: Modifier = Modifier) {
         )
         Row(modifier = Modifier.padding(bottom = 20.dp)) {
             Text("Status Alat :")
-            Text(" Terhubung", color = Green)
+            Text(
+                if (statusDevice.collectAsState().value) "Terhubung" else "Tidak Terhubung",
+                color = if (statusDevice.collectAsState().value) Green else Color.Red
+            )
         }
         BannerWaterStatus(modifier = Modifier.padding(bottom = 36.dp))
         Image(
@@ -66,7 +77,7 @@ fun DetailScreen(modifier: Modifier = Modifier) {
                 .padding(bottom = 12.dp)
                 .align(Alignment.CenterHorizontally)
         )
-        CardStatusTemplate()
+        CardStatusTemplate(sensorData)
     }
 }
 
@@ -75,7 +86,10 @@ fun DetailScreen(modifier: Modifier = Modifier) {
 private fun Preview() {
     BlueSenseTheme {
         Surface {
-            DetailScreen()
+            DetailScreen(
+                MutableStateFlow(true),
+                MutableStateFlow(null),
+            )
         }
     }
 }

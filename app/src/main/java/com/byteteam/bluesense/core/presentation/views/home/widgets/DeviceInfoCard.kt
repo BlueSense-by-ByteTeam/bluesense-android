@@ -45,6 +45,7 @@ import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 fun DeviceInfoCard(
+    statusDevice: StateFlow<Boolean>,
     onTapAddDevice: () -> Unit,
     onTapDetailDevice: (String) -> Unit,
     deviceEntity: DeviceEntity?,
@@ -88,11 +89,11 @@ fun DeviceInfoCard(
                         style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold)
                     )
                     Text(
-                        text = if (deviceEntity == null) stringResource(R.string.no_device_added) else stringResource(
-                            R.string.connected
-                        ),
+                        text = if (deviceEntity == null) stringResource(R.string.no_device_added) else {
+                            if (statusDevice.collectAsState().value) "Terhubung" else "Tidak Terhubung"
+                        },
                         style = MaterialTheme.typography.titleMedium,
-                        color = if (deviceEntity == null) Color.Red else Green
+                        color = if (deviceEntity == null || !statusDevice.collectAsState().value) Color.Red else Green
                     )
                 }
                 Box(

@@ -113,8 +113,10 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
     //PAHO MQTT
-    implementation("org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.1.0")
-    implementation("org.eclipse.paho:org.eclipse.paho.android.service:1.1.1")
+//    implementation("org.eclipse.paho:org.eclipse.paho.android.service:1.1.1")
+    implementation("org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.5")
+    implementation("com.github.hannesa2:paho.mqtt.android:3.3.5")
+    implementation("androidx.legacy:legacy-support-v4:1.0.0")
     //QR Scanner
     implementation("com.google.android.gms:play-services-code-scanner:16.1.0")
     //Icon
@@ -145,6 +147,9 @@ dependencies {
     implementation("io.coil-kt:coil-compose:2.5.0")
     //Pull Refresh
     implementation("eu.bambooapps:compose-material3-pullrefresh:1.0.1")
+
+    implementation("androidx.work:work-runtime:2.7.0-alpha05")
+
 }
 // Allow references to generated code
 kapt {

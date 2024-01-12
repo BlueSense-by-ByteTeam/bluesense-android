@@ -1,88 +1,78 @@
-package com.byteteam.bluesense.core.helper
-
+import android.content.Context
 import android.util.Log
-import org.eclipse.paho.client.mqttv3.*
-import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence
-import javax.inject.Inject
+import info.mqtt.android.service.MqttAndroidClient
+import info.mqtt.android.service.QoS
+import org.eclipse.paho.client.mqttv3.DisconnectedBufferOptions
+import org.eclipse.paho.client.mqttv3.IMqttActionListener
+import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken
+import org.eclipse.paho.client.mqttv3.IMqttToken
+import org.eclipse.paho.client.mqttv3.MqttCallbackExtended
+import org.eclipse.paho.client.mqttv3.MqttConnectOptions
+import org.eclipse.paho.client.mqttv3.MqttMessage
+import java.util.UUID
 
-class MqttHandler @Inject constructor(val memoryPersistence: MemoryPersistence) {
-    var client: MqttClient? = null
-    fun connect(brokerUrl: String?, clientId: String?, connectOptions: MqttConnectOptions, memoryPersistence: MemoryPersistence, cbOnFailConnect: ((String) -> Unit)? = null) {
-        try {
-//            // Set up the persistence layer
-//            val persistence = MemoryPersistence()
-//            persistence.
-            // Initialize the MQTT client
-            client = MqttClient(brokerUrl, clientId, memoryPersistence)
-
-            // Set up the connection options
-            connectOptions.isCleanSession = true
-
-            // Connect to the broker
-            client?.connect(connectOptions)
-        } catch (e: MqttException) {
-            Log.d(this::class.java.simpleName, "connect mqtt error: ${e.message}")
-            e.printStackTrace()
-            cbOnFailConnect?.invoke(e.message.toString())
-        }
+class MqttClientHelper(
+    private val context: Context,
+    private val broker: String
+){
+    var client: MqttAndroidClient? = null
+    init {
+        client = MqttAndroidClient(context, broker,  UUID.randomUUID().toString())
     }
-
-    fun disconnect() {
-        try {
-            client?.disconnect()
-        } catch (e: MqttException) {
-            e.printStackTrace()
-        }
-    }
-
-    fun publish(topic: String?, message: String) {
-        try {
-            val mqttMessage = MqttMessage(message.toByteArray())
-            client?.publish(topic, mqttMessage)
-        } catch (e: MqttException) {
-            e.printStackTrace()
-        }
-    }
-
-    fun subscribe(topic: String?) {
-        try {
-            client?.subscribe(topic)
-        } catch (e: MqttException) {
-            e.printStackTrace()
-        }
-    }
-
-    fun unsubscribe(topic: String?) {
-        try {
-            client?.unsubscribe(topic)
-        } catch (e: MqttException) {
-            e.printStackTrace()
-        }
-    }
-
-    fun listen(callbackOnMessage: (topic: String, message: String?) -> Unit, callbackOnTopicNull: (() -> Unit)? = null){
-        try {
-            client?.setCallback(object: MqttCallback{
-                override fun connectionLost(cause: Throwable?) {
-                    Log.d(this::class.java.simpleName, "connectionLost: $cause")
+    fun init(cbOnMessage: (String) -> Unit, cbOnConnected: () -> Unit, cbOnLostConnection: () -> Unit){
+        client?.setCallback(object : MqttCallbackExtended {
+            override fun connectComplete(reconnect: Boolean, serverURI: String) {
+                if (reconnect) {
+                    Log.d("MQTT Topic   ", "connectComplete: reconnect")
+                } else {
+                    Log.d("MQTT Topic   ", "connectComplete: connected")
                 }
+                cbOnConnected()
+            }
 
-                override fun messageArrived(topic: String?, message: MqttMessage?) {
-                    Log.d(this::class.java.simpleName, "messageArrived from $topic message: $message")
-                    topic?.let {
-                        callbackOnMessage(it, message.toString())
-                    }
-                    if(topic == null) callbackOnTopicNull?.invoke()
-                }
+            override fun connectionLost(cause: Throwable?) {
+                Log.d("MQTT Topic   ", "connection lost")
+                cbOnLostConnection()
+            }
 
-                override fun deliveryComplete(token: IMqttDeliveryToken?) {
-                    Log.d(this::class.java.simpleName, "deliveryComplete: $token")
-                }
-            })
-        }catch (e: MqttException){
-            e.printStackTrace()
-        }
+            override fun messageArrived(topic: String, message: MqttMessage) {
+                Log.d("MQTT Topic   ", "connection message ${message.payload}")
+                cbOnMessage(message.toString())
+            }
+
+            override fun deliveryComplete(token: IMqttDeliveryToken) {}
+        })
     }
 
-    fun close() = client?.close()
+    fun connect(mqttConnectOptions: MqttConnectOptions, topic: String){
+        client?.connect(mqttConnectOptions, null, object : IMqttActionListener {
+            override fun onSuccess(asyncActionToken: IMqttToken) {
+                val disconnectedBufferOptions = DisconnectedBufferOptions()
+                disconnectedBufferOptions.isBufferEnabled = true
+                disconnectedBufferOptions.bufferSize = 100
+                disconnectedBufferOptions.isPersistBuffer = false
+                disconnectedBufferOptions.isDeleteOldestMessages = false
+                client?.setBufferOpts(disconnectedBufferOptions)
+                client?.subscribeToTopic(topic)
+            }
+
+            override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {
+                Log.d("MQTT Topic   ", "onFailure: fail to connect")
+            }
+        })
+    }
+
+    private fun MqttAndroidClient.subscribeToTopic(topic: String, cbOnConnected: () -> Unit = {}, cbOnFail: () -> Unit = {}) {
+        this.subscribe(topic, QoS.AtLeastOnce.value, null, object : IMqttActionListener {
+            override fun onSuccess(asyncActionToken: IMqttToken) {
+                Log.d("MQTT Topic   ", "Subscribed! $topic")
+                cbOnConnected()
+            }
+
+            override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {
+                Log.d("MQTT Topic   ", "Failed to subscribe $exception")
+                cbOnFail()
+            }
+        })
+    }
 }

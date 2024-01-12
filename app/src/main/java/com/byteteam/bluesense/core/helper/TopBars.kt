@@ -83,7 +83,7 @@ fun Topbars(route: String, navHostController: NavHostController) {
             },
             title = { Text(text = "Detail") },
             actions = {
-                IconButton(onClick = { navHostController.popBackStack() }) {
+                IconButton(onClick = {  }) {
                     Icon(
                         imageVector = Icons.Default.Delete,
                         tint = MaterialTheme.colorScheme.primary,

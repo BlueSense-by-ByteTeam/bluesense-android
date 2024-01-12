@@ -1,5 +1,7 @@
 package com.byteteam.bluesense
 
+import MqttClientHelper
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.webkit.URLUtil
@@ -34,8 +36,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.byteteam.bluesense.core.data.common.Resource
-import com.byteteam.bluesense.core.helper.MqttHandler
+import com.byteteam.bluesense.core.domain.model.DeviceEntity
+import com.byteteam.bluesense.core.domain.model.SensorData
 import com.byteteam.bluesense.core.helper.Screens
 import com.byteteam.bluesense.core.helper.Topbars
 import com.byteteam.bluesense.core.helper.bottomNavigationItems
@@ -45,6 +47,7 @@ import com.byteteam.bluesense.core.presentation.views.device.add_form.AddDeviceF
 import com.byteteam.bluesense.core.presentation.views.device.add_form.AddDeviceFormViewModel
 import com.byteteam.bluesense.core.presentation.views.device.add_form.AddDeviceScreenData
 import com.byteteam.bluesense.core.presentation.views.device.add_form.AddDeviceViewModel
+import com.byteteam.bluesense.core.presentation.views.device.detail.DetailDeviceViewModel
 import com.byteteam.bluesense.core.presentation.views.device.detail.DetailScreen
 import com.byteteam.bluesense.core.presentation.views.device.scan.ScanViewModel
 import com.byteteam.bluesense.core.presentation.views.getstarted.GetStartedScreen
@@ -64,13 +67,11 @@ import com.byteteam.bluesense.core.presentation.views.statistic.StatisticScreen
 import com.byteteam.bluesense.core.presentation.views.store.main.StoreScreen
 import com.byteteam.bluesense.core.presentation.widgets.BottomBar
 import com.byteteam.bluesense.ui.theme.BlueSenseTheme
-import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
+import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions
-import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence
 import javax.inject.Inject
-
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -79,14 +80,18 @@ class MainActivity : ComponentActivity() {
     private val onBoardViewModel: OnBoardViewModel by viewModels()
     private val registerViewModel: RegisterViewModel by viewModels()
     private val addDeviceViewModel: AddDeviceViewModel by viewModels()
-    private val homeViewModel: HomeViewModel  by viewModels()
-    private val addDeviceFormViewModel: AddDeviceFormViewModel  by viewModels()
-
-    @Inject
-    lateinit var mqttHandlerClient: MqttHandler
+    private val homeViewModel: HomeViewModel by viewModels()
+    private val addDeviceFormViewModel: AddDeviceFormViewModel by viewModels()
+    private val detailDeviceViewModel: DetailDeviceViewModel by viewModels()
 
     @Inject
     lateinit var googleAuthUiClient: GoogleSignInClient
+
+    var mqttClientHelper: MqttClientHelper? = null
+//    private val mqttClient by lazy {
+//        MqttHandler(this)
+//    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -94,13 +99,11 @@ class MainActivity : ComponentActivity() {
         installSplashScreen()
 
         val mqttConnectOptions = MqttConnectOptions()
-//        val mqttAndroidClient = MqttHandler()
-        val persistence = MemoryPersistence()
-
         mqttConnectOptions.apply {
             this.userName = BuildConfig.MQTT_USERNAME
             this.password = BuildConfig.MQTT_PASSWORD.toCharArray()
         }
+//        mqttClient.connect("ssl://f2e4701e.ala.us-east-1.emqxsl.com:8883", "test", mqttConnectOptions)
 
 
         setContent {
@@ -144,6 +147,20 @@ class MainActivity : ComponentActivity() {
                     ).build()
                 )
                 authViewModel.enableGoogleSigninButton()
+            }
+
+            fun callbackOnConnected(data: DeviceEntity) {
+
+                val brokerUrl = "ssl://${data.mqttBaseUrl}:8883"
+                val mqttTopic = data.mqttTopic
+                initMqtt(
+                    context = this,
+                    mqttConnectOptions = mqttConnectOptions,
+                    brokerUrl = brokerUrl,
+                    mqttTopic = mqttTopic,
+                    cbStatusConnection = {detailDeviceViewModel.updateDeviceStatus(it)},
+                    cbOnMessage = {detailDeviceViewModel.updateDeviceSensorValue(it)},
+                )
             }
 
             BlueSenseTheme {
@@ -240,13 +257,17 @@ class MainActivity : ComponentActivity() {
                                     onTapSignUpGoogle = { signInGoogle() },
                                     disableButton = !registerViewModel.buttonEnabled.collectAsState().value
                                 )
-                                SignupScreen(signupScreenContentData = data, navHostController = navController)
+                                SignupScreen(
+                                    signupScreenContentData = data,
+                                    navHostController = navController
+                                )
                             }
                             composable(Screens.Home.route) {
+                                val context = LocalContext.current
+
                                 HomeScreen(
-                                    memoryPersistence = persistence,
-                                    mqttConnectOptions = mqttConnectOptions,
-                                    mqttAndroidClient = mqttHandlerClient,
+                                    statusDevice = detailDeviceViewModel.isConnected,
+                                    cbOnDeviceConnected = { callbackOnConnected(it) },
                                     devices = homeViewModel.devices,
                                     detailDevice = homeViewModel.detailDeviceLatestInfo,
                                     getDevices = { homeViewModel.getDevices() },
@@ -286,7 +307,11 @@ class MainActivity : ComponentActivity() {
 
                                 LaunchedEffect(barcode) {
                                     if (barcode != null)
-                                        navController.navigate(Screens.AddDeviceForm.createRoute(barcode)) {
+                                        navController.navigate(
+                                            Screens.AddDeviceForm.createRoute(
+                                                barcode
+                                            )
+                                        ) {
                                             popUpTo(Screens.AddDevice.route) {
                                                 inclusive = true
                                             }
@@ -299,10 +324,14 @@ class MainActivity : ComponentActivity() {
                                         scanViewModel.startScan(
                                             context = context,
                                             callBackOnSuccess = {
-                                                if(!URLUtil.isValidUrl(it)) {
+                                                if (!URLUtil.isValidUrl(it)) {
                                                     barcode = it
-                                                }else{
-                                                    Toast.makeText(context, "QR code tidak valid!", Toast.LENGTH_SHORT).show()
+                                                } else {
+                                                    Toast.makeText(
+                                                        context,
+                                                        "QR code tidak valid!",
+                                                        Toast.LENGTH_SHORT
+                                                    ).show()
                                                 }
                                             })
                                     })
@@ -310,33 +339,39 @@ class MainActivity : ComponentActivity() {
                             composable(Screens.AddDeviceForm.route) {
                                 val id = it.arguments?.getString("id")
 
-                               val data = AddDeviceScreenData(
-                                 name= addDeviceFormViewModel.name.collectAsState().value,
-                                 id= addDeviceFormViewModel.id.collectAsState().value,
-                                 province= addDeviceFormViewModel.province.collectAsState().value,
-                                 city= addDeviceFormViewModel.city.collectAsState().value,
-                                 district= addDeviceFormViewModel.district.collectAsState().value,
-                                 address= addDeviceFormViewModel.address.collectAsState().value,
-                                 waterSource= addDeviceFormViewModel.waterSource.collectAsState().value,
-                                 buttonEnabled= addDeviceFormViewModel.buttonEnabled.collectAsState().value,
-                                 updateId= {  addDeviceFormViewModel.updateId(it) },
-                                 updateName= { addDeviceFormViewModel.updateName(it)},
-                                 updateProvince= { addDeviceFormViewModel.updateProvince(it)},
-                                 updateCity= { addDeviceFormViewModel.updateCity(it)},
-                                 updateDistrict= { addDeviceFormViewModel.updateDistrict(it)},
-                                 updateAddress= { addDeviceFormViewModel.updateAddress(it)},
-                                 updateWaterSource= { addDeviceFormViewModel.updateWaterSource(it)},
-                                 eventMessage= addDeviceFormViewModel.eventFlow,
-                                 postDevice= { addDeviceFormViewModel.postDevice(
-                                     callbackOnSuccess = {
-                                         navController.navigate(Screens.Home.route) {
-                                             popUpTo(Screens.AddDeviceForm.route) {
-                                                 inclusive = true
-                                             }
-                                         }
-                                         homeViewModel.getDevices()
-                                     }
-                                 ) },
+                                val data = AddDeviceScreenData(
+                                    name = addDeviceFormViewModel.name.collectAsState().value,
+                                    id = addDeviceFormViewModel.id.collectAsState().value,
+                                    province = addDeviceFormViewModel.province.collectAsState().value,
+                                    city = addDeviceFormViewModel.city.collectAsState().value,
+                                    district = addDeviceFormViewModel.district.collectAsState().value,
+                                    address = addDeviceFormViewModel.address.collectAsState().value,
+                                    waterSource = addDeviceFormViewModel.waterSource.collectAsState().value,
+                                    buttonEnabled = addDeviceFormViewModel.buttonEnabled.collectAsState().value,
+                                    updateId = { addDeviceFormViewModel.updateId(it) },
+                                    updateName = { addDeviceFormViewModel.updateName(it) },
+                                    updateProvince = { addDeviceFormViewModel.updateProvince(it) },
+                                    updateCity = { addDeviceFormViewModel.updateCity(it) },
+                                    updateDistrict = { addDeviceFormViewModel.updateDistrict(it) },
+                                    updateAddress = { addDeviceFormViewModel.updateAddress(it) },
+                                    updateWaterSource = {
+                                        addDeviceFormViewModel.updateWaterSource(
+                                            it
+                                        )
+                                    },
+                                    eventMessage = addDeviceFormViewModel.eventFlow,
+                                    postDevice = {
+                                        addDeviceFormViewModel.postDevice(
+                                            callbackOnSuccess = {
+                                                navController.navigate(Screens.Home.route) {
+                                                    popUpTo(Screens.AddDeviceForm.route) {
+                                                        inclusive = true
+                                                    }
+                                                }
+                                                homeViewModel.getDevices()
+                                            }
+                                        )
+                                    },
                                 )
 
                                 AddDeviceFormScreen(
@@ -354,15 +389,61 @@ class MainActivity : ComponentActivity() {
                                     addDeviceScreenData = data
                                 )
                             }
-                            composable(Screens.DetailDevice.route){
+                            composable(Screens.DetailDevice.route) {
                                 val id = it.arguments?.getString("id")
-                                DetailScreen()
+                                DetailScreen(
+                                    statusDevice = detailDeviceViewModel.isConnected,
+                                    sensorData = detailDeviceViewModel.data,
+                                )
                             }
                         }
                     }
                 }
             }
         }
+    }
+
+
+    private fun initMqtt(
+        context: Context,
+        mqttConnectOptions: MqttConnectOptions?,
+        brokerUrl: String,
+        mqttTopic: String,
+        cbStatusConnection: (Boolean) -> Unit,
+        cbOnMessage: (SensorData) -> Unit,
+    ) {
+        if(mqttClientHelper == null){
+            mqttClientHelper = MqttClientHelper(
+                context = context,
+                broker = brokerUrl
+            )
+
+            mqttClientHelper?.init(
+                cbOnConnected = {
+                    cbStatusConnection(true)
+//                    Toast.makeText(context, "Connected", Toast.LENGTH_SHORT).show()
+                },
+                cbOnLostConnection = {
+                    cbStatusConnection(false)
+//                    Toast.makeText(context, "Lost connection", Toast.LENGTH_SHORT).show()
+                },
+                cbOnMessage = {
+                    val data = Gson()?.fromJson(it, SensorData::class.java)
+                    data?.let(cbOnMessage)
+//                    Log.d("message", "on message cb: $data")
+//                    Toast.makeText(context, "message: $it", Toast.LENGTH_SHORT).show()
+                },
+            )
+            mqttConnectOptions?.let {
+                mqttClientHelper?.connect(mqttConnectOptions = it, topic = mqttTopic)
+            }
+
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mqttClientHelper = null
     }
 
     @Composable

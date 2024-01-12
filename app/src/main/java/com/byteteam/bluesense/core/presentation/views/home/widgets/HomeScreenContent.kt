@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 fun HomeScreenContent(
+    statusDevice: StateFlow<Boolean>,
     deviceEntity: DeviceEntity?,
     deviceInfo: StateFlow<Resource<DeviceLatestInfoEntity?>>,
     navHostController: NavHostController,
@@ -32,6 +33,7 @@ fun HomeScreenContent(
             modifier = Modifier.padding(bottom = 24.dp)
         )
         DeviceInfoCard(
+            statusDevice = statusDevice,
             deviceEntity = deviceEntity,
             onTapAddDevice = { navHostController.navigate(Screens.AddDevice.route) },
             onTapDetailDevice = { navHostController.navigate(Screens.DetailDevice.createRoute(it)) },
