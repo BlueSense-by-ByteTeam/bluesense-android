@@ -1,33 +1,16 @@
 package com.byteteam.bluesense.core.presentation.views.device.detail
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.WaterDrop
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -40,12 +23,13 @@ import com.byteteam.bluesense.core.presentation.views.device.detail.widgets.Bann
 import com.byteteam.bluesense.core.presentation.views.device.detail.widgets.CardStatusTemplate
 import com.byteteam.bluesense.ui.theme.BlueSenseTheme
 import com.byteteam.bluesense.ui.theme.Green
-import com.byteteam.bluesense.ui.theme.LightBlue
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 fun DetailScreen(
+    waterQualityHistory: String?,
+    waterQualityRealtime: StateFlow<String?>,
     statusDevice: StateFlow<Boolean>,
     sensorData: StateFlow<SensorData?>,
     modifier: Modifier = Modifier
@@ -64,10 +48,16 @@ fun DetailScreen(
             Text("Status Alat :")
             Text(
                 if (statusDevice.collectAsState().value) "Terhubung" else "Tidak Terhubung",
-                color = if (statusDevice.collectAsState().value) Green else Color.Red
+                color = if (statusDevice.collectAsState().value) Green else Color.Red,
+                fontWeight = FontWeight.Bold
             )
         }
-        BannerWaterStatus(modifier = Modifier.padding(bottom = 36.dp))
+        BannerWaterStatus(
+            waterQualityHistory = waterQualityHistory,
+            waterQualityRealtime = waterQualityRealtime,
+            connected = statusDevice.collectAsState().value,
+            modifier = Modifier.padding(bottom = 36.dp)
+        )
         Image(
             painter = painterResource(id = R.drawable.box_device),
             contentDescription = stringResource(
@@ -87,6 +77,8 @@ private fun Preview() {
     BlueSenseTheme {
         Surface {
             DetailScreen(
+                null,
+                MutableStateFlow(null),
                 MutableStateFlow(true),
                 MutableStateFlow(null),
             )

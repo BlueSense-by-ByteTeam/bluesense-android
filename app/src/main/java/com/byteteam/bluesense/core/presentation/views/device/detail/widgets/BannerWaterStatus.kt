@@ -8,19 +8,63 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.byteteam.bluesense.ui.theme.Yellow
+import kotlinx.coroutines.flow.StateFlow
 
 @Composable
-fun BannerWaterStatus(modifier: Modifier = Modifier){
-    Column(modifier = modifier
-        .fillMaxWidth()
-        .clip(RoundedCornerShape(12.dp))
-        .background(MaterialTheme.colorScheme.primary)
-        .padding(vertical = 12.dp, horizontal = 20.dp)) {
-        Text(text = "Air aman!", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onPrimary)
-        Text(text = "Kualitas air bagus dan dapat diminum.", color = MaterialTheme.colorScheme.onPrimary)
+fun BannerWaterStatus(
+    modifier: Modifier = Modifier,
+    connected: Boolean,
+    waterQualityRealtime: StateFlow<String?>,
+    waterQualityHistory: String?
+) {
+    val waterQualityRealtimeState = waterQualityRealtime.collectAsState().value
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(12.dp))
+            .background(
+                when {
+                    waterQualityRealtimeState == "buruk" -> Yellow
+                    waterQualityRealtimeState == "baik" -> MaterialTheme.colorScheme.primary
+//                    waterQualityHistory == "buruk" -> Yellow
+//                    waterQualityHistory == "baik" -> MaterialTheme.colorScheme.primary
+                    else -> Color.Red
+                }
+            )
+            .padding(vertical = 12.dp, horizontal = 20.dp)
+    ) {
+        if (connected) {
+            Text(
+                text = when {
+                    waterQualityRealtimeState == "baik" -> "Air Aman!"
+                    waterQualityHistory == "baik" -> "Air Aman!"
+                    else -> "Air Buruk!"
+                }, fontWeight = FontWeight.Bold, color =
+                when (waterQualityRealtimeState) {
+                    "buruk" -> Color.Black
+                    else -> MaterialTheme.colorScheme.onPrimary
+                }
+            )
+            Text(
+                text =
+                when {
+                    waterQualityRealtimeState == "baik" -> "Kualitas air bagus dan dapat diminum."
+                    waterQualityHistory == "baik" -> "Kualitas air bagus dan dapat diminum."
+                    else -> "Kualitas air buruk dan tidak dapat diminum."
+                }, color = MaterialTheme.colorScheme.onPrimary
+            )
+        } else {
+            Text(
+                text = "Check alat deteksi atau hubungkan ulang alat.",
+                color = MaterialTheme.colorScheme.onPrimary
+            )
+        }
     }
 }

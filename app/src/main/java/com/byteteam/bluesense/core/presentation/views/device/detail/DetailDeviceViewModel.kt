@@ -3,6 +3,7 @@ package com.byteteam.bluesense.core.presentation.views.device.detail
 import androidx.lifecycle.ViewModel
 import com.byteteam.bluesense.core.domain.model.SensorData
 import com.byteteam.bluesense.core.domain.repositories.DeviceRepository
+import com.byteteam.bluesense.core.presentation.helper.WaterQuality
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -27,6 +28,9 @@ class DetailDeviceViewModel @Inject constructor(
     }
 
     fun updateDeviceSensorValue(data: SensorData){
+        val detectionResult = WaterQuality.checkWater(data.tds, data.ph)
         _data.value = data
+        _waterQuality.value = if(detectionResult.first) "baik" else "buruk"
+        _waterStatus.value = if(detectionResult.second) "baik" else "buruk"
     }
 }

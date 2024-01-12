@@ -17,38 +17,43 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val deviceRepository: DeviceRepository
 ) : ViewModel() {
-    private var _devices: MutableStateFlow<Resource<List<DeviceEntity>>> = MutableStateFlow(Resource.Loading())
+    private var _devices: MutableStateFlow<Resource<List<DeviceEntity>>> =
+        MutableStateFlow(Resource.Loading())
     val devices: StateFlow<Resource<List<DeviceEntity>>> = _devices
 
-    private var _detailDeviceInfo: MutableStateFlow<Resource<DeviceLatestInfoEntity?>> = MutableStateFlow(Resource.Loading())
+    private var _detailDeviceInfo: MutableStateFlow<Resource<DeviceLatestInfoEntity?>> =
+        MutableStateFlow(Resource.Loading())
     val detailDeviceLatestInfo: StateFlow<Resource<DeviceLatestInfoEntity?>> = _detailDeviceInfo
 
-    fun getDevices(){
+    fun getDevices() {
         viewModelScope.launch {
             _devices.value = Resource.Loading()
             try {
                 deviceRepository.getDevices().catch {
                     _devices.value = Resource.Error(it.message ?: "Error fetching device data")
-                }.collect{
+                }.collect {
                     _devices.value = Resource.Success(it)
-                    getDetailDeviceInfo(it[0].id)
+                    if (it.isNotEmpty()) {
+                        getDetailDeviceInfo(it[0].id)
+                    }
                 }
-            }catch (e: Exception){
-                    _devices.value = Resource.Error(e.message.toString())
+            } catch (e: Exception) {
+                _devices.value = Resource.Error(e.message.toString())
             }
         }
     }
 
-    private fun getDetailDeviceInfo(id: String){
+    private fun getDetailDeviceInfo(id: String) {
         viewModelScope.launch {
             _detailDeviceInfo.value = Resource.Loading()
             try {
                 deviceRepository.getLatestDeviceDetail(id).catch {
-                    _detailDeviceInfo.value = Resource.Error(it.message ?: "Error fetching latest device data")
-                }.collect{
+                    _detailDeviceInfo.value =
+                        Resource.Error(it.message ?: "Error fetching latest device data")
+                }.collect {
                     _detailDeviceInfo.value = Resource.Success(it)
                 }
-            }catch (e: Exception){
+            } catch (e: Exception) {
                 _detailDeviceInfo.value = Resource.Error(e.message.toString())
             }
         }

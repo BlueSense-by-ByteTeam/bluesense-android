@@ -24,6 +24,8 @@ fun HomeScreenContent(
     deviceInfo: StateFlow<Resource<DeviceLatestInfoEntity?>>,
     navHostController: NavHostController,
     modifier: Modifier = Modifier,
+    waterQualityRealtime: StateFlow<String?>,
+    waterStatusRealtime: StateFlow<String?>,
 ){
     Column(modifier) {
         Text(
@@ -35,6 +37,8 @@ fun HomeScreenContent(
         DeviceInfoCard(
             statusDevice = statusDevice,
             deviceEntity = deviceEntity,
+            waterQualityRealtime = waterQualityRealtime,
+            waterStatusRealtime = waterStatusRealtime,
             onTapAddDevice = { navHostController.navigate(Screens.AddDevice.route) },
             onTapDetailDevice = { navHostController.navigate(Screens.DetailDevice.createRoute(it)) },
             deviceData = deviceInfo,

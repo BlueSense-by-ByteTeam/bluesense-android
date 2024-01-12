@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -51,8 +50,10 @@ fun DeviceInfoCard(
     deviceEntity: DeviceEntity?,
     deviceData: StateFlow<Resource<DeviceLatestInfoEntity?>>,
     modifier: Modifier = Modifier,
+    waterQualityRealtime: StateFlow<String?>,
+    waterStatusRealtime: StateFlow<String?>,
 ) {
-    var isBad by remember { mutableStateOf(false)  }
+    var isBad by remember { mutableStateOf(false) }
 
     Column(verticalArrangement = Arrangement.spacedBy(8.dp), modifier = modifier) {
         Box(
@@ -126,18 +127,27 @@ fun DeviceInfoCard(
         ) {
             deviceData.collectAsState().value.let {
                 when (it) {
-                    is Resource.Loading -> CircularProgressIndicator(color = MaterialTheme.colorScheme.onPrimary, strokeWidth = 2.dp, modifier = Modifier.size(16.dp))
+                    is Resource.Loading -> CircularProgressIndicator(
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        strokeWidth = 2.dp,
+                        modifier = Modifier.size(16.dp)
+                    )
+
                     is Resource.Error -> Text(
                         text = it.message ?: "-",
-                        color = if(isBad) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onPrimary,
+                        color = if (isBad) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onPrimary,
                         fontWeight = FontWeight.SemiBold
                     )
 
                     is Resource.Success -> {
-                        isBad = it.data?.quality == "buruk"
+                        isBad = when {
+                            waterStatusRealtime.collectAsState().value != null -> waterStatusRealtime.collectAsState().value == "buruk"
+                            else -> it.data?.quality == "buruk"
+                        }
+
                         Text(
                             text = it.data?.quality ?: "belum ada data",
-                            color = if(isBad) Color.Black else  MaterialTheme.colorScheme.onPrimary,
+                            color = if (isBad) Color.Black else MaterialTheme.colorScheme.onPrimary,
                             fontWeight = FontWeight.SemiBold
                         )
                     }
@@ -146,7 +156,7 @@ fun DeviceInfoCard(
 
             Text(
                 text = "Detail",
-                color = if(isBad) MaterialTheme.colorScheme.primary else  MaterialTheme.colorScheme.onPrimary,
+                color = if (isBad) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onPrimary,
                 fontWeight = FontWeight.SemiBold
             )
         }
@@ -169,13 +179,20 @@ fun DeviceInfoCard(
 
                     deviceData.collectAsState().value.let {
                         when (it) {
-                            is Resource.Loading -> CircularProgressIndicator(color = MaterialTheme.colorScheme.onPrimary, strokeWidth = 2.dp, modifier = Modifier.size(16.dp))
+                            is Resource.Loading -> CircularProgressIndicator(
+                                color = MaterialTheme.colorScheme.onPrimary,
+                                strokeWidth = 2.dp,
+                                modifier = Modifier.size(16.dp)
+                            )
+
                             is Resource.Error -> Text(
                                 text = it.message ?: "-",
                                 color = MaterialTheme.colorScheme.onPrimary
                             )
+
                             is Resource.Success -> Text(
-                                text = it.data?.quality ?: "belum ada data",
+                                text = waterStatusRealtime.collectAsState().value
+                                    ?: it.data?.quality ?: "belum ada data",
                                 color = MaterialTheme.colorScheme.onPrimary,
                                 fontWeight = FontWeight.Bold
                             )
@@ -198,13 +215,20 @@ fun DeviceInfoCard(
                     )
                     deviceData.collectAsState().value.let {
                         when (it) {
-                            is Resource.Loading -> CircularProgressIndicator(color = MaterialTheme.colorScheme.onPrimary, strokeWidth = 2.dp, modifier = Modifier.size(16.dp))
+                            is Resource.Loading -> CircularProgressIndicator(
+                                color = MaterialTheme.colorScheme.onPrimary,
+                                strokeWidth = 2.dp,
+                                modifier = Modifier.size(16.dp)
+                            )
+
                             is Resource.Error -> Text(
                                 text = it.message ?: "-",
                                 color = MaterialTheme.colorScheme.onPrimary
                             )
+
                             is Resource.Success -> Text(
-                                text = it.data?.status ?: "belum ada data",
+                                text = waterStatusRealtime.collectAsState().value ?: it.data?.status
+                                ?: "belum ada data",
                                 color = MaterialTheme.colorScheme.onPrimary,
                                 fontWeight = FontWeight.Bold
                             )

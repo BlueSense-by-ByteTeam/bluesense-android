@@ -103,8 +103,6 @@ class MainActivity : ComponentActivity() {
             this.userName = BuildConfig.MQTT_USERNAME
             this.password = BuildConfig.MQTT_PASSWORD.toCharArray()
         }
-//        mqttClient.connect("ssl://f2e4701e.ala.us-east-1.emqxsl.com:8883", "test", mqttConnectOptions)
-
 
         setContent {
             val navController: NavHostController = rememberNavController()
@@ -266,6 +264,8 @@ class MainActivity : ComponentActivity() {
                                 val context = LocalContext.current
 
                                 HomeScreen(
+                                    waterQualityRealtime = detailDeviceViewModel.waterQuality,
+                                    waterStatusRealtime = detailDeviceViewModel.waterStatus,
                                     statusDevice = detailDeviceViewModel.isConnected,
                                     cbOnDeviceConnected = { callbackOnConnected(it) },
                                     devices = homeViewModel.devices,
@@ -394,6 +394,8 @@ class MainActivity : ComponentActivity() {
                                 DetailScreen(
                                     statusDevice = detailDeviceViewModel.isConnected,
                                     sensorData = detailDeviceViewModel.data,
+                                    waterQualityHistory = null,
+                                    waterQualityRealtime = detailDeviceViewModel.waterQuality
                                 )
                             }
                         }
