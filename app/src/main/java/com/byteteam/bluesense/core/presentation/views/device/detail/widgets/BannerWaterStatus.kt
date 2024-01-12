@@ -58,7 +58,12 @@ fun BannerWaterStatus(
                     waterQualityRealtimeState == "baik" -> "Kualitas air bagus dan dapat diminum."
                     waterQualityHistory == "baik" -> "Kualitas air bagus dan dapat diminum."
                     else -> "Kualitas air buruk dan tidak dapat diminum."
-                }, color = MaterialTheme.colorScheme.onPrimary
+                }, color =
+                when {
+                    waterQualityRealtimeState == "baik" ->  MaterialTheme.colorScheme.onPrimary
+                    waterQualityHistory == "baik" ->  MaterialTheme.colorScheme.onPrimary
+                    else -> Color.Black
+                }
             )
         } else {
             Text(
