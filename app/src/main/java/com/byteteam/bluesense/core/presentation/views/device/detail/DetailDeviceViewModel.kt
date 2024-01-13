@@ -23,8 +23,24 @@ class DetailDeviceViewModel @Inject constructor(
     val waterStatus: StateFlow<String?> = _waterStatus
     val waterQuality: StateFlow<String?> = _waterQuality
 
+    private var _openDeleteModal: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val isDialogDeleteOpen: StateFlow<Boolean> = _openDeleteModal
+    
     fun updateDeviceStatus(status: Boolean){
         _isConnected.value = status
+    }
+    
+    fun openDeleteModal(){
+        _openDeleteModal.value = true
+    }
+    
+    fun closeDeleteModal(){
+        _openDeleteModal.value = false
+    }
+    
+    fun deleteDevice(){
+        // TODO: add delete feature
+        _openDeleteModal.value = false
     }
 
     fun updateDeviceSensorValue(data: SensorData){

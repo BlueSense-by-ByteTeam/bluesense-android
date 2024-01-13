@@ -21,23 +21,37 @@ import com.byteteam.bluesense.R
 import com.byteteam.bluesense.core.domain.model.SensorData
 import com.byteteam.bluesense.core.presentation.views.device.detail.widgets.BannerWaterStatus
 import com.byteteam.bluesense.core.presentation.views.device.detail.widgets.CardStatusTemplate
+import com.byteteam.bluesense.core.presentation.views.device.detail.widgets.DeleteDeviceAlertContent
+import com.byteteam.bluesense.core.presentation.views.profile.widgets.SignOutDialogContent
+import com.byteteam.bluesense.core.presentation.widgets.BottomDialog
 import com.byteteam.bluesense.ui.theme.BlueSenseTheme
 import com.byteteam.bluesense.ui.theme.Green
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 @Composable
-fun DetailScreen(
+fun DetailDeviceScreen(
     waterQualityHistory: String?,
     waterQualityRealtime: StateFlow<String?>,
     statusDevice: StateFlow<Boolean>,
     sensorData: StateFlow<SensorData?>,
-    modifier: Modifier = Modifier
+    closeDeleteModal: () -> Unit = {},
+    onDeleteDevice: () -> Unit = {},
+    isDeleteDialogOpen: Boolean = false,
+    modifier: Modifier = Modifier,
 ) {
     Column(
         modifier
             .padding(horizontal = 24.dp)
     ) {
+        if(isDeleteDialogOpen){
+                BottomDialog(onDismissRequest = closeDeleteModal) {
+                    DeleteDeviceAlertContent(
+                        onDismiss = closeDeleteModal,
+                        onConfirm = closeDeleteModal
+                    )
+                }
+        }
         Text(
             "Penampungan Air",
             style = MaterialTheme.typography.titleLarge,
@@ -76,7 +90,7 @@ fun DetailScreen(
 private fun Preview() {
     BlueSenseTheme {
         Surface {
-            DetailScreen(
+            DetailDeviceScreen(
                 null,
                 MutableStateFlow(null),
                 MutableStateFlow(true),

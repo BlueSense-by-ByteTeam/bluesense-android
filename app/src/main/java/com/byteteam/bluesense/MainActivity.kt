@@ -50,7 +50,7 @@ import com.byteteam.bluesense.core.presentation.views.device.add_form.AddDeviceF
 import com.byteteam.bluesense.core.presentation.views.device.add_form.AddDeviceScreenData
 import com.byteteam.bluesense.core.presentation.views.device.add_form.AddDeviceViewModel
 import com.byteteam.bluesense.core.presentation.views.device.detail.DetailDeviceViewModel
-import com.byteteam.bluesense.core.presentation.views.device.detail.DetailScreen
+import com.byteteam.bluesense.core.presentation.views.device.detail.DetailDeviceScreen
 import com.byteteam.bluesense.core.presentation.views.device.scan.ScanViewModel
 import com.byteteam.bluesense.core.presentation.views.getstarted.GetStartedScreen
 import com.byteteam.bluesense.core.presentation.views.home.HomeScreen
@@ -166,7 +166,11 @@ class MainActivity : ComponentActivity() {
             BlueSenseTheme {
                 Scaffold(
                     topBar = {
-                        Topbars(route = currentRoute ?: "", navHostController = navController)
+                        Topbars(
+                            route = currentRoute ?: "", actions = mapOf(
+                                Screens.DetailDevice.route to { detailDeviceViewModel.openDeleteModal() }
+                            ), navHostController = navController
+                        )
                     },
                     bottomBar = {
                         if (bottomNavigationItems.map { it.route }
@@ -211,15 +215,15 @@ class MainActivity : ComponentActivity() {
                                         onBoardViewModel.finishOnBoarding()
                                     },
                                     navigateSignIn = {
-                                        navController.navigate(Screens.SignIn.route){
-                                            popUpTo(Screens.GetStarted.route){
+                                        navController.navigate(Screens.SignIn.route) {
+                                            popUpTo(Screens.GetStarted.route) {
                                                 inclusive = true
                                             }
                                         }
                                     },
                                     navigateSignUp = {
-                                        navController.navigate(Screens.SignUp.route){
-                                            popUpTo(Screens.GetStarted.route){
+                                        navController.navigate(Screens.SignUp.route) {
+                                            popUpTo(Screens.GetStarted.route) {
                                                 inclusive = true
                                             }
                                         }
@@ -251,9 +255,9 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
                             composable(Screens.SignUp.route) {
-                                var openSuccessDialog by rememberSaveable{  mutableStateOf(false) }
+                                var openSuccessDialog by rememberSaveable { mutableStateOf(false) }
 
-                                DisposableEffect(Unit){
+                                DisposableEffect(Unit) {
                                     onDispose { openSuccessDialog = false }
                                 }
 
@@ -424,9 +428,15 @@ class MainActivity : ComponentActivity() {
                             }
                             composable(Screens.DetailDevice.route) {
                                 val id = it.arguments?.getString("id")
-                                DetailScreen(
+
+                                DetailDeviceScreen(
                                     statusDevice = detailDeviceViewModel.isConnected,
                                     sensorData = detailDeviceViewModel.data,
+                                    closeDeleteModal = { detailDeviceViewModel.closeDeleteModal() },
+                                    onDeleteDevice = {
+                                        detailDeviceViewModel.deleteDevice()
+                                    },
+                                    isDeleteDialogOpen = detailDeviceViewModel.isDialogDeleteOpen.collectAsState().value,
                                     waterQualityHistory = null,
                                     waterQualityRealtime = detailDeviceViewModel.waterQuality
                                 )

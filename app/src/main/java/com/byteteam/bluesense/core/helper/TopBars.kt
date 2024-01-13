@@ -20,7 +20,7 @@ import com.byteteam.bluesense.core.presentation.widgets.NavigationBackButton
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Topbars(route: String, navHostController: NavHostController) {
+fun Topbars(actions: Map<String, () -> Unit>, route: String, navHostController: NavHostController) {
     val topAppBarColors = TopAppBarDefaults.topAppBarColors(
         containerColor = MaterialTheme.colorScheme.background
     )
@@ -83,7 +83,9 @@ fun Topbars(route: String, navHostController: NavHostController) {
             },
             title = { Text(text = "Detail") },
             actions = {
-                IconButton(onClick = {  }) {
+                IconButton(onClick = {
+                    actions[Screens.DetailDevice.route]?.invoke()
+                }) {
                     Icon(
                         imageVector = Icons.Default.Delete,
                         tint = MaterialTheme.colorScheme.primary,
