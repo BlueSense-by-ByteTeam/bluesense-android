@@ -86,10 +86,10 @@ fun HomeScreen(
                     }
                     is Resource.Success -> {
                         fetchingApi = false
-                        if (it.data?.get(0) != null) dataEntity = it.data[0]
+                        if (it.data?.size != 0 && it.data?.get(0) != null) dataEntity = it.data[0]
                         HomeScreenContent(
                             statusDevice =  statusDevice,
-                            deviceEntity = it.data?.get(0),
+                            deviceEntity = if(it.data?.size != 0) it.data?.get(0) else null,
                             deviceInfo = detailDevice,
                             waterQualityRealtime = waterQualityRealtime,
                             waterStatusRealtime = waterStatusRealtime,

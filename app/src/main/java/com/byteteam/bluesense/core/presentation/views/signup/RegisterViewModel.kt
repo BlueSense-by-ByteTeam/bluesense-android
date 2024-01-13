@@ -5,10 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.byteteam.bluesense.core.data.event.SingleEvent
 import com.byteteam.bluesense.core.domain.model.InputData
-import com.byteteam.bluesense.core.domain.model.SignInResult
 import com.byteteam.bluesense.core.domain.model.UserData
 import com.byteteam.bluesense.core.domain.repositories.AuthRepository
-import com.byteteam.bluesense.core.helper.UiState
 import com.byteteam.bluesense.core.presentation.tokens.EMAIL_REGEX
 import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -32,8 +30,12 @@ class RegisterViewModel @Inject constructor(private val authRepository: AuthRepo
         MutableStateFlow(InputData(data = "", errorMessage = null))
     val buttonEnabled: MutableStateFlow<Boolean> = MutableStateFlow(false)
 
-    private val eventChannel = Channel<SingleEvent>()
-    val eventFlow = eventChannel.receiveAsFlow()
+    private val errorEvetMessage = Channel<SingleEvent>()
+    val errorEventFlow = errorEvetMessage.receiveAsFlow()
+
+    private val successEvetMessage = Channel<SingleEvent>()
+    val successEventFlow = successEvetMessage.receiveAsFlow()
+
 
     fun updateName(value: String) {
         val data = InputData(value).copy(
@@ -96,7 +98,7 @@ class RegisterViewModel @Inject constructor(private val authRepository: AuthRepo
                 Log.d("TAG", "onCreate: signed user $json")
                 if(it?.data != null) callbackOnSuccess()
                 it?.errorMessage?.let {
-                    eventChannel.send(SingleEvent.MessageEvent(it))
+                    errorEvetMessage.send(SingleEvent.MessageEvent(it))
                 }
                 buttonEnabled.value = true
             }

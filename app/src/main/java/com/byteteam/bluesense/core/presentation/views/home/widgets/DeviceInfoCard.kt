@@ -182,7 +182,7 @@ fun DeviceInfoCard(
                             is Resource.Loading -> CircularProgressIndicator(
                                 color = MaterialTheme.colorScheme.onPrimary,
                                 strokeWidth = 2.dp,
-                                modifier = Modifier.size(16.dp)
+                            modifier = Modifier.size(16.dp)
                             )
 
                             is Resource.Error -> Text(

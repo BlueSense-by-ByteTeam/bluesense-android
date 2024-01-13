@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
@@ -36,6 +35,7 @@ import com.byteteam.bluesense.core.domain.model.InputData
 import com.byteteam.bluesense.core.helper.Screens
 import com.byteteam.bluesense.core.presentation.widgets.BottomDialog
 import com.byteteam.bluesense.core.presentation.widgets.ErrorAlertContent
+import com.byteteam.bluesense.core.presentation.widgets.SuccessAlertContent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
@@ -43,11 +43,12 @@ import kotlinx.coroutines.flow.flowOf
 fun SignupScreenContent(
     signupScreenContentData: SignupScreenContentData,
     navHostController: NavHostController = rememberNavController(),
-    modifier: Modifier = Modifier){
+    modifier: Modifier = Modifier
+) {
 
     var errorMessage: String? by remember { mutableStateOf(null) }
     LaunchedEffect(Unit) {
-        signupScreenContentData.eventMessage?.collect { event ->
+        signupScreenContentData.errorEventMsg?.collect { event ->
             when (event) {
                 is SingleEvent.MessageEvent -> errorMessage = event.message
             }
@@ -69,7 +70,22 @@ fun SignupScreenContent(
             BottomDialog(onDismissRequest = {
                 errorMessage = null
             }) {
-                ErrorAlertContent(title = "Oops! Terjadi kesalahan saat daftar", error = it, onDismiss = {errorMessage = null})
+                ErrorAlertContent(
+                    title = "Oops! Terjadi kesalahan saat daftar",
+                    error = it,
+                    onDismiss = { errorMessage = null })
+            }
+        }
+
+        if (signupScreenContentData.openSuccessDialog) {
+            BottomDialog(onDismissRequest = {}) {
+                SuccessAlertContent(title = stringResource(R.string.congratulations),
+                    message = stringResource(
+                        R.string.success_register
+                    ),
+                    onConfirm = signupScreenContentData.onSuccessNavigateSignIn,
+                    confirmText = "Masuk"
+                )
             }
         }
 
@@ -80,18 +96,28 @@ fun SignupScreenContent(
             ),
             modifier = Modifier.padding(bottom = 36.dp)
         )
-        Text(text = stringResource(R.string.signup_desc), textAlign = TextAlign.Left, modifier = Modifier.padding(bottom = 20.dp))
-        Row(horizontalArrangement = Arrangement.spacedBy(4.dp),  modifier = Modifier
-            .padding(bottom = 24.dp)
-            .align(Alignment.Start)) {
+        Text(
+            text = stringResource(R.string.signup_desc),
+            textAlign = TextAlign.Left,
+            modifier = Modifier.padding(bottom = 20.dp)
+        )
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(4.dp), modifier = Modifier
+                .padding(bottom = 24.dp)
+                .align(Alignment.Start)
+        ) {
             Text(text = stringResource(R.string.already_have_account))
-            Text(text = stringResource(R.string.signin_now) , color = MaterialTheme.colorScheme.primary, modifier = Modifier.clickable { navHostController.navigate(Screens.SignIn.route) })
+            Text(
+                text = stringResource(R.string.signin_now),
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.clickable { navHostController.navigate(Screens.SignIn.route) })
         }
         SignupForm(signupScreenContentData)
     }
 }
 
 data class SignupScreenContentData(
+    val openSuccessDialog: Boolean = false,
     val name: InputData? = null,
     val email: InputData? = null,
     val password: InputData? = null,
@@ -101,7 +127,8 @@ data class SignupScreenContentData(
     val onUpdatePassword: (String) -> Unit = {},
     val onUpdateConfirmPassword: (String) -> Unit = {},
     val onTapSignUpEmailPassword: () -> Unit = {},
-    val eventMessage: Flow<SingleEvent> = flowOf(),
+    val onSuccessNavigateSignIn: () -> Unit = {},
+    val errorEventMsg: Flow<SingleEvent> = flowOf(),
     val onTapSignUpGoogle: () -> Unit = {},
     val disableButton: Boolean = false
 )

@@ -1,5 +1,6 @@
 package com.byteteam.bluesense.core.presentation.views.home
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.byteteam.bluesense.core.data.common.Resource
@@ -22,7 +23,7 @@ class HomeViewModel @Inject constructor(
     val devices: StateFlow<Resource<List<DeviceEntity>>> = _devices
 
     private var _detailDeviceInfo: MutableStateFlow<Resource<DeviceLatestInfoEntity?>> =
-        MutableStateFlow(Resource.Loading())
+        MutableStateFlow(Resource.Success(null))
     val detailDeviceLatestInfo: StateFlow<Resource<DeviceLatestInfoEntity?>> = _detailDeviceInfo
 
     fun getDevices() {

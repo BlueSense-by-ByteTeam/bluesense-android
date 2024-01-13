@@ -20,11 +20,13 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -249,6 +251,12 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
                             composable(Screens.SignUp.route) {
+                                var openSuccessDialog by rememberSaveable{  mutableStateOf(false) }
+
+                                DisposableEffect(Unit){
+                                    onDispose { openSuccessDialog = false }
+                                }
+
                                 val data = SignupScreenContentData(
                                     name = registerViewModel.name.collectAsState().value,
                                     email = registerViewModel.email.collectAsState().value,
@@ -262,18 +270,22 @@ class MainActivity : ComponentActivity() {
                                             it
                                         )
                                     },
-                                    eventMessage = registerViewModel.eventFlow,
+                                    errorEventMsg = registerViewModel.errorEventFlow,
                                     onTapSignUpEmailPassword = {
                                         registerViewModel.register(callbackOnSuccess = {
-                                            authViewModel.getCurrentUser()
-                                            navController.navigate(Screens.Home.route) {
-                                                popUpTo(Screens.SignUp.route) {
-                                                    inclusive = true
-                                                }
-                                            }
+                                            openSuccessDialog = true
                                         })
                                     },
                                     onTapSignUpGoogle = { signInGoogle() },
+                                    onSuccessNavigateSignIn = {
+                                        openSuccessDialog = false
+                                        navController.navigate(Screens.SignIn.route) {
+                                            popUpTo(Screens.SignUp.route) {
+                                                inclusive = true
+                                            }
+                                        }
+                                    },
+                                    openSuccessDialog = openSuccessDialog,
                                     disableButton = !registerViewModel.buttonEnabled.collectAsState().value
                                 )
                                 SignupScreen(

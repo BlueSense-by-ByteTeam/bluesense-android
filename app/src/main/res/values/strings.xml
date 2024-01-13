@@ -85,4 +85,6 @@
     <string name="notification">Notifikasi</string>
     <string name="profile_pic">profile pic</string>
     <string name="connected">Terhubung</string>
+    <string name="congratulations">Selamat!</string>
+    <string name="success_register">Kamu berhasil membuat akun di Bluesense. Masuk untuk mulai deteksi kebersihan air.</string>
 </resources>
