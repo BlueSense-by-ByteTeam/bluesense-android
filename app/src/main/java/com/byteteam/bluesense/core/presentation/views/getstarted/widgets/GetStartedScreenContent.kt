@@ -28,7 +28,8 @@ import com.byteteam.bluesense.core.helper.Screens
 @Composable
 fun GetStartedScreenContent(
     onFinishOnBoarding: () -> Unit,
-    navHostController: NavHostController = rememberNavController(),
+    navigateSignUp: () -> Unit,
+    navigateSignIn: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -53,14 +54,14 @@ fun GetStartedScreenContent(
         )
         Button(onClick = {
             onFinishOnBoarding()
-            navHostController.navigate(Screens.SignIn.route)
+            navigateSignIn()
         }, shape = RoundedCornerShape(12.dp), modifier = Modifier.fillMaxWidth()) {
             Text(text = stringResource(R.string.enter))
         }
         OutlinedButton(
             onClick = {
                 onFinishOnBoarding()
-                navHostController.navigate(Screens.SignUp.route)
+                navigateSignUp()
             },
             shape = RoundedCornerShape(12.dp),
             modifier = Modifier.fillMaxWidth(),

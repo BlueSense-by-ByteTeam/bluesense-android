@@ -156,8 +156,8 @@ class MainActivity : ComponentActivity() {
                     mqttConnectOptions = mqttConnectOptions,
                     brokerUrl = brokerUrl,
                     mqttTopic = mqttTopic,
-                    cbStatusConnection = {detailDeviceViewModel.updateDeviceStatus(it)},
-                    cbOnMessage = {detailDeviceViewModel.updateDeviceSensorValue(it)},
+                    cbStatusConnection = { detailDeviceViewModel.updateDeviceStatus(it) },
+                    cbOnMessage = { detailDeviceViewModel.updateDeviceSensorValue(it) },
                 )
             }
 
@@ -183,13 +183,20 @@ class MainActivity : ComponentActivity() {
                         val isSigned = authViewModel.currentUser.collectAsState().value != null
                         val isFirstTimeOpen =
                             onBoardViewModel.isFirstTimeOpen.collectAsState().value
+                        var isPressRegisterFirst by remember { mutableStateOf(false) }
 
                         NavHost(
                             startDestination =
                             if (isFirstTimeOpen) {
                                 Screens.OnBoarding.route
                             } else {
-                                if (isSigned) Screens.Home.route else Screens.SignIn.route
+                                if (isSigned) {
+                                    Screens.Home.route
+                                } else if (isPressRegisterFirst) {
+                                    Screens.SignUp.route
+                                } else {
+                                    Screens.SignIn.route
+                                }
                             },
                             navController = navController
                         ) {
@@ -201,7 +208,21 @@ class MainActivity : ComponentActivity() {
                                     onFinishOnBoarding = {
                                         onBoardViewModel.finishOnBoarding()
                                     },
-                                    navController
+                                    navigateSignIn = {
+                                        navController.navigate(Screens.SignIn.route){
+                                            popUpTo(Screens.GetStarted.route){
+                                                inclusive = true
+                                            }
+                                        }
+                                    },
+                                    navigateSignUp = {
+                                        navController.navigate(Screens.SignUp.route){
+                                            popUpTo(Screens.GetStarted.route){
+                                                inclusive = true
+                                            }
+                                        }
+                                        isPressRegisterFirst = true
+                                    }
                                 )
                             }
                             composable(Screens.SignIn.route) {
@@ -414,7 +435,7 @@ class MainActivity : ComponentActivity() {
         cbStatusConnection: (Boolean) -> Unit,
         cbOnMessage: (SensorData) -> Unit,
     ) {
-        if(mqttClientHelper == null){
+        if (mqttClientHelper == null) {
             mqttClientHelper = MqttClientHelper(
                 context = context,
                 broker = brokerUrl
