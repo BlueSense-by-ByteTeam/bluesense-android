@@ -28,6 +28,7 @@ import com.byteteam.bluesense.core.data.common.Resource
 import com.byteteam.bluesense.core.domain.model.DeviceEntity
 import com.byteteam.bluesense.core.domain.model.DeviceLatestInfoEntity
 import com.byteteam.bluesense.core.presentation.views.home.widgets.HomeScreenContent
+import com.byteteam.bluesense.core.presentation.widgets.ErrorHandler
 import com.byteteam.bluesense.ui.theme.BlueSenseTheme
 import eu.bambooapps.material3.pullrefresh.PullRefreshIndicator
 import eu.bambooapps.material3.pullrefresh.pullRefresh
@@ -60,8 +61,13 @@ fun HomeScreen(
 
     var dataEntity: DeviceEntity? by remember { mutableStateOf(null) }
 
-    LaunchedEffect(dataEntity){
-        if(dataEntity != null) cbOnDeviceConnected(dataEntity!!)
+    LaunchedEffect(dataEntity) {
+        if (dataEntity != null) cbOnDeviceConnected(dataEntity!!)
+    }
+
+    fun fetchData(){
+        fetchingApi = true
+        getDevices()
     }
 
     Column(
@@ -73,23 +79,21 @@ fun HomeScreen(
             devices.collectAsState().value.let {
                 when (it) {
                     is Resource.Loading -> {
-                        if(!fetchingApi){
-                            fetchingApi = true
-                            getDevices()
-                        }
+                        if (!fetchingApi) fetchData()
                         CircularProgressIndicator()
                     }
 
                     is Resource.Error -> {
                         fetchingApi = false
-                        Text(text = "error x${it.message}" ?: "Error")
+                        ErrorHandler(onPressRetry = { fetchData() }, errorText = "Error: ${it.message}")
                     }
+
                     is Resource.Success -> {
                         fetchingApi = false
                         if (it.data?.size != 0 && it.data?.get(0) != null) dataEntity = it.data[0]
                         HomeScreenContent(
-                            statusDevice =  statusDevice,
-                            deviceEntity = if(it.data?.size != 0) it.data?.get(0) else null,
+                            statusDevice = statusDevice,
+                            deviceEntity = if (it.data?.size != 0) it.data?.get(0) else null,
                             deviceInfo = detailDevice,
                             waterQualityRealtime = waterQualityRealtime,
                             waterStatusRealtime = waterStatusRealtime,
