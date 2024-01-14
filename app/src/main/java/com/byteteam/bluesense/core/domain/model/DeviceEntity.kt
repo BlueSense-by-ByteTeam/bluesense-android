@@ -2,6 +2,8 @@ package com.byteteam.bluesense.core.domain.model
 
 data class DeviceEntity(
     val id: String,
+    val userDeviceId: String,
+    val macId: String,
     val name: String,
     val waterSource: String,
     val address: String,

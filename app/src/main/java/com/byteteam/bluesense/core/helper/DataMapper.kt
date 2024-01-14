@@ -37,6 +37,7 @@ fun GetDistrictsItem.toDistrictEntity(): DistrictEntity =
 fun GetDevicesResponseOld.toDeviceEntities(): List<DeviceEntity> = this.data?.map {
     DeviceEntity(
         id = it?.id!!,
+        userDeviceId = it?.id!!,
         name = it?.deviceDetail?.name!!,
         waterSource = it?.deviceDetail?.waterSource!!,
         address = it?.deviceDetail?.address!!,
@@ -44,6 +45,7 @@ fun GetDevicesResponseOld.toDeviceEntities(): List<DeviceEntity> = this.data?.ma
         city = it?.deviceDetail?.city!!,
         province = it?.deviceDetail?.province!!,
         mqttBaseUrl = "",
+        macId = "",
         mqttTopic = ""
     )
 } ?: listOf()
@@ -51,6 +53,8 @@ fun GetDevicesResponseOld.toDeviceEntities(): List<DeviceEntity> = this.data?.ma
 fun GetDevicesResponse.toDeviceEntities(): List<DeviceEntity> = this.data?.map {
     DeviceEntity(
         id = it?.deviceId!!,
+        userDeviceId = it?.id!!,
+        macId = it?.device?.deviceId!!,
         name = it?.deviceDetail?.name!!,
         waterSource = it?.deviceDetail?.waterSource!!,
         address = it?.deviceDetail?.address!!,

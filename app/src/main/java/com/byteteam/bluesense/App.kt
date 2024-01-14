@@ -347,7 +347,8 @@ fun App(
                         },
                         isDeleteDialogOpen = detailDeviceViewModel.isDialogDeleteOpen.collectAsState().value,
                         waterQualityHistory = null,
-                        waterQualityRealtime = detailDeviceViewModel.waterQuality
+                        waterQualityRealtime = detailDeviceViewModel.waterQuality,
+                        waterStatusRealtime = detailDeviceViewModel.waterStatus
                     )
                 }
                 composable(Screens.WaterSupplierRecommendation.route){

@@ -33,6 +33,7 @@ import kotlinx.coroutines.flow.StateFlow
 fun DetailDeviceScreen(
     waterQualityHistory: String?,
     waterQualityRealtime: StateFlow<String?>,
+    waterStatusRealtime: StateFlow<String?>,
     statusDevice: StateFlow<Boolean>,
     sensorData: StateFlow<SensorData?>,
     closeDeleteModal: () -> Unit = {},
@@ -81,7 +82,7 @@ fun DetailDeviceScreen(
                 .padding(bottom = 12.dp)
                 .align(Alignment.CenterHorizontally)
         )
-        CardStatusTemplate(sensorData)
+        CardStatusTemplate(sensorData, waterStatusRealtime, waterQualityRealtime)
     }
 }
 
@@ -92,6 +93,7 @@ private fun Preview() {
         Surface {
             DetailDeviceScreen(
                 null,
+                MutableStateFlow(null),
                 MutableStateFlow(null),
                 MutableStateFlow(true),
                 MutableStateFlow(null),

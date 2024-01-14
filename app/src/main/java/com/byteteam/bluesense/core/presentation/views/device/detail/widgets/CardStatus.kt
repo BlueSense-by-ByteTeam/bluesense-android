@@ -17,15 +17,31 @@ import androidx.compose.ui.unit.dp
 import com.byteteam.bluesense.ui.theme.LightBlue
 
 @Composable
-fun CardStatus(label: String, text: String, iconVector: ImageVector, modifier: Modifier = Modifier){
-    Column(modifier = modifier
-        .clip(RoundedCornerShape(12.dp))
-        .background(LightBlue)
-        .padding(12.dp)) {
-        Icon(imageVector = iconVector, tint = MaterialTheme.colorScheme.primary, contentDescription = "water quality ic", modifier = Modifier.padding(bottom = 12.dp).clip(
-            RoundedCornerShape(4.dp)
-        ).background(Color.White).padding(8.dp))
-        Text(text = label)
-        Text(text = text, fontWeight = FontWeight.Bold)
+fun CardStatus(
+    label: String,
+    text: String,
+    iconVector: ImageVector,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier
+            .clip(RoundedCornerShape(12.dp))
+            .background(LightBlue)
+            .padding(12.dp)
+    ) {
+        Icon(
+            imageVector = iconVector,
+            tint = MaterialTheme.colorScheme.primary,
+            contentDescription = "water quality ic",
+            modifier = Modifier
+                .padding(bottom = 12.dp)
+                .clip(
+                    RoundedCornerShape(4.dp)
+                )
+                .background(Color.White)
+                .padding(8.dp)
+        )
+        Text(text = label, style = MaterialTheme.typography.bodyMedium)
+        Text(text = text, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.bodyMedium)
     }
 }
