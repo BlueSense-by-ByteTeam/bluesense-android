@@ -1,5 +1,6 @@
 package com.byteteam.bluesense.core.helper
 
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
@@ -9,10 +10,13 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.NavHostController
 import com.byteteam.bluesense.R
 import com.byteteam.bluesense.core.presentation.widgets.NavigationBackButton
@@ -28,7 +32,7 @@ fun Topbars(actions: Map<String, () -> Unit>, route: String, navHostController: 
         Screens.Home.route -> TopAppBar(
             colors = topAppBarColors,
             title = {
-                Text(text = stringResource(id = R.string.bluesense))
+                Text(modifier = Modifier.padding(start = 8.dp), fontWeight = FontWeight.Bold, text = stringResource(id = R.string.bluesense))
             }, actions = {
                 IconButton(onClick = { navHostController.navigate(Screens.Notification.route) }) {
                     Icon(
@@ -41,34 +45,34 @@ fun Topbars(actions: Map<String, () -> Unit>, route: String, navHostController: 
 
         Screens.History.route -> TopAppBar(colors = topAppBarColors,
             title = {
-                Text(text = "Riwayat Kualitas Air")
+                Text(modifier = Modifier.padding(start = 8.dp), fontWeight = FontWeight.Bold, text = "Riwayat Kualitas Air")
             })
 
         Screens.Store.route -> TopAppBar(colors = topAppBarColors,
             title = {
-                Text(text = stringResource(id = R.string.bluesense))
+                Text(modifier = Modifier.padding(start = 8.dp), fontWeight = FontWeight.Bold, text = stringResource(id = R.string.bluesense))
             })
 
-        Screens.Notification.route ->  TopAppBar(
+        Screens.Notification.route -> TopAppBar(
             colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background),
             title = {
-                Text(text = stringResource(R.string.notification))
+                Text(modifier = Modifier.padding(start = 8.dp), fontWeight = FontWeight.Bold, text = stringResource(R.string.notification))
             },
             navigationIcon = { NavigationBackButton(navHostController = navHostController) }
         )
 
-        Screens.AddDevice.route ->  TopAppBar(colors = topAppBarColors,
+        Screens.AddDevice.route -> TopAppBar(colors = topAppBarColors,
             title = {
-                Text(text = stringResource(id = R.string.bluesense))
+                Text(modifier = Modifier.padding(start = 8.dp), fontWeight = FontWeight.Bold, text = stringResource(id = R.string.bluesense))
             },
-            navigationIcon = { NavigationBackButton(navHostController = navHostController)  }
+            navigationIcon = { NavigationBackButton(navHostController = navHostController) }
         )
 
-        Screens.AddDeviceForm.route ->  TopAppBar(colors = topAppBarColors,
+        Screens.AddDeviceForm.route -> TopAppBar(colors = topAppBarColors,
             title = {
-                Text(text = "Tambah Alat")
+                Text(modifier = Modifier.padding(start = 8.dp), fontWeight = FontWeight.Bold, text = "Tambah Alat")
             },
-            navigationIcon = { NavigationBackButton(navHostController = navHostController)  }
+            navigationIcon = { NavigationBackButton(navHostController = navHostController) }
         )
 
         Screens.DetailDevice.route -> TopAppBar(
@@ -81,7 +85,7 @@ fun Topbars(actions: Map<String, () -> Unit>, route: String, navHostController: 
                     )
                 }
             },
-            title = { Text(text = "Detail") },
+            title = { Text(modifier = Modifier.padding(start = 8.dp), fontWeight = FontWeight.Bold, text = "Detail") },
             actions = {
                 IconButton(onClick = {
                     actions[Screens.DetailDevice.route]?.invoke()
@@ -95,6 +99,31 @@ fun Topbars(actions: Map<String, () -> Unit>, route: String, navHostController: 
                     )
                 }
             })
+
+        Screens.WaterSupplierRecommendation.route -> TopAppBar(
+            colors = topAppBarColors,
+            navigationIcon = {
+                IconButton(onClick = { navHostController.popBackStack() }) {
+                    Icon(
+                        imageVector = Icons.Default.ArrowBack,
+                        contentDescription = stringResource(R.string.back_icon)
+                    )
+                }
+            },
+            title = { Text(modifier = Modifier.padding(start = 8.dp), fontWeight = FontWeight.Bold, text = "Supplier Air") },
+        )
+        Screens.FilterRecommendation.route -> TopAppBar(
+            colors = topAppBarColors,
+            navigationIcon = {
+                IconButton(onClick = { navHostController.popBackStack() }) {
+                    Icon(
+                        imageVector = Icons.Default.ArrowBack,
+                        contentDescription = stringResource(R.string.back_icon)
+                    )
+                }
+            },
+            title = { Text(modifier = Modifier.padding(start = 8.dp), fontWeight = FontWeight.Bold, text = "Bluesense") },
+        )
 
         else -> null
     }

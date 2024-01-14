@@ -1,5 +1,6 @@
 package com.byteteam.bluesense
 
+import android.util.Log
 import android.webkit.URLUtil
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -48,11 +49,14 @@ import com.byteteam.bluesense.core.presentation.views.signup.RegisterViewModel
 import com.byteteam.bluesense.core.presentation.views.signup.SignupScreen
 import com.byteteam.bluesense.core.presentation.views.signup.widgets.SignupScreenContentData
 import com.byteteam.bluesense.core.presentation.views.statistic.StatisticScreen
+import com.byteteam.bluesense.core.presentation.views.store.detail.DetailProductScreen
 import com.byteteam.bluesense.core.presentation.views.store.main.StoreScreen
+import com.byteteam.bluesense.core.presentation.views.store.support_items.SupportItemsScreen
+import com.byteteam.bluesense.core.presentation.views.store.water_supplier.WaterSupplierScreen
 import com.byteteam.bluesense.core.presentation.widgets.BottomBar
 
 @Composable
-fun BlueSenseApp(
+fun App(
     currentRoute: String?,
     navController: NavHostController,
     signInGoogle: () -> Unit,
@@ -223,7 +227,7 @@ fun BlueSenseApp(
                     StatisticScreen()
                 }
                 composable(Screens.Store.route) {
-                    StoreScreen()
+                    StoreScreen(navController)
                 }
                 composable(Screens.Profile.route) {
                     fun callbackOnSuccessSignout() {
@@ -345,6 +349,20 @@ fun BlueSenseApp(
                         waterQualityHistory = null,
                         waterQualityRealtime = detailDeviceViewModel.waterQuality
                     )
+                }
+                composable(Screens.WaterSupplierRecommendation.route){
+                    WaterSupplierScreen()
+                }
+                composable(Screens.FilterRecommendation.route){
+                    val id = it.arguments?.getString("id")
+
+                    Log.d("navigation", "App: $id")
+
+                    if(id == "{id}"){//default value when no id is given is {id}
+                        SupportItemsScreen(navController)
+                    }else{
+                        DetailProductScreen()
+                    }
                 }
             }
         }

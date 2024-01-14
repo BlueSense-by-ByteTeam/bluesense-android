@@ -2,6 +2,7 @@ package com.byteteam.bluesense.core.presentation.views.store.main.widgets
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -22,7 +23,9 @@ import androidx.compose.ui.unit.dp
 import com.byteteam.bluesense.R
 
 @Composable
-fun WaterFilterProductItem() {
+fun WaterFilterProductItem(
+    onTap: (String) -> Unit
+) {
     Card(
         border = BorderStroke(
             width = 1.dp,
@@ -35,6 +38,7 @@ fun WaterFilterProductItem() {
             .padding(end = 8.dp)
             .clip(RoundedCornerShape(12.dp))
             .width(150.dp)
+            .clickable { onTap("id") }// TODO: replace with actual item id
     ) {
         Column(Modifier.padding(bottom = 7.dp)) {
             Image(

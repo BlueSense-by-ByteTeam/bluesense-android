@@ -19,7 +19,10 @@ import androidx.compose.ui.unit.dp
 import com.byteteam.bluesense.R
 
 @Composable
-fun WaterFilterProductTemplate() {
+fun WaterFilterProductTemplate(
+    navigateDetailProduct: (String) -> Unit,
+    navigateWaterFilterRecommendations:  () -> Unit
+) {
     Column {
         Column(
             Modifier
@@ -40,15 +43,19 @@ fun WaterFilterProductTemplate() {
                 Text(
                     text = stringResource(R.string.see_all),
                     color = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.clickable { })
+                    modifier = Modifier.clickable { navigateWaterFilterRecommendations() })
             }
             Text(
                 text = stringResource(R.string.use_this_to_cleanse_your_water),
-                modifier = Modifier.padding(horizontal = 24.dp).padding(bottom = 20.dp)
+                modifier = Modifier
+                    .padding(horizontal = 24.dp)
+                    .padding(bottom = 20.dp)
             )
             LazyRow(contentPadding = PaddingValues(start = 24.dp)) {
                 items(12) {
-                    WaterFilterProductItem()
+                    WaterFilterProductItem(
+                        onTap = { navigateDetailProduct(it) }
+                    )
                 }
             }
         }

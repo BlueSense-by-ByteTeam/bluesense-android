@@ -6,12 +6,10 @@ import android.app.Activity
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
-import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.compose.runtime.getValue
@@ -22,8 +20,6 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.byteteam.bluesense.core.domain.model.DeviceEntity
 import com.byteteam.bluesense.core.domain.model.SensorData
-import com.byteteam.bluesense.core.domain.model.SignInResult
-import com.byteteam.bluesense.core.domain.model.UserData
 import com.byteteam.bluesense.core.helper.Screens
 import com.byteteam.bluesense.core.presentation.helper.GoogleSignInClientHelper
 import com.byteteam.bluesense.core.presentation.views.device.add_form.AddDeviceFormViewModel
@@ -36,7 +32,6 @@ import com.byteteam.bluesense.core.presentation.views.signin.AuthViewModel
 import com.byteteam.bluesense.core.presentation.views.signup.RegisterViewModel
 import com.byteteam.bluesense.core.services.FCMService
 import com.byteteam.bluesense.ui.theme.BlueSenseTheme
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -46,10 +41,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
-import com.google.firebase.Firebase
-import com.google.firebase.auth.GoogleAuthProvider
-import com.google.firebase.auth.auth
-import kotlinx.coroutines.tasks.await
 
 
 @AndroidEntryPoint
@@ -149,7 +140,7 @@ class MainActivity : ComponentActivity() {
             }
 
             BlueSenseTheme {
-                BlueSenseApp(
+                App(
                     currentRoute = currentRoute,
                     navController = navController,
                     signInGoogle = { newGoogleSignIn() },

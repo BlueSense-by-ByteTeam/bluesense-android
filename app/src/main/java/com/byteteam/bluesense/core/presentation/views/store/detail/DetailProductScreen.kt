@@ -36,37 +36,31 @@ import com.byteteam.bluesense.ui.theme.BlueSenseTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailProductScreen(modifier: Modifier = Modifier) {
-    Scaffold(
-        topBar = {
-            TopAppBar(title = { Text(text = stringResource(id = R.string.bluesense)) })
-        }
-    ) { padding ->
-        Column(
-            modifier
-                .padding(padding)
-                .verticalScroll(rememberScrollState())
-                .padding(24.dp)
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.box_device),
-                contentDescription = stringResource(
-                    id = R.string.device_image
-                ),
-                modifier = Modifier
-                    .padding(bottom = 40.dp)
-                    .fillMaxWidth()
-                    .height(268.dp),
-                contentScale = ContentScale.Fit,
-                alignment = Alignment.Center
-            )
-            NamePriceRatingTemplate(
-                name = stringResource(id = R.string.water_clean_detection),
-                price = "Rp50.000",
-                rating = 4.5
-            )
-            DescProductTemplate(desc = stringResource(R.string.dummy_device_desc))
-            AffiliateShopTemplate(shopeeLink = "", tokopediaLink = "")
-        }
+
+    Column(
+        modifier
+            .verticalScroll(rememberScrollState())
+            .padding(24.dp)
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.box_device),
+            contentDescription = stringResource(
+                id = R.string.device_image
+            ),
+            modifier = Modifier
+                .padding(bottom = 40.dp)
+                .fillMaxWidth()
+                .height(268.dp),
+            contentScale = ContentScale.Fit,
+            alignment = Alignment.Center
+        )
+        NamePriceRatingTemplate(
+            name = stringResource(id = R.string.water_clean_detection),
+            price = "Rp50.000",
+            rating = 4.5
+        )
+        DescProductTemplate(desc = stringResource(R.string.dummy_device_desc))
+        AffiliateShopTemplate(shopeeLink = "", tokopediaLink = "")
     }
 }
 

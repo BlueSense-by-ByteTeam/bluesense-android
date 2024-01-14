@@ -46,6 +46,7 @@ import kotlinx.coroutines.flow.Flow
 @Composable
 fun SigninScreenContent(
     signInData: SignInData,
+   isDarkTheme: Boolean = false,
     navHostController: NavHostController = rememberNavController(),
     modifier: Modifier = Modifier,
 ) {
@@ -72,7 +73,7 @@ fun SigninScreenContent(
             }
         }
         Image(
-            painter = painterResource(id = if (!isSystemInDarkTheme()) R.drawable.bluesense_logo_with_text else R.drawable.bluesense_logo_w_text_darktheme),
+            painter = painterResource(id = if (isDarkTheme) R.drawable.bluesense_logo_with_text else R.drawable.bluesense_logo_w_text_darktheme),
             contentDescription = stringResource(
                 R.string.bluesense_logo_with_text
             ),

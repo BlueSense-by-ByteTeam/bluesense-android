@@ -1,6 +1,7 @@
 package com.byteteam.bluesense.core.presentation.views.store.support_items.widgets
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,7 +26,9 @@ import com.byteteam.bluesense.R
 import com.byteteam.bluesense.core.presentation.views.store.main.widgets.StarRating
 
 @Composable
-fun WaterFilterItem(modifier: Modifier = Modifier){
+fun WaterFilterItem(
+    navigateDetailItem: (String) -> Unit,
+    modifier: Modifier = Modifier){
     Row(horizontalArrangement = Arrangement.spacedBy(12.dp), modifier = modifier
         .padding(bottom = 20.dp)
         .height(120.dp)) {
@@ -61,7 +64,10 @@ fun WaterFilterItem(modifier: Modifier = Modifier){
             Spacer(modifier = Modifier.weight(1f))
             Text(
                 text = stringResource(R.string.see_detail),
-                color = MaterialTheme.colorScheme.primary
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.clickable {
+                    navigateDetailItem("id")// TODO: change this to actual id
+                }
             )
         }
     }

@@ -50,6 +50,7 @@ fun DeviceInfoCard(
     deviceEntity: DeviceEntity?,
     deviceData: StateFlow<Resource<DeviceLatestInfoEntity?>>,
     modifier: Modifier = Modifier,
+    isDarkTheme: Boolean = false,
     waterQualityRealtime: StateFlow<String?>,
     waterStatusRealtime: StateFlow<String?>,
 ) {
@@ -64,7 +65,7 @@ fun DeviceInfoCard(
                     RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)
                 )
                 .background(
-                    if (isSystemInDarkTheme()) Color(0xFF3d3d3d) else Color(
+                    if (isDarkTheme) Color(0xFF3d3d3d) else Color(
                         0xFFF2F2F2
                     )
                 )
@@ -182,7 +183,7 @@ fun DeviceInfoCard(
                             is Resource.Loading -> CircularProgressIndicator(
                                 color = MaterialTheme.colorScheme.onPrimary,
                                 strokeWidth = 2.dp,
-                            modifier = Modifier.size(16.dp)
+                                modifier = Modifier.size(16.dp)
                             )
 
                             is Resource.Error -> Text(

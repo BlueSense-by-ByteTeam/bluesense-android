@@ -27,26 +27,27 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.byteteam.bluesense.R
+import com.byteteam.bluesense.core.helper.Screens
 import com.byteteam.bluesense.core.presentation.views.store.main.widgets.StarRating
 import com.byteteam.bluesense.core.presentation.views.store.support_items.widgets.WaterFilterItem
 import com.byteteam.bluesense.core.presentation.views.store.water_supplier.SupplierItem
 import com.byteteam.bluesense.ui.theme.BlueSenseTheme
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SupportItemsScreen() {
-    Scaffold(
-        topBar = {
-            TopAppBar(title = { Text(text = stringResource(R.string.recommendation)) })
-        }
+fun SupportItemsScreen(
+    navHostController: NavHostController = rememberNavController()
+) {
+    LazyColumn(
+        modifier = Modifier
+            .padding(horizontal = 24.dp)
     ) {
-        LazyColumn(modifier = Modifier
-            .padding(it)
-            .padding(horizontal = 24.dp)) {
-            items(12) { item ->
-                WaterFilterItem()
-            }
+        items(12) { item ->
+            WaterFilterItem(navigateDetailItem = {id ->
+                navHostController.navigate(Screens.FilterRecommendation.createRoute(id))
+            })
         }
     }
 }

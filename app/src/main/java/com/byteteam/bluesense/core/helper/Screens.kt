@@ -17,12 +17,14 @@ sealed class Screens(val route: String) {
 
     object History : Screens(route = "history")
     object Store : Screens(route = "store")
-    object FilterRecommendation : Screens(route = "filter_recommendation")
+    object FilterRecommendation : Screens(route = "filter_recommendation/{id}"){
+        fun createRoute(id: String) = "filter_recommendation/$id"
+    }
     object DetailFilterDevice : Screens(route = "filter_recommendation/{id}") {
         fun createRoute(id: String) = "filter_recommendation/$id"
     }
 
-    object WaterSupplier : Screens(route = "water_supplier")
+    object WaterSupplierRecommendation : Screens(route = "water_supplier_recommendation")
     object Notification : Screens(route = "notification")
     object OnBoarding : Screens(route = "onboarding")
     object GetStarted : Screens(route = "get_started")

@@ -19,7 +19,9 @@ import androidx.compose.ui.unit.dp
 import com.byteteam.bluesense.R
 
 @Composable
-fun WaterSupplierTemplate() {
+fun WaterSupplierTemplate(
+    navigateWaterSupplierRecommendations: () -> Unit
+) {
     Column {
         Column(
             Modifier
@@ -40,7 +42,7 @@ fun WaterSupplierTemplate() {
                 Text(
                     text = stringResource(R.string.see_all),
                     color = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.clickable { })
+                    modifier = Modifier.clickable { navigateWaterSupplierRecommendations() })
             }
             Text(
                 text = stringResource(R.string.your_water_need_is_here),

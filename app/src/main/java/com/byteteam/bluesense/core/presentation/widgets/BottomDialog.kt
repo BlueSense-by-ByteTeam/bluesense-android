@@ -36,7 +36,7 @@ fun BottomDialog(
         onDismissRequest = {
             onDismissRequest()
         }) {
-        Column(Modifier.verticalScrollDisabled()) {
+        Column(Modifier.verticalScrollDisabled().padding(bottom=24.dp)) {
             child()
         }
     }

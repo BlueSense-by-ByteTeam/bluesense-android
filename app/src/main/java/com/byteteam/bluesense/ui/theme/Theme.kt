@@ -62,7 +62,7 @@ fun BlueSenseTheme(
 //            window.statusBarColor = colorScheme.background.toArgb()
 //            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
 //        }
-        SideEffect {
+    SideEffect {
             val window = (view.context as Activity).window
             window.statusBarColor = LightColorScheme.background.toArgb()
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = true

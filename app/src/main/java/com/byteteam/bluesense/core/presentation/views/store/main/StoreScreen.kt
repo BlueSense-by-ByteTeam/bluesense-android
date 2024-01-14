@@ -14,24 +14,38 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.byteteam.bluesense.R
+import com.byteteam.bluesense.core.helper.Screens
 import com.byteteam.bluesense.core.presentation.views.store.main.widgets.BannerFilterDevice
 import com.byteteam.bluesense.core.presentation.views.store.main.widgets.WaterFilterProductTemplate
 import com.byteteam.bluesense.core.presentation.views.store.main.widgets.WaterSupplierTemplate
 import com.byteteam.bluesense.ui.theme.BlueSenseTheme
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun StoreScreen() {
-
+fun StoreScreen(
+    navHostController: NavHostController = rememberNavController(),
+    modifier: Modifier = Modifier
+) {
         Column(
             Modifier
                 .verticalScroll(rememberScrollState())) {
             BannerFilterDevice(modifier = Modifier.padding(horizontal = 24.dp))
-            WaterFilterProductTemplate()
-            WaterSupplierTemplate()
+            WaterFilterProductTemplate(
+                navigateDetailProduct = {
+                    navHostController.navigate(Screens.FilterRecommendation.createRoute(it))
+                },
+                navigateWaterFilterRecommendations = {
+                    navHostController.navigate(Screens.FilterRecommendation.route)
+                }
+            )
+            WaterSupplierTemplate(
+                navigateWaterSupplierRecommendations = {
+                    navHostController.navigate(Screens.WaterSupplierRecommendation.route)
+                }
+            )
         }
-
 }
 
 @Preview

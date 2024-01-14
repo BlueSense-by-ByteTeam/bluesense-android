@@ -17,25 +17,20 @@ import com.byteteam.bluesense.ui.theme.BlueSenseTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun WaterSupplierScreen(){
-    Scaffold(
-        topBar = {
-            TopAppBar(title = { Text(text = stringResource(R.string.water_supplier)) })
-        }
+fun WaterSupplierScreen() {
+    LazyColumn(
+        modifier = androidx.compose.ui.Modifier
+            .padding(horizontal = 24.dp)
     ) {
-        LazyColumn(modifier = androidx.compose.ui.Modifier
-            .padding(it)
-            .padding(horizontal = 24.dp)) {
-            items(12) { item ->
-                SupplierItem()
-            }
+        items(12) { item ->
+            SupplierItem()
         }
     }
 }
 
 @Preview
 @Composable
-private fun WaterSupplierScreenPreview(){
+private fun WaterSupplierScreenPreview() {
     BlueSenseTheme {
         Surface {
             WaterSupplierScreen()
