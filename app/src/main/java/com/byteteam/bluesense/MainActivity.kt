@@ -120,7 +120,6 @@ class MainActivity : ComponentActivity() {
             }
 
             fun callbackOnConnected(data: DeviceEntity) {
-
                 val brokerUrl = "ssl://${data.mqttBaseUrl}:8883"
                 val mqttTopic = data.mqttTopic
                 initMqtt(
@@ -204,21 +203,5 @@ class MainActivity : ComponentActivity() {
     override fun onDestroy() {
         super.onDestroy()
         mqttClientHelper = null
-    }
-
-    @Composable
-    fun Greeting(name: String, modifier: Modifier = Modifier) {
-        Text(
-            text = "Hello $name!",
-            modifier = modifier
-        )
-    }
-
-    @Preview(showBackground = true)
-    @Composable
-    fun GreetingPreview() {
-        BlueSenseTheme {
-            Greeting("Android")
-        }
     }
 }
