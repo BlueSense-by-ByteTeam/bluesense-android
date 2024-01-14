@@ -36,6 +36,7 @@ fun DetailDeviceScreen(
     waterStatusRealtime: StateFlow<String?>,
     statusDevice: StateFlow<Boolean>,
     sensorData: StateFlow<SensorData?>,
+    isOnDelete: Boolean = false,
     closeDeleteModal: () -> Unit = {},
     onDeleteDevice: () -> Unit = {},
     isDeleteDialogOpen: Boolean = false,
@@ -48,8 +49,9 @@ fun DetailDeviceScreen(
         if(isDeleteDialogOpen){
                 BottomDialog(onDismissRequest = closeDeleteModal) {
                     DeleteDeviceAlertContent(
+                        isOnDelete = isOnDelete,
                         onDismiss = closeDeleteModal,
-                        onConfirm = closeDeleteModal
+                        onConfirm = onDeleteDevice
                     )
                 }
         }

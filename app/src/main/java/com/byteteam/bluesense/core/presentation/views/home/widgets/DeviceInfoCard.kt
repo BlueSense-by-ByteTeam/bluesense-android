@@ -122,7 +122,7 @@ fun DeviceInfoCard(
                     } else Color.LightGray
                 )
                 .fillMaxWidth()
-                .clickable { if (deviceEntity != null) onTapDetailDevice(deviceEntity.id) }
+                .clickable { if (deviceEntity != null) onTapDetailDevice(deviceEntity.userDeviceId) }
                 .padding(horizontal = 20.dp, vertical = 12.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {

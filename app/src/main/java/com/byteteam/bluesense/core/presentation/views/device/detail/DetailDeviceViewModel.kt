@@ -54,7 +54,6 @@ class DetailDeviceViewModel @Inject constructor(
     }
     
     fun deleteDevice(id: String, callbackOnSuccess: () -> Unit){
-        _openDeleteModal.value = false
         viewModelScope.launch {
             _onDelete.value = true
             try {
@@ -67,6 +66,7 @@ class DetailDeviceViewModel @Inject constructor(
                 eventChannel.send(SingleEvent.MessageEvent(e.message ?: "Error delete device data"))
             }finally {
                 _onDelete.value = false
+                _openDeleteModal.value = false
             }
         }
     }

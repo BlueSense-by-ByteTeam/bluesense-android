@@ -342,13 +342,21 @@ fun App(
                         statusDevice = detailDeviceViewModel.isConnected,
                         sensorData = detailDeviceViewModel.data,
                         closeDeleteModal = { detailDeviceViewModel.closeDeleteModal() },
-                        onDeleteDevice = {
-                            detailDeviceViewModel.deleteDevice()
-                        },
+                        isOnDelete = detailDeviceViewModel.onDelete.collectAsState().value,
                         isDeleteDialogOpen = detailDeviceViewModel.isDialogDeleteOpen.collectAsState().value,
                         waterQualityHistory = null,
                         waterQualityRealtime = detailDeviceViewModel.waterQuality,
-                        waterStatusRealtime = detailDeviceViewModel.waterStatus
+                        waterStatusRealtime = detailDeviceViewModel.waterStatus,
+                        onDeleteDevice = {
+                            detailDeviceViewModel.deleteDevice(id ?: "", callbackOnSuccess = {
+                                navController.navigate(Screens.Home.route){
+                                    popUpTo(Screens.DetailDevice.createRoute(id ?: "")){
+                                        inclusive = true
+                                    }
+                                }
+                                homeViewModel.getDevices()//reset by get new data
+                            })
+                        },
                     )
                 }
                 composable(Screens.WaterSupplierRecommendation.route){
