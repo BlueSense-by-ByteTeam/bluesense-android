@@ -1,5 +1,6 @@
 package com.byteteam.bluesense
 
+import android.Manifest
 import MqttClientHelper
 import android.content.Context
 import android.os.Build
@@ -64,7 +65,7 @@ class MainActivity : ComponentActivity() {
         installSplashScreen()
 
         if (Build.VERSION.SDK_INT >= 33) {
-//            requestNotificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            requestNotificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
         }
 
         FCMService.subscribeTopic(this, "it_should_device_id")// TODO: the topic should get from REST server data
