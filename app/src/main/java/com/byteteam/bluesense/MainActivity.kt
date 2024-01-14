@@ -2,6 +2,7 @@ package com.byteteam.bluesense
 
 import android.Manifest
 import MqttClientHelper
+import android.app.Activity
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
@@ -13,11 +14,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
@@ -25,8 +22,10 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.byteteam.bluesense.core.domain.model.DeviceEntity
 import com.byteteam.bluesense.core.domain.model.SensorData
+import com.byteteam.bluesense.core.domain.model.SignInResult
+import com.byteteam.bluesense.core.domain.model.UserData
 import com.byteteam.bluesense.core.helper.Screens
-import com.byteteam.bluesense.core.presentation.helper.GoogleSignInClient
+import com.byteteam.bluesense.core.presentation.helper.GoogleSignInClientHelper
 import com.byteteam.bluesense.core.presentation.views.device.add_form.AddDeviceFormViewModel
 import com.byteteam.bluesense.core.presentation.views.device.add_form.AddDeviceViewModel
 import com.byteteam.bluesense.core.presentation.views.device.detail.DetailDeviceViewModel
@@ -37,11 +36,21 @@ import com.byteteam.bluesense.core.presentation.views.signin.AuthViewModel
 import com.byteteam.bluesense.core.presentation.views.signup.RegisterViewModel
 import com.byteteam.bluesense.core.services.FCMService
 import com.byteteam.bluesense.ui.theme.BlueSenseTheme
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions
 import javax.inject.Inject
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.Task
+import com.google.firebase.Firebase
+import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.auth
+import kotlinx.coroutines.tasks.await
+
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -55,7 +64,7 @@ class MainActivity : ComponentActivity() {
     private val detailDeviceViewModel: DetailDeviceViewModel by viewModels()
 
     @Inject
-    lateinit var googleAuthUiClient: GoogleSignInClient
+    lateinit var googleAuthUiClient: GoogleSignInClientHelper
 
     var mqttClientHelper: MqttClientHelper? = null
 
@@ -68,7 +77,10 @@ class MainActivity : ComponentActivity() {
             requestNotificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
         }
 
-        FCMService.subscribeTopic(this, "it_should_device_id")// TODO: the topic should get from REST server data
+        FCMService.subscribeTopic(
+            this,
+            "it_should_device_id"
+        )// TODO: the topic should get from REST server data
 
         val mqttConnectOptions = MqttConnectOptions()
         mqttConnectOptions.apply {
@@ -88,35 +100,39 @@ class MainActivity : ComponentActivity() {
                     }
                 }
 
-            val launcher = rememberLauncherForActivityResult(
-                contract = ActivityResultContracts.StartIntentSenderForResult(),
+
+            val googleSignInLauncher = rememberLauncherForActivityResult(
+                contract = ActivityResultContracts.StartActivityForResult(),
                 onResult = { result ->
-                    Log.d("TAG", "onCreate: $result")
-                    if (result.resultCode == RESULT_OK) {
-                        lifecycleScope.launch {
-                            val signInResult =
-                                googleAuthUiClient.getSignInResultFromIntent(
-                                    intent = result.data ?: return@launch
-                                )
-                            signInResult.data?.let {
-                                registerViewModel.googleSignup(it)
+                    if (result.resultCode == Activity.RESULT_OK) {
+                        val task: Task<GoogleSignInAccount> =
+                            GoogleSignIn.getSignedInAccountFromIntent(result.data)
+                        try {
+                            lifecycleScope.launch {
+                                val signInResult = googleAuthUiClient.getSignInResult(task)
+                                signInResult.data?.let {
+                                    registerViewModel.googleSignup(it)
+                                }
+                                authViewModel.getCurrentUser()
+                                callbackOnSuccessSignIn()
                             }
-                            authViewModel.getCurrentUser()
-                            callbackOnSuccessSignIn()
+
+                        } catch (e: ApiException) {
+                            lifecycleScope.launch {
+                                authViewModel.setErrorSignIn(e.message)
+                            }
+                        } finally {
+                            authViewModel.enableGoogleSigninButton()
                         }
                     }
                 }
             )
 
-            fun signInGoogle() = lifecycleScope.launch {
+            fun newGoogleSignIn() = lifecycleScope.launch {
                 authViewModel.disableGoogleSigninButton()
-                val signInIntentSender = googleAuthUiClient.signIn()
-                launcher.launch(
-                    IntentSenderRequest.Builder(
-                        signInIntentSender ?: return@launch
-                    ).build()
+                googleSignInLauncher.launch(
+                    googleAuthUiClient.client.signInIntent ?: return@launch
                 )
-                authViewModel.enableGoogleSigninButton()
             }
 
             fun callbackOnConnected(data: DeviceEntity) {
@@ -136,9 +152,9 @@ class MainActivity : ComponentActivity() {
                 BlueSenseApp(
                     currentRoute = currentRoute,
                     navController = navController,
-                    signInGoogle = { signInGoogle() },
+                    signInGoogle = { newGoogleSignIn() },
                     callbackOnSuccessSignIn = { callbackOnSuccessSignIn() },
-                    callbackOnConnected = { callbackOnConnected(it)  },
+                    callbackOnConnected = { callbackOnConnected(it) },
                     scanViewModel = scanViewModel,
                     authViewModel = authViewModel,
                     onBoardViewModel = onBoardViewModel,
@@ -146,7 +162,7 @@ class MainActivity : ComponentActivity() {
                     addDeviceViewModel = addDeviceViewModel,
                     homeViewModel = homeViewModel,
                     addDeviceFormViewModel = addDeviceFormViewModel,
-                    detailDeviceViewModel =detailDeviceViewModel
+                    detailDeviceViewModel = detailDeviceViewModel
                 )
             }
         }

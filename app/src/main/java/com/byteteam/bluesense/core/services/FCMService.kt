@@ -8,11 +8,9 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.widget.Toast
-import androidx.compose.ui.graphics.Color
 import androidx.core.app.NotificationCompat
 import com.byteteam.bluesense.MainActivity
 import com.byteteam.bluesense.R
-import com.byteteam.bluesense.ui.theme.PrimaryBlue
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
@@ -46,7 +44,7 @@ class FCMService : FirebaseMessagingService() {
             NOTIFICATION_CHANNEL_ID
         )
             .setSmallIcon(R.drawable.bluesense_ic_white_no_bg)
-            .setColor(0xFF3E00FF.toInt())
+            .setColor(android.graphics.Color.BLUE)
             .setContentTitle(title)
             .setContentText(messageBody)
             .setContentIntent(contentPendingIntent)

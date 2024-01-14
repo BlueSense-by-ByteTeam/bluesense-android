@@ -7,7 +7,7 @@ import com.byteteam.bluesense.core.domain.model.SignInResult
 import com.byteteam.bluesense.core.domain.model.SignUpPost
 import com.byteteam.bluesense.core.domain.model.UserData
 import com.byteteam.bluesense.core.domain.repositories.AuthRepository
-import com.byteteam.bluesense.core.presentation.helper.GoogleSignInClient
+import com.byteteam.bluesense.core.presentation.helper.GoogleSignInClientHelper
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import kotlinx.coroutines.flow.Flow
@@ -18,7 +18,7 @@ import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
     private val dataStorePreference: DataStorePreference,
-    private val googleSignInClient: GoogleSignInClient,
+    private val googleSignInClient: GoogleSignInClientHelper,
     private val authServices: AuthServices
 ) : AuthRepository {
     override suspend fun signInEmail(email: String, password: String): Flow<SignInResult?> {

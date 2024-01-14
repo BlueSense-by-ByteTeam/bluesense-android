@@ -32,7 +32,7 @@ fun BottomDialog(
         dragHandle = {},
         sheetState = bottomSheetState,
         containerColor = MaterialTheme.colorScheme.background,
-        modifier = modifier,
+        modifier = modifier.padding(bottom=24.dp),
         onDismissRequest = {
             onDismissRequest()
         }) {

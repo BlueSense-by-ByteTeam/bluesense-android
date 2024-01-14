@@ -11,43 +11,39 @@ import com.byteteam.bluesense.core.domain.model.UserData
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.BeginSignInRequest.GoogleIdTokenRequestOptions
 import com.google.android.gms.auth.api.identity.SignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.Task
 import com.google.firebase.Firebase
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.auth
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 import kotlin.coroutines.cancellation.CancellationException
 
-class GoogleSignInClient @Inject constructor(
+class GoogleSignInClientHelper @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val client: SignInClient,
+    val client: GoogleSignInClient,
     private val dataStorePreference: DataStorePreference,
 ) {
     private val auth = Firebase.auth
-    suspend fun signIn(): IntentSender? {
-        val result = try {
-            client.beginSignIn(buildSignInRequest()).await()
-        } catch (e: Exception) {
-            Log.d("TAG", "signIn: error")
-            e.printStackTrace()
-            if (e is CancellationException) throw e
-            null
-        }
-        return result?.pendingIntent?.intentSender
-    }
 
-    suspend fun getSignInResultFromIntent(intent: Intent): SignInResult {
-        val credential = client.getSignInCredentialFromIntent(intent)
-        val googleIdToken = credential.googleIdToken
-        val googleCredentials = GoogleAuthProvider.getCredential(googleIdToken, null)
-        return try {
-            val user = auth.signInWithCredential(googleCredentials).await().user
-            Log.d("TAG", "getSignInResultFromIntent: $user")
+    suspend fun getSignInResult(task: Task<GoogleSignInAccount>): SignInResult{
+        try {
+
+            val account: GoogleSignInAccount =
+                task.getResult(ApiException::class.java)!!
+            val googleIdToken = account.idToken!!
+            val googleCredentials =
+                GoogleAuthProvider.getCredential(googleIdToken, null)
+            val user = Firebase.auth.signInWithCredential(googleCredentials)
+                .await().user
+
             val data = user?.let {
-                dataStorePreference.setAuthToken(googleIdToken ?: "")
+                dataStorePreference.setAuthToken(googleIdToken)
                 UserData(
                     userId = it.uid,
                     userName = it.displayName ?: "-",
@@ -56,21 +52,21 @@ class GoogleSignInClient @Inject constructor(
                     credential = googleIdToken ?: "-"
                 )
             }
-            SignInResult(
+            val signInResult = SignInResult(
                 data = data,
                 errorMessage = null
             )
-        } catch (e: Exception) {
+            return signInResult
+        }catch (e: Exception) {
             Log.d("TAG", "getSignInResultFromIntent: ${e.message}")
             e.printStackTrace()
             if (e is CancellationException) throw e
-            SignInResult(
+            return SignInResult(
                 data = null,
                 errorMessage = e.message
             )
         }
     }
-
 
     suspend fun signOut() {
         try {
@@ -81,22 +77,6 @@ class GoogleSignInClient @Inject constructor(
             e.printStackTrace()
             if (e is CancellationException) throw e
         }
-    }
-
-    suspend fun getIdToken(): String? = auth.currentUser?.run {
-        getIdToken(true).await().token
-    }
-
-    suspend fun getSignedUser(): UserData? = auth.currentUser?.run {
-        val token = dataStorePreference.getAuthToken().firstOrNull()
-        UserData(
-            userId = uid,
-            userName = displayName ?: "-",
-            profilePicUrl = photoUrl.toString(),
-            email = email ?: "-",
-            credential = token
-                ?: "-",// TODO: replace this credential with credential from userpreference
-        )
     }
 
     private fun buildSignInRequest(): BeginSignInRequest {
