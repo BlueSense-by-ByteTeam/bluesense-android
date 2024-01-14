@@ -12,6 +12,9 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+
 
     <application
         android:name="com.byteteam.BlueSenseApp"
@@ -39,7 +42,15 @@
             </intent-filter>
         </activity>
         <!-- Mqtt Service -->
-        <service android:name="org.eclipse.paho.android.service.MqttService">
+        <service android:name="org.eclipse.paho.android.service.MqttService"
+            tools:ignore="MissingClass">
+        </service>
+<!--        FCM service-->
+        <service android:name=".core.services.FCMService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+            </intent-filter>
         </service>
     </application>
 

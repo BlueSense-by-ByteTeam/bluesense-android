@@ -97,6 +97,7 @@ dependencies {
     implementation("com.google.firebase:firebase-auth:22.3.0")
     implementation("com.google.android.gms:play-services-auth:20.7.0")
     implementation("androidx.datastore:datastore-core:1.0.0")
+    implementation("com.google.firebase:firebase-messaging:23.4.0")
     val nav_version = "2.7.6"
     val compose_version =  "1.5.1"
     val vico = "1.13.1"
