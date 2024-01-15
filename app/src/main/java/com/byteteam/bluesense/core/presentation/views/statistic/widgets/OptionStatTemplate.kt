@@ -1,5 +1,6 @@
 package com.byteteam.bluesense.core.presentation.views.statistic.widgets
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
@@ -23,7 +24,8 @@ fun OptionStatTemplate(sortDatas: Map<String, SortData>, selectedData: SortData?
         items(sortDatas.keys.toList()) {
             OutlinedButton(
                 onClick = { onClick(sortDatas[it]) },
-                shape = RoundedCornerShape(4.dp),
+                shape = RoundedCornerShape(8.dp),
+                border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.primary),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = if (selectedData==sortDatas[it]) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.background
                 ),

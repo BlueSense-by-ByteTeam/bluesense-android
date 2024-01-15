@@ -70,6 +70,10 @@ fun HomeScreen(
         getDevices()
     }
 
+    LaunchedEffect(Unit){
+        fetchData()
+    }
+
     Column(
         modifier
             .verticalScroll(rememberScrollState())

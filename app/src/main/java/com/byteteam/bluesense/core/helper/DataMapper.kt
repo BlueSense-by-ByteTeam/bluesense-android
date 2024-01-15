@@ -3,6 +3,7 @@ package com.byteteam.bluesense.core.helper
 import com.byteteam.bluesense.core.data.remote.network.response.devices.GetDeviceLatestInfoResponse
 import com.byteteam.bluesense.core.data.remote.network.response.devices.GetDevicesResponse
 import com.byteteam.bluesense.core.data.remote.network.response.devices.GetDevicesResponseOld
+import com.byteteam.bluesense.core.data.remote.network.response.history.GetHistoryResponse
 import com.byteteam.bluesense.core.data.remote.network.response.indonesian_location.GetCities
 import com.byteteam.bluesense.core.data.remote.network.response.indonesian_location.GetCitiesItem
 import com.byteteam.bluesense.core.data.remote.network.response.indonesian_location.GetDistricts
@@ -15,6 +16,8 @@ import com.byteteam.bluesense.core.domain.model.CityEntity
 import com.byteteam.bluesense.core.domain.model.DeviceEntity
 import com.byteteam.bluesense.core.domain.model.DeviceLatestInfoEntity
 import com.byteteam.bluesense.core.domain.model.DistrictEntity
+import com.byteteam.bluesense.core.domain.model.LogEntity
+import com.byteteam.bluesense.core.domain.model.LogHistoryEntity
 import com.byteteam.bluesense.core.domain.model.ProvinceEntity
 import com.byteteam.bluesense.core.domain.model.WaterFilterEntity
 import com.byteteam.bluesense.core.domain.model.WaterSupplierEntity
@@ -70,35 +73,57 @@ fun GetDevicesResponse.toDeviceEntities(): List<DeviceEntity> = this.data?.map {
     )
 } ?: listOf()
 
-fun GetDeviceLatestInfoResponse.toDeviceLatestInfoEntity(id: String): DeviceLatestInfoEntity? = if(this.data?.log == null) null else DeviceLatestInfoEntity(
-    id = id,
-    status = this.data?.status!!,
-    quality = this.data?.quality!!,
-    ph = this.data?.log?.ph?.toDouble() ?: 0.0,
-    tds = this.data?.log?.tds?.toDouble() ?: 0.0,
-    timestamp=this.data?.log?.createdAt.toString()
-)
+fun GetDeviceLatestInfoResponse.toDeviceLatestInfoEntity(id: String): DeviceLatestInfoEntity? =
+    if (this.data?.log == null) null else DeviceLatestInfoEntity(
+        id = id,
+        status = this.data?.status!!,
+        quality = this.data?.quality!!,
+        ph = this.data?.log?.ph?.toDouble() ?: 0.0,
+        tds = this.data?.log?.tds?.toDouble() ?: 0.0,
+        timestamp = this.data?.log?.createdAt.toString()
+    )
 
 fun GetWaterFilters.toWaterFilterEntities(): List<WaterFilterEntity> = this.data?.map {
     WaterFilterEntity(
-        id= it?.id!!,
-        name= it?.name!!,
-        price= it?.price?.toLongOrNull() ?: 0,
-        rating= it?.rating?.toDouble() ?: 0.0,
+        id = it?.id!!,
+        name = it?.name!!,
+        price = it?.price?.toLongOrNull() ?: 0,
+        rating = it?.rating?.toDouble() ?: 0.0,
         description = it?.description ?: "",
-        tokopediaUrl =  it?.tokopediaUrl ?: "",
-        shoppeUrl =  it?.shoppeUrl ?: "",
-        imageUrl =  it?.imageUrl ?: "",
-        )
+        tokopediaUrl = it?.tokopediaUrl ?: "",
+        shoppeUrl = it?.shoppeUrl ?: "",
+        imageUrl = it?.imageUrl ?: "",
+    )
 } ?: listOf()
 
 fun GetWaterSuppliers.toWaterSupplierEntities(): List<WaterSupplierEntity> = this.data?.map {
     WaterSupplierEntity(
-        id= it?.id!!,
-        name= it?.name!!,
+        id = it?.id!!,
+        name = it?.name!!,
         phone = it?.phone ?: "-",
-        instagramUrl =  it?.instagramUrl ?: "-",
-        category =  it?.category ?: "",
-        imageUrl =  it?.imageUrl ?: "",
+        instagramUrl = it?.instagramUrl ?: "-",
+        category = it?.category ?: "",
+        imageUrl = it?.imageUrl ?: "",
     )
 } ?: listOf()
+
+fun GetHistoryResponse.toLogHistoryEntity(): LogHistoryEntity = LogHistoryEntity(
+    averageTds = this.data?.averageTds!!,
+    averageQuality = this.data?.averageQuality!!,
+    averagePh = this.data?.averagePh!!,
+    minTds = this.data?.minPh!!,
+    maxPh = this.data?.maxPh!!,
+    maxTds = this.data?.maxTds!!,
+    minPh = this.data?.minPh!!,
+    averageStatus = this.data?.averageStatus!!,
+    averageDrinkable = this.data?.averageDrinkable!!,
+    logs = this.data?.logs?.map {
+        LogEntity(
+            tds = it?.tds!!.toDouble(),
+            ph = it?.ph!!.toDouble(),
+            createdAt = it?.createdAt!!,
+            quality = it?.quality!!,
+            status = it?.status!!
+        )
+    } ?: listOf(),
+)

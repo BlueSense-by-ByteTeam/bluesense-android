@@ -31,6 +31,7 @@ import com.byteteam.bluesense.core.presentation.views.onboard.OnBoardViewModel
 import com.byteteam.bluesense.core.presentation.views.reset_password.ResetPasswordViewModel
 import com.byteteam.bluesense.core.presentation.views.signin.AuthViewModel
 import com.byteteam.bluesense.core.presentation.views.signup.RegisterViewModel
+import com.byteteam.bluesense.core.presentation.views.statistic.StatisticHistoryViewModel
 import com.byteteam.bluesense.core.presentation.views.store.StoreViewModel
 import com.byteteam.bluesense.core.services.FCMService
 import com.byteteam.bluesense.ui.theme.BlueSenseTheme
@@ -57,6 +58,7 @@ class MainActivity : ComponentActivity() {
     private val detailDeviceViewModel: DetailDeviceViewModel by viewModels()
     private val storeViewModel: StoreViewModel by viewModels()
     private val resetPasswordViewModel: ResetPasswordViewModel by viewModels()
+    private val historyViewModel: StatisticHistoryViewModel by viewModels()
 
     @Inject
     lateinit var googleAuthUiClient: GoogleSignInClientHelper
@@ -160,6 +162,7 @@ class MainActivity : ComponentActivity() {
                     detailDeviceViewModel = detailDeviceViewModel,
                     storeViewModel = storeViewModel,
                     resetPasswordViewModel = resetPasswordViewModel,
+                    historyViewModel = historyViewModel,
                 )
             }
         }

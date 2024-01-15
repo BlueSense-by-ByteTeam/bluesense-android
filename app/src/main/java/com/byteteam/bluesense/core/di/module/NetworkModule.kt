@@ -4,6 +4,7 @@ import com.byteteam.bluesense.core.data.datastore.DataStorePreference
 import com.byteteam.bluesense.core.data.remote.network.config.FirebaseTokenInterceptor
 import com.byteteam.bluesense.core.data.remote.network.services.bluesense.AuthServices
 import com.byteteam.bluesense.core.data.remote.network.services.bluesense.DeviceServices
+import com.byteteam.bluesense.core.data.remote.network.services.bluesense.HistoryLogServices
 import com.byteteam.bluesense.core.data.remote.network.services.bluesense.WaterFilterServices
 import com.byteteam.bluesense.core.data.remote.network.services.bluesense.WaterSupplierServices
 import com.byteteam.bluesense.core.data.remote.network.services.location.IndonesianLocationAddressService
@@ -60,21 +61,27 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideDeviceApiServices(retrofitBuilder: Retrofit.Builder): DeviceServices =  retrofitBuilder.baseUrl(
+    fun provideDeviceApiServices(retrofitBuilder: Retrofit.Builder): DeviceServices = retrofitBuilder.baseUrl(
         BLUESENSE_BASE_URL).build().create(
         DeviceServices::class.java
     )
 
     @Provides
     @Singleton
-    fun provideWaterSuppliersApiServices(retrofitBuilder: Retrofit.Builder): WaterSupplierServices =  retrofitBuilder.baseUrl(
+    fun provideWaterSuppliersApiServices(retrofitBuilder: Retrofit.Builder): WaterSupplierServices = retrofitBuilder.baseUrl(
         BLUESENSE_BASE_URL).build().create(
         WaterSupplierServices::class.java
     )
     @Provides
     @Singleton
-    fun provideWaterFiltersApiServices(retrofitBuilder: Retrofit.Builder): WaterFilterServices =  retrofitBuilder.baseUrl(
+    fun provideWaterFiltersApiServices(retrofitBuilder: Retrofit.Builder): WaterFilterServices = retrofitBuilder.baseUrl(
         BLUESENSE_BASE_URL).build().create(
         WaterFilterServices::class.java
+    )
+    @Provides
+    @Singleton
+    fun provideHistoryLogApiServices(retrofitBuilder: Retrofit.Builder): HistoryLogServices = retrofitBuilder.baseUrl(
+        BLUESENSE_BASE_URL).build().create(
+        HistoryLogServices::class.java
     )
 }

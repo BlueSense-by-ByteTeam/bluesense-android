@@ -50,6 +50,7 @@ import com.byteteam.bluesense.core.presentation.views.signin.SigninScreen
 import com.byteteam.bluesense.core.presentation.views.signup.RegisterViewModel
 import com.byteteam.bluesense.core.presentation.views.signup.SignupScreen
 import com.byteteam.bluesense.core.presentation.views.signup.widgets.SignupScreenContentData
+import com.byteteam.bluesense.core.presentation.views.statistic.StatisticHistoryViewModel
 import com.byteteam.bluesense.core.presentation.views.statistic.StatisticScreen
 import com.byteteam.bluesense.core.presentation.views.store.StoreViewModel
 import com.byteteam.bluesense.core.presentation.views.store.detail.DetailProductScreen
@@ -76,6 +77,7 @@ fun App(
     detailDeviceViewModel: DetailDeviceViewModel,
     storeViewModel: StoreViewModel,
     resetPasswordViewModel: ResetPasswordViewModel,
+    historyViewModel: StatisticHistoryViewModel,
 ) {
 
     Scaffold(topBar = {
@@ -214,7 +216,13 @@ fun App(
                     NotificationScreen(navController)
                 }
                 composable(Screens.History.route) {
-                    StatisticScreen()
+                    StatisticScreen(
+                        getHistoryToday = { historyViewModel.getTodayHistory() },
+                        getHistoryWeek = { historyViewModel.getWeekHistory() },
+                        getHistoryMonth = { historyViewModel.getMonthHistory() },
+                        getHistoryYear = { historyViewModel.getYearHistory() },
+                        historyState = historyViewModel.historyLogs
+                    )
                 }
                 composable(Screens.Store.route) {
                     StoreScreen(
