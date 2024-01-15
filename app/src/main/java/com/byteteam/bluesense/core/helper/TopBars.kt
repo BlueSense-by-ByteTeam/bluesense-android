@@ -32,7 +32,11 @@ fun Topbars(actions: Map<String, () -> Unit>, route: String, navHostController: 
         Screens.Home.route -> TopAppBar(
             colors = topAppBarColors,
             title = {
-                Text(modifier = Modifier.padding(start = 8.dp), fontWeight = FontWeight.Bold, text = stringResource(id = R.string.bluesense))
+                Text(
+                    modifier = Modifier.padding(start = 8.dp),
+                    fontWeight = FontWeight.Bold,
+                    text = stringResource(id = R.string.bluesense)
+                )
             }, actions = {
                 IconButton(onClick = { navHostController.navigate(Screens.Notification.route) }) {
                     Icon(
@@ -45,32 +49,52 @@ fun Topbars(actions: Map<String, () -> Unit>, route: String, navHostController: 
 
         Screens.History.route -> TopAppBar(colors = topAppBarColors,
             title = {
-                Text(modifier = Modifier.padding(start = 8.dp), fontWeight = FontWeight.Bold, text = "Riwayat Kualitas Air")
+                Text(
+                    modifier = Modifier.padding(start = 8.dp),
+                    fontWeight = FontWeight.Bold,
+                    text = "Riwayat Kualitas Air"
+                )
             })
 
         Screens.Store.route -> TopAppBar(colors = topAppBarColors,
             title = {
-                Text(modifier = Modifier.padding(start = 8.dp), fontWeight = FontWeight.Bold, text = stringResource(id = R.string.bluesense))
+                Text(
+                    modifier = Modifier.padding(start = 8.dp),
+                    fontWeight = FontWeight.Bold,
+                    text = stringResource(id = R.string.bluesense)
+                )
             })
 
         Screens.Notification.route -> TopAppBar(
             colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background),
             title = {
-                Text(modifier = Modifier.padding(start = 8.dp), fontWeight = FontWeight.Bold, text = stringResource(R.string.notification))
+                Text(
+                    modifier = Modifier.padding(start = 8.dp),
+                    fontWeight = FontWeight.Bold,
+                    text = stringResource(R.string.notification)
+                )
             },
             navigationIcon = { NavigationBackButton(navHostController = navHostController) }
         )
 
         Screens.AddDevice.route -> TopAppBar(colors = topAppBarColors,
             title = {
-                Text(modifier = Modifier.padding(start = 8.dp), fontWeight = FontWeight.Bold, text = stringResource(id = R.string.bluesense))
+                Text(
+                    modifier = Modifier.padding(start = 8.dp),
+                    fontWeight = FontWeight.Bold,
+                    text = stringResource(id = R.string.bluesense)
+                )
             },
             navigationIcon = { NavigationBackButton(navHostController = navHostController) }
         )
 
         Screens.AddDeviceForm.route -> TopAppBar(colors = topAppBarColors,
             title = {
-                Text(modifier = Modifier.padding(start = 8.dp), fontWeight = FontWeight.Bold, text = "Tambah Alat")
+                Text(
+                    modifier = Modifier.padding(start = 8.dp),
+                    fontWeight = FontWeight.Bold,
+                    text = "Tambah Alat"
+                )
             },
             navigationIcon = { NavigationBackButton(navHostController = navHostController) }
         )
@@ -85,7 +109,13 @@ fun Topbars(actions: Map<String, () -> Unit>, route: String, navHostController: 
                     )
                 }
             },
-            title = { Text(modifier = Modifier.padding(start = 8.dp), fontWeight = FontWeight.Bold, text = "Detail") },
+            title = {
+                Text(
+                    modifier = Modifier.padding(start = 8.dp),
+                    fontWeight = FontWeight.Bold,
+                    text = "Detail"
+                )
+            },
             actions = {
                 IconButton(onClick = {
                     actions[Screens.DetailDevice.route]?.invoke()
@@ -110,8 +140,15 @@ fun Topbars(actions: Map<String, () -> Unit>, route: String, navHostController: 
                     )
                 }
             },
-            title = { Text(modifier = Modifier.padding(start = 8.dp), fontWeight = FontWeight.Bold, text = "Supplier Air") },
+            title = {
+                Text(
+                    modifier = Modifier.padding(start = 8.dp),
+                    fontWeight = FontWeight.Bold,
+                    text = "Supplier Air"
+                )
+            },
         )
+
         Screens.FilterRecommendation.route -> TopAppBar(
             colors = topAppBarColors,
             navigationIcon = {
@@ -122,16 +159,65 @@ fun Topbars(actions: Map<String, () -> Unit>, route: String, navHostController: 
                     )
                 }
             },
-            title = { Text(modifier = Modifier.padding(start = 8.dp), fontWeight = FontWeight.Bold, text = "Bluesense") },
+            title = {
+                Text(
+                    modifier = Modifier.padding(start = 8.dp),
+                    fontWeight = FontWeight.Bold,
+                    text = "Bluesense"
+                )
+            },
         )
+
         Screens.ResetPassword.route -> TopAppBar(
             colors = topAppBarColors,
-            title = { Text(modifier = Modifier.padding(start = 8.dp), fontWeight = FontWeight.Bold, text = "Bluesense") },
+            navigationIcon = {
+                IconButton(onClick = {
+                    navHostController.navigate(Screens.SignIn.route) {
+                        popUpTo(Screens.ResetPassword.route) {
+                            inclusive = true
+                        }
+                    }
+                }) {
+                    Icon(
+                        imageVector = Icons.Default.ArrowBack,
+                        contentDescription = stringResource(R.string.back_icon)
+                    )
+                }
+            },
+            title = {
+                Text(
+                    modifier = Modifier.padding(start = 8.dp),
+                    fontWeight = FontWeight.Bold,
+                    text = "Bluesense"
+                )
+            },
         )
+
         Screens.SuccessResetPassword.route -> TopAppBar(
             colors = topAppBarColors,
-            title = { Text(modifier = Modifier.padding(start = 8.dp), fontWeight = FontWeight.Bold, text = "Bluesense") },
+            navigationIcon = {
+                IconButton(onClick = {
+                    navHostController.navigate(Screens.SignIn.route) {
+                        popUpTo(Screens.SuccessResetPassword.route) {
+                            inclusive = true
+                        }
+                    }
+                }) {
+                    Icon(
+                        imageVector = Icons.Default.ArrowBack,
+                        contentDescription = stringResource(R.string.back_icon)
+                    )
+                }
+            },
+            title = {
+                Text(
+                    modifier = Modifier.padding(start = 8.dp),
+                    fontWeight = FontWeight.Bold,
+                    text = "Bluesense"
+                )
+            },
         )
+
         else -> null
     }
 }

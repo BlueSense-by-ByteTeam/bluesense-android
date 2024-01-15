@@ -80,7 +80,11 @@ fun SuccessResetPassScreen(
         }
         AnnonatedText(
             callbackOnTapTryNewEmail = {
-                navHostController.popBackStack()
+                navHostController.navigate(Screens.ResetPassword.route){
+                    popUpTo(Screens.SuccessResetPassword.route){
+                        inclusive=true
+                    }
+                }
             },
         )
     }

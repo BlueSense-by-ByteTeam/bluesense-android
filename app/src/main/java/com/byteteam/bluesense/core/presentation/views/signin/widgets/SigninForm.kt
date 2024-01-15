@@ -43,7 +43,7 @@ fun SignupForm(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             OutlinedButton(
-                enabled = enableGoogleSigninButton,
+//                enabled = enableGoogleSigninButton,
                 onClick = onTapGoogleAuth,
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
