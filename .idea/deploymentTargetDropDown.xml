@@ -2,9 +2,6 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="NoficationPreview">
-        <State />
-      </entry>
       <entry key="Preview">
         <State />
       </entry>
@@ -29,6 +26,9 @@
           </targetSelectedWithDropDown>
           <timeTargetWasSelectedWithDropDown value="2024-01-09T00:56:41.423231800Z" />
         </State>
+      </entry>
+      <entry key="PreviewSuccessResetPass">
+        <State />
       </entry>
       <entry key="app">
         <State>

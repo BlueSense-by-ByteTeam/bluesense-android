@@ -29,4 +29,5 @@ sealed class Screens(val route: String) {
     object OnBoarding : Screens(route = "onboarding")
     object GetStarted : Screens(route = "get_started")
     object ResetPassword : Screens(route = "reset_password")
+    object SuccessResetPassword: Screens(route = "success_reset_password")
 }

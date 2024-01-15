@@ -56,6 +56,7 @@ import com.byteteam.bluesense.core.presentation.views.store.detail.DetailProduct
 import com.byteteam.bluesense.core.presentation.views.store.main.StoreScreen
 import com.byteteam.bluesense.core.presentation.views.store.support_items.SupportItemsScreen
 import com.byteteam.bluesense.core.presentation.views.store.water_supplier.WaterSupplierScreen
+import com.byteteam.bluesense.core.presentation.views.success_reset_pass.SuccessResetPassScreen
 import com.byteteam.bluesense.core.presentation.widgets.BottomBar
 
 @Composable
@@ -362,9 +363,16 @@ fun App(
                         updateEmail = {resetPasswordViewModel.updateEmail(it)},
                         eventMessage = resetPasswordViewModel.eventFlow,
                         sendResetEmail = { resetPasswordViewModel.sendEmailResetPassword(callbackSuccess = {
-                            Log.d("TAG", "Success send reset email")
-                        }) }
+                            navController.navigate(Screens.SuccessResetPassword.route){
+                                popUpTo(Screens.ResetPassword.route){
+                                    inclusive = true
+                                }
+                            }
+                        })}
                     )
+                }
+                composable(Screens.SuccessResetPassword.route){
+                    SuccessResetPassScreen(navHostController = navController)
                 }
             }
         }

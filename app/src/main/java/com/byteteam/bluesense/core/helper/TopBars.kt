@@ -124,7 +124,14 @@ fun Topbars(actions: Map<String, () -> Unit>, route: String, navHostController: 
             },
             title = { Text(modifier = Modifier.padding(start = 8.dp), fontWeight = FontWeight.Bold, text = "Bluesense") },
         )
-
+        Screens.ResetPassword.route -> TopAppBar(
+            colors = topAppBarColors,
+            title = { Text(modifier = Modifier.padding(start = 8.dp), fontWeight = FontWeight.Bold, text = "Bluesense") },
+        )
+        Screens.SuccessResetPassword.route -> TopAppBar(
+            colors = topAppBarColors,
+            title = { Text(modifier = Modifier.padding(start = 8.dp), fontWeight = FontWeight.Bold, text = "Bluesense") },
+        )
         else -> null
     }
 }
