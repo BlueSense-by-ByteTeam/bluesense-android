@@ -28,6 +28,7 @@ import com.byteteam.bluesense.core.presentation.views.device.detail.DetailDevice
 import com.byteteam.bluesense.core.presentation.views.device.scan.ScanViewModel
 import com.byteteam.bluesense.core.presentation.views.home.HomeViewModel
 import com.byteteam.bluesense.core.presentation.views.onboard.OnBoardViewModel
+import com.byteteam.bluesense.core.presentation.views.reset_password.ResetPasswordViewModel
 import com.byteteam.bluesense.core.presentation.views.signin.AuthViewModel
 import com.byteteam.bluesense.core.presentation.views.signup.RegisterViewModel
 import com.byteteam.bluesense.core.presentation.views.store.StoreViewModel
@@ -55,6 +56,7 @@ class MainActivity : ComponentActivity() {
     private val addDeviceFormViewModel: AddDeviceFormViewModel by viewModels()
     private val detailDeviceViewModel: DetailDeviceViewModel by viewModels()
     private val storeViewModel: StoreViewModel by viewModels()
+    private val resetPasswordViewModel: ResetPasswordViewModel by viewModels()
 
     @Inject
     lateinit var googleAuthUiClient: GoogleSignInClientHelper
@@ -157,6 +159,7 @@ class MainActivity : ComponentActivity() {
                     addDeviceFormViewModel = addDeviceFormViewModel,
                     detailDeviceViewModel = detailDeviceViewModel,
                     storeViewModel = storeViewModel,
+                    resetPasswordViewModel = resetPasswordViewModel,
                 )
             }
         }
@@ -206,7 +209,6 @@ class MainActivity : ComponentActivity() {
             mqttConnectOptions?.let {
                 mqttClientHelper?.connect(mqttConnectOptions = it, topic = mqttTopic)
             }
-
         }
     }
 

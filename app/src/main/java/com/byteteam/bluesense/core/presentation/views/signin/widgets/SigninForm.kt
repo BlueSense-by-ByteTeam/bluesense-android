@@ -2,6 +2,7 @@ package com.byteteam.bluesense.core.presentation.views.signin.widgets
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -32,6 +33,7 @@ fun SignupForm(
     enableGoogleSigninButton: Boolean,
     onUpdateEmail: (String) -> Unit,
     onUpdatePassword: (String) -> Unit,
+    navigateToResetPasswordScreen: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column {
@@ -83,7 +85,7 @@ fun SignupForm(
                 color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.align(
                     Alignment.End
-                )
+                ).clickable { navigateToResetPasswordScreen() }
             )
         }
         Button(

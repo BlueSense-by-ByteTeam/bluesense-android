@@ -87,6 +87,7 @@ fun SigninScreenContent(
             onUpdatePassword = signInData.onUpdatePassword,
             enableButton = signInData.enableButton,
             enableGoogleSigninButton = signInData.enableGooogleSigninButton,
+            navigateToResetPasswordScreen = { navHostController.navigate(Screens.ResetPassword.route)  },
             onTapSignInEmail = signInData.onTapSignInEmailPassword
         )
         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {

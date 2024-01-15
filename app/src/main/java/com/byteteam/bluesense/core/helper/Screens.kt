@@ -28,4 +28,5 @@ sealed class Screens(val route: String) {
     object Notification : Screens(route = "notification")
     object OnBoarding : Screens(route = "onboarding")
     object GetStarted : Screens(route = "get_started")
+    object ResetPassword : Screens(route = "reset_password")
 }

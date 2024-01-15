@@ -62,6 +62,7 @@ fun WaterFilterProductTemplate(
                 }
                 items(waterFilterEntities) {
                     WaterFilterProductItem(
+                        waterFilterEntity = it,
                         onTap = { navigateDetailProduct(it) }
                     )
                 }

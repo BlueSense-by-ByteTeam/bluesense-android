@@ -139,6 +139,14 @@ class AuthRepositoryImpl @Inject constructor(
     }
 
     override suspend fun signOut() = googleSignInClient.signOut()
+    override suspend fun forgotPassword(email: String): Flow<String> {
+        try {
+            Firebase.auth.sendPasswordResetEmail(email).await()
+            return flowOf("Success send reset password link to given email!")
+        }catch (e: Exception){
+            throw e
+        }
+    }
 
     private fun generateAvatar(name: String): String = "https://ui-avatars.com/api/?size=128&background=0D8ABC&color=fff&name=$name"
 }

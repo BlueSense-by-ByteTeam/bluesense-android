@@ -42,6 +42,8 @@ import com.byteteam.bluesense.core.presentation.views.notification.NotificationS
 import com.byteteam.bluesense.core.presentation.views.onboard.OnBoardScreen
 import com.byteteam.bluesense.core.presentation.views.onboard.OnBoardViewModel
 import com.byteteam.bluesense.core.presentation.views.profile.ProfileScreen
+import com.byteteam.bluesense.core.presentation.views.reset_password.ResetPasswordScreen
+import com.byteteam.bluesense.core.presentation.views.reset_password.ResetPasswordViewModel
 import com.byteteam.bluesense.core.presentation.views.signin.AuthViewModel
 import com.byteteam.bluesense.core.presentation.views.signin.SignInData
 import com.byteteam.bluesense.core.presentation.views.signin.SigninScreen
@@ -72,6 +74,7 @@ fun App(
     addDeviceFormViewModel: AddDeviceFormViewModel,
     detailDeviceViewModel: DetailDeviceViewModel,
     storeViewModel: StoreViewModel,
+    resetPasswordViewModel: ResetPasswordViewModel,
 ) {
 
     Scaffold(topBar = {
@@ -351,6 +354,17 @@ fun App(
                     } else {
                         DetailProductScreen()
                     }
+                }
+                composable(Screens.ResetPassword.route){
+                    ResetPasswordScreen(
+                        buttonEnabled = resetPasswordViewModel.buttonEnabled.collectAsState().value,
+                        inputEmail = resetPasswordViewModel.inputEmail.collectAsState().value,
+                        updateEmail = {resetPasswordViewModel.updateEmail(it)},
+                        eventMessage = resetPasswordViewModel.eventFlow,
+                        sendResetEmail = { resetPasswordViewModel.sendEmailResetPassword(callbackSuccess = {
+                            Log.d("TAG", "Success send reset email")
+                        }) }
+                    )
                 }
             }
         }

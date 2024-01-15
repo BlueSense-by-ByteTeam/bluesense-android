@@ -10,4 +10,6 @@ interface AuthRepository {
     suspend fun signupGoogle(name: String, email: String): Flow<SignInResult?>
     suspend fun getCurrentUser(): Flow<UserData?>
     suspend fun signOut()
+
+    suspend fun forgotPassword(email: String): Flow<String>
 }
