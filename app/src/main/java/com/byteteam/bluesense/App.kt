@@ -142,7 +142,13 @@ fun App(
                         onUpdateEmail = { authViewModel.updateEmail(it) },
                         onUpdatePassword = { authViewModel.updatePassword(it) },
                         onTapSignInEmailPassword = {
-                            authViewModel.signInEmailPassword(callbackOnSuccess = { callbackOnSuccessSignIn() })
+                            authViewModel.signInEmailPassword(callbackOnSuccess = {
+                                homeViewModel.getDevices()
+                                storeViewModel.getWaterFilters()
+                                storeViewModel.getWaterSuppliers()
+                                storeViewModel.getFeaturedWaterFilters()
+                                callbackOnSuccessSignIn()
+                            })
                         },
                         onTapGoogleAuth = {
                             signInGoogle()

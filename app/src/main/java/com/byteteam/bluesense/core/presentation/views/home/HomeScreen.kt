@@ -70,9 +70,9 @@ fun HomeScreen(
         getDevices()
     }
 
-    LaunchedEffect(Unit){
-        fetchData()
-    }
+//    LaunchedEffect(Unit){
+//        fetchData()
+//    }
 
     Column(
         modifier

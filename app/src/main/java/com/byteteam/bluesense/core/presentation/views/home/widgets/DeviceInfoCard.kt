@@ -148,7 +148,8 @@ fun DeviceInfoCard(
 
                         Text(
                             text = it.data?.quality ?: "belum ada data",
-                            color = if (isBad) Color.Black else MaterialTheme.colorScheme.onPrimary,
+                            color =
+                            if (isBad) Color.Black else MaterialTheme.colorScheme.onPrimary,
                             fontWeight = FontWeight.SemiBold
                         )
                     }

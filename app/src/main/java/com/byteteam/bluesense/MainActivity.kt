@@ -111,6 +111,10 @@ class MainActivity : ComponentActivity() {
                                     registerViewModel.googleSignup(it)
                                 }
                                 authViewModel.getCurrentUser()
+                                homeViewModel.getDevices()
+                                storeViewModel.getWaterFilters()
+                                storeViewModel.getWaterSuppliers()
+                                storeViewModel.getFeaturedWaterFilters()
                                 callbackOnSuccessSignIn()
                             }
 
