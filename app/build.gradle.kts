@@ -15,10 +15,10 @@ android {
 
     defaultConfig {
         applicationId = "com.byteteam.bluesense"
-        minSdk = 28
+        minSdk = 25
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 3
+        versionName = "1.3"
 
         val keystoreFile = project.rootProject.file("local.properties")
         val properties = Properties()
@@ -154,6 +154,8 @@ dependencies {
     implementation("eu.bambooapps:compose-material3-pullrefresh:1.0.1")
 
     implementation("androidx.work:work-runtime:2.7.0-alpha05")
+    //recaptcha for auth
+    implementation("com.google.android.recaptcha:recaptcha:18.4.0")
 
 }
 // Allow references to generated code

@@ -30,7 +30,9 @@ import com.byteteam.bluesense.core.domain.model.CityEntity
 import com.byteteam.bluesense.core.domain.model.DistrictEntity
 import com.byteteam.bluesense.core.domain.model.InputData
 import com.byteteam.bluesense.core.domain.model.ProvinceEntity
+import com.byteteam.bluesense.core.presentation.widgets.BottomDialog
 import com.byteteam.bluesense.core.presentation.widgets.DropDownInput
+import com.byteteam.bluesense.core.presentation.widgets.ErrorAlertContent
 import com.byteteam.bluesense.core.presentation.widgets.InputField
 import com.byteteam.bluesense.ui.theme.BlueSenseTheme
 import kotlinx.coroutines.flow.Flow
@@ -62,6 +64,14 @@ fun AddDeviceFormScreen(
         if(idDeviceFromUrl != "no_data") addDeviceScreenData.updateId(idDeviceFromUrl!!)
     }
 
+    var errorMessage: String? by remember { mutableStateOf(null) }
+    LaunchedEffect(Unit) {
+        addDeviceScreenData.eventMessage?.collect { event ->
+            when (event) {
+                is SingleEvent.MessageEvent -> errorMessage = event.message
+            }
+        }
+    }
     Column(
         Modifier
             .fillMaxWidth()
@@ -71,6 +81,13 @@ fun AddDeviceFormScreen(
             .fillMaxHeight()
             .padding(horizontal = 20.dp)
     ) {
+        errorMessage?.let {
+            BottomDialog(onDismissRequest = {
+                errorMessage = null
+            }) {
+                ErrorAlertContent(title = "Oops! Terjadi kesalahan saat menambahkan perangkat.", error = it, onDismiss = {errorMessage = null})
+            }
+        }
         Text(
             text = stringResource(R.string.add_device_desc),
             modifier = Modifier.padding(bottom = 20.dp)

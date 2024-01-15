@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.byteteam.bluesense.R
 import com.byteteam.bluesense.core.domain.model.WaterFilterEntity
+import com.byteteam.bluesense.core.presentation.helper.formatPrice
 
 @Composable
 fun WaterFilterProductItem(
@@ -61,15 +62,19 @@ fun WaterFilterProductItem(
                 )
             )
             Text(
-                text = "Rp${waterFilterEntity.price}",
+                text =  "Rp${waterFilterEntity.price.formatPrice()}",
                 modifier = Modifier.padding(
                     top = 4.dp,
+                    bottom = 4.dp,
                     start = 12.dp,
                     end = 12.dp
                 ),
                 fontWeight = FontWeight.Bold
             )
-            StarRating(rating = waterFilterEntity.rating)
+            StarRating(modifier= Modifier.padding(
+                start = 12.dp,
+                end = 12.dp
+            ), rating = waterFilterEntity.rating)
         }
     }
 }

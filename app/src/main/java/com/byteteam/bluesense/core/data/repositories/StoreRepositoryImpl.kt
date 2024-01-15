@@ -40,7 +40,14 @@ class StoreRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getFeaturedWaterFilter(): Flow<Resource<WaterFilterEntity>> {
-        TODO("Not yet implemented")
+    override suspend fun getFeaturedWaterFilter(): Flow<Resource<WaterFilterEntity>> = flow {
+        emit(Resource.Loading())
+        try {
+            val token = dataStorePreference.getAuthToken()
+            val response = waterFilterServices.getFeaturedWaterFilter("Bearer $token")
+            emit(Resource.Success(response.toWaterFilterEntities().get(0)))
+        } catch (e: Exception) {
+            emit(Resource.Error(e.message ?: "Error saat mengambil data produk filter air!"))
+        }
     }
 }

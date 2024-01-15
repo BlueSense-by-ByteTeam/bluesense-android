@@ -22,12 +22,16 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.byteteam.bluesense.R
+import com.byteteam.bluesense.core.domain.model.WaterFilterEntity
+import com.byteteam.bluesense.core.presentation.helper.formatPrice
 import com.byteteam.bluesense.core.presentation.views.store.main.widgets.StarRating
 
 @Composable
 fun WaterFilterItem(
-    navigateDetailItem: (String) -> Unit,
+    waterFilterEntity: WaterFilterEntity,
+    onTap: () -> Unit,
     modifier: Modifier = Modifier){
     Row(horizontalArrangement = Arrangement.spacedBy(12.dp), modifier = modifier
         .padding(bottom = 20.dp)
@@ -38,8 +42,8 @@ fun WaterFilterItem(
                 .width(152.dp)
                 .height(119.dp)
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.water_filter_dummy_1),
+            AsyncImage(
+                model = waterFilterEntity.imageUrl,
                 contentDescription = stringResource(
                     id = R.string.water_filter_product
                 ),
@@ -53,20 +57,20 @@ fun WaterFilterItem(
 
             Text(text = stringResource(R.string.water_filter))
             Text(
-                text = "Rp50.000",
+                text = "Rp${waterFilterEntity.price.formatPrice()}",
                 modifier = Modifier.padding(
                     top = 4.dp,
                     bottom = 4.dp
                 ),
                 fontWeight = FontWeight.Bold
             )
-            StarRating(rating = 3.9)
+            StarRating(rating = waterFilterEntity.rating)
             Spacer(modifier = Modifier.weight(1f))
             Text(
                 text = stringResource(R.string.see_detail),
                 color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.clickable {
-                    navigateDetailItem("id")// TODO: change this to actual id
+                    onTap()
                 }
             )
         }

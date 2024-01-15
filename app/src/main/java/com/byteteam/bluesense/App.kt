@@ -79,9 +79,11 @@ fun App(
 ) {
 
     Scaffold(topBar = {
-        Topbars(route = currentRoute ?: "",
+        Topbars(
+            route = currentRoute ?: "",
             actions = mapOf(Screens.DetailDevice.route to { detailDeviceViewModel.openDeleteModal() }),
-            navHostController = navController)
+            navHostController = navController
+        )
     }, bottomBar = {
         if (bottomNavigationItems.map { it.route }.contains(currentRoute)) BottomBar(
             currentRoute = currentRoute ?: "", navHostController = navController
@@ -216,8 +218,10 @@ fun App(
                 }
                 composable(Screens.Store.route) {
                     StoreScreen(
+                        featuredWaterFilterState = storeViewModel.featuredWaterFilter,
                         waterFiltersState = storeViewModel.waterFilters,
                         waterSuppliersState = storeViewModel.waterSuppliers,
+                        getFeaturedWaterFilter = { storeViewModel.getFeaturedWaterFilters() },
                         getWaterFilter = { storeViewModel.getWaterFilters() },
                         getWaterSupplier = { storeViewModel.getWaterSuppliers() },
                         navHostController = navController
@@ -343,7 +347,10 @@ fun App(
                     )
                 }
                 composable(Screens.WaterSupplierRecommendation.route) {
-                    WaterSupplierScreen()
+                    WaterSupplierScreen(
+                        waterSuppliersState = storeViewModel.waterSuppliers,
+                        getWaterSupplier = { storeViewModel.getWaterSuppliers() }
+                    )
                 }
                 composable(Screens.FilterRecommendation.route) {
                     val id = it.arguments?.getString("id")
@@ -351,27 +358,32 @@ fun App(
                     Log.d("navigation", "App: $id")
 
                     if (id == "{id}") {//default value when no id is given is {id}
-                        SupportItemsScreen(navController)
+                        SupportItemsScreen(
+                            waterFiltersState = storeViewModel.waterFilters,
+                            getWaterFilters = { storeViewModel.getWaterFilters() },
+                        )
                     } else {
                         DetailProductScreen()
                     }
                 }
-                composable(Screens.ResetPassword.route){
+                composable(Screens.ResetPassword.route) {
                     ResetPasswordScreen(
                         buttonEnabled = resetPasswordViewModel.buttonEnabled.collectAsState().value,
                         inputEmail = resetPasswordViewModel.inputEmail.collectAsState().value,
-                        updateEmail = {resetPasswordViewModel.updateEmail(it)},
+                        updateEmail = { resetPasswordViewModel.updateEmail(it) },
                         eventMessage = resetPasswordViewModel.eventFlow,
-                        sendResetEmail = { resetPasswordViewModel.sendEmailResetPassword(callbackSuccess = {
-                            navController.navigate(Screens.SuccessResetPassword.route){
-                                popUpTo(Screens.ResetPassword.route){
-                                    inclusive = true
+                        sendResetEmail = {
+                            resetPasswordViewModel.sendEmailResetPassword(callbackSuccess = {
+                                navController.navigate(Screens.SuccessResetPassword.route) {
+                                    popUpTo(Screens.ResetPassword.route) {
+                                        inclusive = true
+                                    }
                                 }
-                            }
-                        })}
+                            })
+                        }
                     )
                 }
-                composable(Screens.SuccessResetPassword.route){
+                composable(Screens.SuccessResetPassword.route) {
                     SuccessResetPassScreen(navHostController = navController)
                 }
             }

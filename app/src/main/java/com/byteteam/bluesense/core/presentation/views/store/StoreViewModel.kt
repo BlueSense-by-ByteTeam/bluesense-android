@@ -19,9 +19,11 @@ class StoreViewModel @Inject constructor(
 ) : ViewModel(){
     private var _waterSuppliers: MutableStateFlow<Resource<List<WaterSupplierEntity>>> = MutableStateFlow(Resource.Loading())
     private var _waterFilters: MutableStateFlow<Resource<List<WaterFilterEntity>>> = MutableStateFlow(Resource.Loading())
+    private var _featuredWaterFilter: MutableStateFlow<Resource<WaterFilterEntity>> = MutableStateFlow(Resource.Loading())
 
     val waterSuppliers: StateFlow<Resource<List<WaterSupplierEntity>>> = _waterSuppliers
     val waterFilters: StateFlow<Resource<List<WaterFilterEntity>>> = _waterFilters
+    val featuredWaterFilter: StateFlow<Resource<WaterFilterEntity>> = _featuredWaterFilter
 
     fun getWaterSuppliers(){
         viewModelScope.launch {
@@ -46,6 +48,20 @@ class StoreViewModel @Inject constructor(
                 }
             }catch (e: Exception){
                 _waterFilters.value = Resource.Error(e.message ?: "Error saat mengambil data filter air!")
+            }
+        }
+    }
+
+    fun getFeaturedWaterFilters(){
+        viewModelScope.launch {
+            try {
+                storeRepository.getFeaturedWaterFilter().catch {
+                    _featuredWaterFilter.value = Resource.Error(it.message ?: "Error saat mengambil data supplier air!")
+                }.collect{
+                    _featuredWaterFilter.value = it
+                }
+            }catch (e: Exception){
+                _featuredWaterFilter.value = Resource.Error(e.message ?: "Error saat mengambil data filter air!")
             }
         }
     }

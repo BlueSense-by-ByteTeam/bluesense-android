@@ -146,11 +146,12 @@ class AddDeviceFormViewModel @Inject constructor(
                     val json = gson.toJson(it)
                     Log.d("TAG", "onCreate: signed user $json")
 
-                    _buttonEnabled.value = true
                     callbackOnSuccess()
                 }
             } catch (e: Exception) {
                 eventChannel.send(SingleEvent.MessageEvent(e.message.toString()))
+            } finally {
+                _buttonEnabled.value = true
             }
         }
     }

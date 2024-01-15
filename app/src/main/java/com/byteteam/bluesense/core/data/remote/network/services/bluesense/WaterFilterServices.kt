@@ -11,4 +11,9 @@ interface WaterFilterServices {
     suspend fun getWaterFilters(
         @Header("Authorization") authToken: String
     ): GetWaterFilters
+
+    @GET("api/store/water-filters/true")
+    suspend fun getFeaturedWaterFilter(
+        @Header("Authorization") authToken: String
+    ): GetWaterFilters
 }
