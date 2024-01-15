@@ -49,6 +49,7 @@ import com.byteteam.bluesense.core.presentation.views.signup.RegisterViewModel
 import com.byteteam.bluesense.core.presentation.views.signup.SignupScreen
 import com.byteteam.bluesense.core.presentation.views.signup.widgets.SignupScreenContentData
 import com.byteteam.bluesense.core.presentation.views.statistic.StatisticScreen
+import com.byteteam.bluesense.core.presentation.views.store.StoreViewModel
 import com.byteteam.bluesense.core.presentation.views.store.detail.DetailProductScreen
 import com.byteteam.bluesense.core.presentation.views.store.main.StoreScreen
 import com.byteteam.bluesense.core.presentation.views.store.support_items.SupportItemsScreen
@@ -70,39 +71,30 @@ fun App(
     homeViewModel: HomeViewModel,
     addDeviceFormViewModel: AddDeviceFormViewModel,
     detailDeviceViewModel: DetailDeviceViewModel,
+    storeViewModel: StoreViewModel,
+) {
 
-    ) {
-
-    Scaffold(
-        topBar = {
-            Topbars(
-                route = currentRoute ?: "", actions = mapOf(
-                    Screens.DetailDevice.route to { detailDeviceViewModel.openDeleteModal() }
-                ), navHostController = navController
-            )
-        },
-        bottomBar = {
-            if (bottomNavigationItems.map { it.route }
-                    .contains(currentRoute)) BottomBar(
-                currentRoute = currentRoute ?: "", navHostController = navController
-            )
-        }
-    ) {
+    Scaffold(topBar = {
+        Topbars(route = currentRoute ?: "",
+            actions = mapOf(Screens.DetailDevice.route to { detailDeviceViewModel.openDeleteModal() }),
+            navHostController = navController)
+    }, bottomBar = {
+        if (bottomNavigationItems.map { it.route }.contains(currentRoute)) BottomBar(
+            currentRoute = currentRoute ?: "", navHostController = navController
+        )
+    }) {
         Surface(
             modifier = Modifier
                 .padding(it)
                 .background(MaterialTheme.colorScheme.background)
-                .fillMaxSize(),
-            color = MaterialTheme.colorScheme.background
+                .fillMaxSize(), color = MaterialTheme.colorScheme.background
         ) {
             val isSigned = authViewModel.currentUser.collectAsState().value != null
-            val isFirstTimeOpen =
-                onBoardViewModel.isFirstTimeOpen.collectAsState().value
+            val isFirstTimeOpen = onBoardViewModel.isFirstTimeOpen.collectAsState().value
             var isPressRegisterFirst by remember { mutableStateOf(false) }
 
             NavHost(
-                startDestination =
-                if (isFirstTimeOpen) {
+                startDestination = if (isFirstTimeOpen) {
                     Screens.OnBoarding.route
                 } else {
                     if (isSigned) {
@@ -112,33 +104,28 @@ fun App(
                     } else {
                         Screens.SignIn.route
                     }
-                },
-                navController = navController
+                }, navController = navController
             ) {
                 composable(Screens.OnBoarding.route) {
                     OnBoardScreen(navController)
                 }
                 composable(Screens.GetStarted.route) {
-                    GetStartedScreen(
-                        onFinishOnBoarding = {
-                            onBoardViewModel.finishOnBoarding()
-                        },
-                        navigateSignIn = {
-                            navController.navigate(Screens.SignIn.route) {
-                                popUpTo(Screens.GetStarted.route) {
-                                    inclusive = true
-                                }
+                    GetStartedScreen(onFinishOnBoarding = {
+                        onBoardViewModel.finishOnBoarding()
+                    }, navigateSignIn = {
+                        navController.navigate(Screens.SignIn.route) {
+                            popUpTo(Screens.GetStarted.route) {
+                                inclusive = true
                             }
-                        },
-                        navigateSignUp = {
-                            navController.navigate(Screens.SignUp.route) {
-                                popUpTo(Screens.GetStarted.route) {
-                                    inclusive = true
-                                }
-                            }
-                            isPressRegisterFirst = true
                         }
-                    )
+                    }, navigateSignUp = {
+                        navController.navigate(Screens.SignUp.route) {
+                            popUpTo(Screens.GetStarted.route) {
+                                inclusive = true
+                            }
+                        }
+                        isPressRegisterFirst = true
+                    })
                 }
                 composable(Screens.SignIn.route) {
                     val signInData = SignInData(
@@ -147,9 +134,7 @@ fun App(
                         onUpdateEmail = { authViewModel.updateEmail(it) },
                         onUpdatePassword = { authViewModel.updatePassword(it) },
                         onTapSignInEmailPassword = {
-                            authViewModel.signInEmailPassword(
-                                callbackOnSuccess = { callbackOnSuccessSignIn() }
-                            )
+                            authViewModel.signInEmailPassword(callbackOnSuccess = { callbackOnSuccessSignIn() })
                         },
                         onTapGoogleAuth = {
                             signInGoogle()
@@ -202,8 +187,7 @@ fun App(
                         disableButton = !registerViewModel.buttonEnabled.collectAsState().value
                     )
                     SignupScreen(
-                        signupScreenContentData = data,
-                        navHostController = navController
+                        signupScreenContentData = data, navHostController = navController
                     )
                 }
                 composable(Screens.Home.route) {
@@ -227,7 +211,13 @@ fun App(
                     StatisticScreen()
                 }
                 composable(Screens.Store.route) {
-                    StoreScreen(navController)
+                    StoreScreen(
+                        waterFiltersState = storeViewModel.waterFilters,
+                        waterSuppliersState = storeViewModel.waterSuppliers,
+                        getWaterFilter = { storeViewModel.getWaterFilters() },
+                        getWaterSupplier = { storeViewModel.getWaterSuppliers() },
+                        navHostController = navController
+                    )
                 }
                 composable(Screens.Profile.route) {
                     fun callbackOnSuccessSignout() {
@@ -237,8 +227,7 @@ fun App(
                             }
                         }
                     }
-                    ProfileScreen(
-                        userData = authViewModel.currentUser.collectAsState().value,
+                    ProfileScreen(userData = authViewModel.currentUser.collectAsState().value,
                         onTapSignOut = {
                             authViewModel.signOut {
                                 callbackOnSuccessSignout()
@@ -252,35 +241,28 @@ fun App(
                     }
 
                     LaunchedEffect(barcode) {
-                        if (barcode != null)
-                            navController.navigate(
-                                Screens.AddDeviceForm.createRoute(
-                                    barcode
-                                )
-                            ) {
-                                popUpTo(Screens.AddDevice.route) {
-                                    inclusive = true
-                                }
+                        if (barcode != null) navController.navigate(
+                            Screens.AddDeviceForm.createRoute(
+                                barcode
+                            )
+                        ) {
+                            popUpTo(Screens.AddDevice.route) {
+                                inclusive = true
                             }
+                        }
                     }
 
-                    AddScreen(
-                        navHostController = navController,
-                        startScanDevice = {
-                            scanViewModel.startScan(
-                                context = context,
-                                callBackOnSuccess = {
-                                    if (!URLUtil.isValidUrl(it)) {
-                                        barcode = it
-                                    } else {
-                                        Toast.makeText(
-                                            context,
-                                            "QR code tidak valid!",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
-                                    }
-                                })
+                    AddScreen(navHostController = navController, startScanDevice = {
+                        scanViewModel.startScan(context = context, callBackOnSuccess = {
+                            if (!URLUtil.isValidUrl(it)) {
+                                barcode = it
+                            } else {
+                                Toast.makeText(
+                                    context, "QR code tidak valid!", Toast.LENGTH_SHORT
+                                ).show()
+                            }
                         })
+                    })
                 }
                 composable(Screens.AddDeviceForm.route) {
                     val id = it.arguments?.getString("id")
@@ -307,16 +289,14 @@ fun App(
                         },
                         eventMessage = addDeviceFormViewModel.eventFlow,
                         postDevice = {
-                            addDeviceFormViewModel.postDevice(
-                                callbackOnSuccess = {
-                                    navController.navigate(Screens.Home.route) {
-                                        popUpTo(Screens.AddDeviceForm.route) {
-                                            inclusive = true
-                                        }
+                            addDeviceFormViewModel.postDevice(callbackOnSuccess = {
+                                navController.navigate(Screens.Home.route) {
+                                    popUpTo(Screens.AddDeviceForm.route) {
+                                        inclusive = true
                                     }
-                                    homeViewModel.getDevices()
                                 }
-                            )
+                                homeViewModel.getDevices()
+                            })
                         },
                     )
 
@@ -327,8 +307,7 @@ fun App(
                         getCitiesItem = { addDeviceViewModel.getCities(it) },
                         getDistrictItem = { provinceId, cityId ->
                             addDeviceViewModel.getDistricts(
-                                provinceId,
-                                cityId
+                                provinceId, cityId
                             )
                         },
                         idDeviceFromUrl = id,
@@ -349,8 +328,8 @@ fun App(
                         waterStatusRealtime = detailDeviceViewModel.waterStatus,
                         onDeleteDevice = {
                             detailDeviceViewModel.deleteDevice(id ?: "", callbackOnSuccess = {
-                                navController.navigate(Screens.Home.route){
-                                    popUpTo(Screens.DetailDevice.createRoute(id ?: "")){
+                                navController.navigate(Screens.Home.route) {
+                                    popUpTo(Screens.DetailDevice.createRoute(id ?: "")) {
                                         inclusive = true
                                     }
                                 }
@@ -359,17 +338,17 @@ fun App(
                         },
                     )
                 }
-                composable(Screens.WaterSupplierRecommendation.route){
+                composable(Screens.WaterSupplierRecommendation.route) {
                     WaterSupplierScreen()
                 }
-                composable(Screens.FilterRecommendation.route){
+                composable(Screens.FilterRecommendation.route) {
                     val id = it.arguments?.getString("id")
 
                     Log.d("navigation", "App: $id")
 
-                    if(id == "{id}"){//default value when no id is given is {id}
+                    if (id == "{id}") {//default value when no id is given is {id}
                         SupportItemsScreen(navController)
-                    }else{
+                    } else {
                         DetailProductScreen()
                     }
                 }

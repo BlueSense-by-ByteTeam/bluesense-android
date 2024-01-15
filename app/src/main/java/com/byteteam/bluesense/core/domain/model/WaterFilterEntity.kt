@@ -7,6 +7,6 @@ data class WaterFilterEntity(
     val rating: Double,
     val description: String,
     val tokopediaUrl: String,
-    val shoppe_url: String,
+    val shoppeUrl: String,
     val imageUrl: String
 )

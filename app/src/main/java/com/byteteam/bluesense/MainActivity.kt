@@ -30,6 +30,7 @@ import com.byteteam.bluesense.core.presentation.views.home.HomeViewModel
 import com.byteteam.bluesense.core.presentation.views.onboard.OnBoardViewModel
 import com.byteteam.bluesense.core.presentation.views.signin.AuthViewModel
 import com.byteteam.bluesense.core.presentation.views.signup.RegisterViewModel
+import com.byteteam.bluesense.core.presentation.views.store.StoreViewModel
 import com.byteteam.bluesense.core.services.FCMService
 import com.byteteam.bluesense.ui.theme.BlueSenseTheme
 import com.google.gson.Gson
@@ -53,6 +54,7 @@ class MainActivity : ComponentActivity() {
     private val homeViewModel: HomeViewModel by viewModels()
     private val addDeviceFormViewModel: AddDeviceFormViewModel by viewModels()
     private val detailDeviceViewModel: DetailDeviceViewModel by viewModels()
+    private val storeViewModel: StoreViewModel by viewModels()
 
     @Inject
     lateinit var googleAuthUiClient: GoogleSignInClientHelper
@@ -153,7 +155,8 @@ class MainActivity : ComponentActivity() {
                     addDeviceViewModel = addDeviceViewModel,
                     homeViewModel = homeViewModel,
                     addDeviceFormViewModel = addDeviceFormViewModel,
-                    detailDeviceViewModel = detailDeviceViewModel
+                    detailDeviceViewModel = detailDeviceViewModel,
+                    storeViewModel = storeViewModel,
                 )
             }
         }

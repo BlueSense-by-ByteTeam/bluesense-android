@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -17,9 +18,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.byteteam.bluesense.R
+import com.byteteam.bluesense.core.domain.model.WaterSupplierEntity
 
 @Composable
 fun WaterSupplierTemplate(
+    waterSupplierEntities: List<WaterSupplierEntity>,
     navigateWaterSupplierRecommendations: () -> Unit
 ) {
     Column {
@@ -49,7 +52,14 @@ fun WaterSupplierTemplate(
             )
         }
         LazyRow(contentPadding = PaddingValues(start = 24.dp)) {
-            items(12) { SupplierItem() }
+            if (waterSupplierEntities.isEmpty()) {
+                item {
+                    Text(text = "Belum ada data supplier air.")
+                }
+            }
+            items(waterSupplierEntities) {
+                SupplierItem(it)
+            }
         }
     }
 }

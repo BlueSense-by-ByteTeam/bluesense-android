@@ -19,10 +19,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.byteteam.bluesense.R
+import com.byteteam.bluesense.core.domain.model.WaterSupplierEntity
 
 @Composable
-fun SupplierItem(modifier: Modifier = Modifier){
+fun SupplierItem(waterSupplierEntity: WaterSupplierEntity, modifier: Modifier = Modifier){
     Card(
         border = BorderStroke(
             width = 1.dp,
@@ -37,14 +39,14 @@ fun SupplierItem(modifier: Modifier = Modifier){
             .width(150.dp)
     ) {
         Column(Modifier.padding(bottom = 7.dp)) {
-            Image(
-                painter = painterResource(id = R.drawable.water_supplier_dummy),
+            AsyncImage(
+                model = waterSupplierEntity.imageUrl,
                 contentDescription = stringResource(R.string.water_supplier_image),
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.height(96.dp)
             )
             Text(
-                text = "Tirta Jaya",
+                text = waterSupplierEntity.name,
                 modifier = Modifier.padding(
                     top = 8.dp,
                     start = 12.dp,
@@ -52,7 +54,7 @@ fun SupplierItem(modifier: Modifier = Modifier){
                 )
             )
             Text(
-                text = "Water tank",
+                text = waterSupplierEntity.category,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f),
                 modifier = Modifier.padding(start = 12.dp, end = 12.dp)

@@ -20,10 +20,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.byteteam.bluesense.R
+import com.byteteam.bluesense.core.domain.model.WaterFilterEntity
 
 @Composable
 fun WaterFilterProductItem(
+    waterFilterEntity: WaterFilterEntity,
     onTap: (String) -> Unit
 ) {
     Card(
@@ -38,11 +41,11 @@ fun WaterFilterProductItem(
             .padding(end = 8.dp)
             .clip(RoundedCornerShape(12.dp))
             .width(150.dp)
-            .clickable { onTap("id") }// TODO: replace with actual item id
+            .clickable { onTap(waterFilterEntity.id) }
     ) {
         Column(Modifier.padding(bottom = 7.dp)) {
-            Image(
-                painter = painterResource(id = R.drawable.water_filter_dummy_1),
+            AsyncImage(
+                model = waterFilterEntity.imageUrl,
                 contentDescription = stringResource(
                     R.string.water_filter
                 ),
@@ -50,7 +53,7 @@ fun WaterFilterProductItem(
                 modifier = Modifier.height(96.dp)
             )
             Text(
-                text = "Filter Air",
+                text = waterFilterEntity.name,
                 modifier = Modifier.padding(
                     top = 8.dp,
                     start = 12.dp,
@@ -58,7 +61,7 @@ fun WaterFilterProductItem(
                 )
             )
             Text(
-                text = "Rp50.000",
+                text = "Rp${waterFilterEntity.price}",
                 modifier = Modifier.padding(
                     top = 4.dp,
                     start = 12.dp,
@@ -66,7 +69,7 @@ fun WaterFilterProductItem(
                 ),
                 fontWeight = FontWeight.Bold
             )
-            StarRating(rating = 3.9)
+            StarRating(rating = waterFilterEntity.rating)
         }
     }
 }

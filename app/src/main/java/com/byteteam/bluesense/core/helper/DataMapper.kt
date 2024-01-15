@@ -9,11 +9,15 @@ import com.byteteam.bluesense.core.data.remote.network.response.indonesian_locat
 import com.byteteam.bluesense.core.data.remote.network.response.indonesian_location.GetDistrictsItem
 import com.byteteam.bluesense.core.data.remote.network.response.indonesian_location.GetProvince
 import com.byteteam.bluesense.core.data.remote.network.response.indonesian_location.GetProvinceItem
+import com.byteteam.bluesense.core.data.remote.network.response.water_filters.GetWaterFilters
+import com.byteteam.bluesense.core.data.remote.network.response.water_suppliers.GetWaterSuppliers
 import com.byteteam.bluesense.core.domain.model.CityEntity
 import com.byteteam.bluesense.core.domain.model.DeviceEntity
 import com.byteteam.bluesense.core.domain.model.DeviceLatestInfoEntity
 import com.byteteam.bluesense.core.domain.model.DistrictEntity
 import com.byteteam.bluesense.core.domain.model.ProvinceEntity
+import com.byteteam.bluesense.core.domain.model.WaterFilterEntity
+import com.byteteam.bluesense.core.domain.model.WaterSupplierEntity
 
 fun GetProvince.toProvinceEntity(): List<ProvinceEntity> = this.getProvince?.mapNotNull {
     ProvinceEntity(id = it!!.code!!, text = it.name!!)
@@ -74,3 +78,27 @@ fun GetDeviceLatestInfoResponse.toDeviceLatestInfoEntity(id: String): DeviceLate
     tds = this.data?.log?.tds?.toDouble() ?: 0.0,
     timestamp=this.data?.log?.createdAt.toString()
 )
+
+fun GetWaterFilters.toWaterFilterEntities(): List<WaterFilterEntity> = this.data?.map {
+    WaterFilterEntity(
+        id= it?.id!!,
+        name= it?.name!!,
+        price= it?.price?.toLongOrNull() ?: 0,
+        rating= it?.rating?.toDouble() ?: 0.0,
+        description = it?.description ?: "",
+        tokopediaUrl =  it?.tokopediaUrl ?: "",
+        shoppeUrl =  it?.shoppeUrl ?: "",
+        imageUrl =  it?.imageUrl ?: "",
+        )
+} ?: listOf()
+
+fun GetWaterSuppliers.toWaterSupplierEntities(): List<WaterSupplierEntity> = this.data?.map {
+    WaterSupplierEntity(
+        id= it?.id!!,
+        name= it?.name!!,
+        phone = it?.phone ?: "-",
+        instagramUrl =  it?.instagramUrl ?: "-",
+        category =  it?.category ?: "",
+        imageUrl =  it?.imageUrl ?: "",
+    )
+} ?: listOf()
