@@ -4,6 +4,8 @@ import com.byteteam.bluesense.core.data.datastore.DataStorePreference
 import com.byteteam.bluesense.core.data.remote.network.config.FirebaseTokenInterceptor
 import com.byteteam.bluesense.core.data.remote.network.services.bluesense.AuthServices
 import com.byteteam.bluesense.core.data.remote.network.services.bluesense.DeviceServices
+import com.byteteam.bluesense.core.data.remote.network.services.bluesense.WaterFilterServices
+import com.byteteam.bluesense.core.data.remote.network.services.bluesense.WaterSupplierServices
 import com.byteteam.bluesense.core.data.remote.network.services.location.IndonesianLocationAddressService
 import dagger.Module
 import dagger.Provides
@@ -37,14 +39,6 @@ object NetworkModule {
         .addInterceptor(firebaseTokenInterceptor)
         .build()
 
-//    @Provides
-//    @Singleton
-//    fun provideRetrofitLocalAddress(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
-//        .baseUrl("https://davidaprilio.github.io/data-lokasi-indonesia/json/")
-//        .client(okHttpClient)
-//        .addConverterFactory(GsonConverterFactory.create())
-//        .build()
-
     @Provides
     @Singleton
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit.Builder = Retrofit.Builder()
@@ -69,5 +63,18 @@ object NetworkModule {
     fun provideDeviceApiServices(retrofitBuilder: Retrofit.Builder): DeviceServices =  retrofitBuilder.baseUrl(
         BLUESENSE_BASE_URL).build().create(
         DeviceServices::class.java
+    )
+
+    @Provides
+    @Singleton
+    fun provideWaterSuppliersApiServices(retrofitBuilder: Retrofit.Builder): WaterSupplierServices =  retrofitBuilder.baseUrl(
+        BLUESENSE_BASE_URL).build().create(
+        WaterSupplierServices::class.java
+    )
+    @Provides
+    @Singleton
+    fun provideWaterFiltersApiServices(retrofitBuilder: Retrofit.Builder): WaterFilterServices =  retrofitBuilder.baseUrl(
+        BLUESENSE_BASE_URL).build().create(
+        WaterFilterServices::class.java
     )
 }

@@ -62,7 +62,8 @@ fun DeleteDeviceAlertContent(
                     onConfirm()
                 }
             }, modifier = Modifier.weight(1f), shape = RoundedCornerShape(12.dp)) {
-               if(isOnDelete) CircularProgressIndicator(color = Color.White, strokeWidth = 2.dp, modifier = Modifier.size(12.dp)) else Text(text = "Hapus")
+               if(isOnDelete) CircularProgressIndicator(color = Color.White, strokeWidth = 2.dp, modifier = Modifier.size(12.dp
+               )) else Text(text = "Hapus")
             }
         }
     }
