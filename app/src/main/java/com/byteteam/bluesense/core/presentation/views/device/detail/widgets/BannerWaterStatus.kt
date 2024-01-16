@@ -1,5 +1,6 @@
 package com.byteteam.bluesense.core.presentation.views.device.detail.widgets
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -25,6 +26,7 @@ fun BannerWaterStatus(
     waterQualityHistory: String?
 ) {
     val waterQualityRealtimeState = waterQualityRealtime.collectAsState().value
+    Log.d("TAG", "BannerWaterStatus: $waterQualityHistory")
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -35,7 +37,8 @@ fun BannerWaterStatus(
                     waterQualityRealtimeState == "baik" -> MaterialTheme.colorScheme.primary
 //                    waterQualityHistory == "buruk" -> Yellow
 //                    waterQualityHistory == "baik" -> MaterialTheme.colorScheme.primary
-                    else -> Color.Red
+                    connected == false -> Color.Red
+                    else -> Yellow
                 }
             )
             .padding(vertical = 12.dp, horizontal = 20.dp)
@@ -47,8 +50,9 @@ fun BannerWaterStatus(
                     waterQualityHistory == "baik" -> "Air Aman!"
                     else -> "Air Buruk!"
                 }, fontWeight = FontWeight.Bold, color =
-                when (waterQualityRealtimeState) {
-                    "buruk" -> Color.Black
+                when {
+                    waterQualityRealtimeState == "buruk" -> Color.Black
+                    waterQualityHistory == "buruk" -> Color.Black
                     else -> MaterialTheme.colorScheme.onPrimary
                 }
             )

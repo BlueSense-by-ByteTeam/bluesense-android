@@ -2,6 +2,7 @@ package com.byteteam.bluesense.core.presentation.views.signup
 
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
@@ -16,6 +17,13 @@ fun SignupScreen(
     navHostController: NavHostController = rememberNavController(),
     modifier: Modifier = Modifier
 ) {
+
+    DisposableEffect(Unit) {
+        onDispose {
+            signupScreenContentData.onResetState()
+        }
+    }
+
     SignupScreenContent(
         signupScreenContentData = signupScreenContentData,
         navHostController = navHostController,

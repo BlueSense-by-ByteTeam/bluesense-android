@@ -18,6 +18,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -46,7 +47,7 @@ import kotlinx.coroutines.flow.Flow
 @Composable
 fun SigninScreenContent(
     signInData: SignInData,
-   isDarkTheme: Boolean = false,
+    isDarkTheme: Boolean = false,
     navHostController: NavHostController = rememberNavController(),
     modifier: Modifier = Modifier,
 ) {
@@ -58,6 +59,7 @@ fun SigninScreenContent(
             }
         }
     }
+
     Column(
         modifier
             .fillMaxSize()
@@ -69,7 +71,10 @@ fun SigninScreenContent(
             BottomDialog(onDismissRequest = {
                 errorMessage = null
             }) {
-                ErrorAlertContent(title = "Oops! Terjadi kesalahan saat masuk", error = it, onDismiss = {errorMessage = null})
+                ErrorAlertContent(
+                    title = "Oops! Terjadi kesalahan saat masuk",
+                    error = it,
+                    onDismiss = { errorMessage = null })
             }
         }
         Image(
@@ -80,14 +85,14 @@ fun SigninScreenContent(
             modifier = Modifier.padding(bottom = 60.dp)
         )
         SignupForm(
-            onTapGoogleAuth = { signInData.onTapGoogleAuth()  },
+            onTapGoogleAuth = { signInData.onTapGoogleAuth() },
             email = signInData.email,
             password = signInData.password,
             onUpdateEmail = signInData.onUpdateEmail,
             onUpdatePassword = signInData.onUpdatePassword,
             enableButton = signInData.enableButton,
             enableGoogleSigninButton = signInData.enableGooogleSigninButton,
-            navigateToResetPasswordScreen = { navHostController.navigate(Screens.ResetPassword.route)  },
+            navigateToResetPasswordScreen = { navHostController.navigate(Screens.ResetPassword.route) },
             onTapSignInEmail = signInData.onTapSignInEmailPassword
         )
         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {

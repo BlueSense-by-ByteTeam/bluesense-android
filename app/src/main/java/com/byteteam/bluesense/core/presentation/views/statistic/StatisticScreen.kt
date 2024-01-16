@@ -73,7 +73,6 @@ fun StatisticScreen(
         stringResource(R.string.tds) to SortData.TDS,
         stringResource(R.string.ph) to SortData.PH,
     )
-    val chartEntryModelProducer = ChartEntryModelProducer(getRandomEntries())
 
     var isFetchingData by remember { mutableStateOf(false) }
     fun fetchOnce() {

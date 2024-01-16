@@ -2,6 +2,7 @@ package com.byteteam.bluesense.core.presentation.views.signin
 
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
@@ -19,6 +20,11 @@ fun SigninScreen(
     navHostController: NavHostController = rememberNavController(),
     modifier: Modifier = Modifier,
 ) {
+    DisposableEffect(Unit) {
+        onDispose {
+            signInData.onResetState()
+        }
+    }
     SigninScreenContent(
         signInData = signInData,
         navHostController = navHostController,
@@ -32,6 +38,7 @@ data class SignInData(
     val enableButton: Boolean = true,
     val enableGooogleSigninButton: Boolean = true,
     val eventMessage: Flow<SingleEvent> = flowOf(),
+    val onResetState: () -> Unit = {},
     val onUpdateEmail: (String) -> Unit = {},
     val onUpdatePassword: (String) -> Unit = {},
     val onTapSignInEmailPassword: () -> Unit = {},

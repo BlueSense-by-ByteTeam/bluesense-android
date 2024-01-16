@@ -32,7 +32,6 @@ import com.byteteam.bluesense.core.presentation.views.device.add_form.AddDeviceS
 import com.byteteam.bluesense.core.presentation.views.device.add_form.AddDeviceViewModel
 import com.byteteam.bluesense.core.presentation.views.device.detail.DetailDeviceScreen
 import com.byteteam.bluesense.core.presentation.views.device.detail.DetailDeviceViewModel
-import com.byteteam.bluesense.core.presentation.views.device.scan.ScanViewModel
 import com.byteteam.bluesense.core.presentation.views.getstarted.GetStartedScreen
 import com.byteteam.bluesense.core.presentation.views.home.HomeScreen
 import com.byteteam.bluesense.core.presentation.views.home.HomeViewModel
@@ -66,7 +65,6 @@ fun App(
     signInGoogle: () -> Unit,
     callbackOnSuccessSignIn: () -> Unit,
     callbackOnConnected: (DeviceEntity) -> Unit,
-    scanViewModel: ScanViewModel,
     authViewModel: AuthViewModel,
     onBoardViewModel: OnBoardViewModel,
     registerViewModel: RegisterViewModel,
@@ -141,6 +139,7 @@ fun App(
                         password = authViewModel.password.collectAsState().value,
                         onUpdateEmail = { authViewModel.updateEmail(it) },
                         onUpdatePassword = { authViewModel.updatePassword(it) },
+                        onResetState = {authViewModel.resetState()},
                         onTapSignInEmailPassword = {
                             authViewModel.signInEmailPassword(callbackOnSuccess = {
                                 homeViewModel.getDevices()
@@ -170,6 +169,7 @@ fun App(
                     }
 
                     val data = SignupScreenContentData(
+                        onResetState = {registerViewModel.resetState()},
                         name = registerViewModel.name.collectAsState().value,
                         email = registerViewModel.email.collectAsState().value,
                         password = registerViewModel.password.collectAsState().value,
@@ -338,7 +338,7 @@ fun App(
                         closeDeleteModal = { detailDeviceViewModel.closeDeleteModal() },
                         isOnDelete = detailDeviceViewModel.onDelete.collectAsState().value,
                         isDeleteDialogOpen = detailDeviceViewModel.isDialogDeleteOpen.collectAsState().value,
-                        waterQualityHistory = null,
+                        waterQualityHistory = detailDeviceViewModel.waterQuality.collectAsState().value,
                         waterQualityRealtime = detailDeviceViewModel.waterQuality,
                         waterStatusRealtime = detailDeviceViewModel.waterStatus,
                         onDeleteDevice = {
@@ -368,13 +368,17 @@ fun App(
                             getWaterFilters = { storeViewModel.getWaterFilters() },
                         )
                     } else {
-                        DetailProductScreen()
+                        DetailProductScreen(
+                            getFeaturedWaterFilter = {storeViewModel.getFeaturedWaterFilters()},
+                            waterFilterState = storeViewModel.featuredWaterFilter
+                        )
                     }
                 }
                 composable(Screens.ResetPassword.route) {
                     ResetPasswordScreen(buttonEnabled = resetPasswordViewModel.buttonEnabled.collectAsState().value,
                         inputEmail = resetPasswordViewModel.inputEmail.collectAsState().value,
                         updateEmail = { resetPasswordViewModel.updateEmail(it) },
+                        onResetState = { resetPasswordViewModel.resetState() },
                         eventMessage = resetPasswordViewModel.eventFlow,
                         sendResetEmail = {
                             resetPasswordViewModel.sendEmailResetPassword(callbackSuccess = {

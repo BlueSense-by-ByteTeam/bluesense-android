@@ -74,6 +74,17 @@ fun Topbars(actions: Map<String, () -> Unit>, route: String, navHostController: 
                     text = stringResource(R.string.notification)
                 )
             },
+            actions = {
+                IconButton(onClick = {
+
+                }) {
+                    Icon(
+                        imageVector = Icons.Default.Delete,
+                        tint = MaterialTheme.colorScheme.primary,
+                        contentDescription = null
+                    )
+                }
+            },
             navigationIcon = { NavigationBackButton(navHostController = navHostController) }
         )
 

@@ -34,7 +34,7 @@ import com.byteteam.bluesense.core.presentation.widgets.BottomDialog
 import com.byteteam.bluesense.core.presentation.widgets.BuyProductAlertContent
 
 @Composable
-fun BannerFilterDevice(waterFilterEntity: WaterFilterEntity, modifier: Modifier = Modifier) {
+fun BannerFilterDevice(navigateDetail: () -> Unit, waterFilterEntity: WaterFilterEntity, modifier: Modifier = Modifier) {
     var selectedProduct: WaterFilterEntity? by remember { mutableStateOf(null) }
     Row(
         modifier
@@ -72,7 +72,7 @@ fun BannerFilterDevice(waterFilterEntity: WaterFilterEntity, modifier: Modifier 
                 text = stringResource(R.string.water_clean_detector_desc),
                 style = MaterialTheme.typography.bodySmall
             )
-            Button(onClick = { selectedProduct = waterFilterEntity }, shape = RoundedCornerShape(8.dp)) {
+            Button(onClick = { navigateDetail() }, shape = RoundedCornerShape(8.dp)) {
                 Text(text = stringResource(R.string.buy_now))
             }
         }

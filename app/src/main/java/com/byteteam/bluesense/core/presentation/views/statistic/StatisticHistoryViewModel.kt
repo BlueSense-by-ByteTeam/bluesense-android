@@ -26,13 +26,16 @@ class StatisticHistoryViewModel  @Inject constructor(
             try {
                 historyLogRepository.getTodayHistory().catch {
                     Log.d("TAG", "getTodayHistory: viewmodel")
-                    _historyLogs.value = Resource.Error(it.message ?: "Error saat mengambil data history")
+
+                    val message = if(it.message == "Index: 0, Size: 0") "Belum ada data history" else it.message
+                    _historyLogs.value = Resource.Error(message ?: "Error saat mengambil data history")
                 }.collect{
                     _historyLogs.value = it
                 }
             }catch (e: Exception){
                     Log.d("TAG", "getTodayHistory: viewmodel")
-             _historyLogs.value = Resource.Error(e.message ?: "Error saat mengambil data history")
+                val message = if(e.message == "Index: 0, Size: 0") "Belum ada data history" else e.message
+             _historyLogs.value = Resource.Error(message ?: "Error saat mengambil data history")
             }
         }
     }

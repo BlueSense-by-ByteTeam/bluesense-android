@@ -23,6 +23,11 @@ class ResetPasswordViewModel @Inject constructor(
 
     private val eventChannel = Channel<SingleEvent>()
     val eventFlow = eventChannel.receiveAsFlow()
+
+    fun resetState(){
+        inputEmail.value = InputData("")
+        buttonEnabled.value = false
+    }
     fun updateEmail(value: String){
         viewModelScope.launch {
             val data = InputData(value).copy(

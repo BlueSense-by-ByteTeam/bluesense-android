@@ -2,6 +2,7 @@ package com.byteteam.bluesense.core.presentation.views.store.main
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -9,6 +10,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -42,26 +44,33 @@ fun StoreScreen(
     var fetchingFeaturedWaterFilter by remember { mutableStateOf(false) }
     var fetchingWaterSupplier by remember { mutableStateOf(false) }
     var fetchingWaterFilter by remember { mutableStateOf(false) }
-    fun fetchOnceFeaturedWaterSupplier() {
-        if (fetchingFeaturedWaterFilter) {
-            fetchingFeaturedWaterFilter = false
+    fun fetchOnceFeaturedWaterFilter() {
+        if (featuredWaterFilterState.value is Resource.Loading && !fetchingFeaturedWaterFilter) {
+            fetchingFeaturedWaterFilter = true
             getFeaturedWaterFilter()
         }
     }
 
     fun fetchOnceWaterSupplier() {
-        if (fetchingWaterSupplier) {
-            fetchingWaterSupplier = false
+        if (waterSuppliersState.value is Resource.Loading && !fetchingWaterSupplier) {
+            fetchingWaterSupplier = true
             getWaterSupplier()
         }
     }
 
     fun fetchOnceWaterFilter() {
-        if (fetchingWaterFilter) {
-            fetchingWaterFilter = false
+        if (waterFiltersState.value is Resource.Loading && !fetchingWaterFilter) {
+            fetchingWaterFilter = true
             getWaterFilter()
         }
     }
+
+    LaunchedEffect(Unit){
+        fetchOnceFeaturedWaterFilter()
+        fetchOnceWaterFilter()
+        fetchOnceWaterSupplier()
+    }
+
     Column(
         Modifier
             .verticalScroll(rememberScrollState())
@@ -74,15 +83,14 @@ fun StoreScreen(
                         Text(text = "Belum ada data filter air.")
                     } else {
                         BannerFilterDevice(
+                            navigateDetail = { navHostController.navigate(Screens.DetailFilterDevice.createRoute(it.data.id))  },
                             waterFilterEntity = it.data,
                             modifier = Modifier.padding(horizontal = 24.dp)
                         )
                     }
                 }
                 is Resource.Loading -> {
-                    fetchingFeaturedWaterFilter = true
-                    fetchOnceFeaturedWaterSupplier()
-                    Row {
+                    Row(Modifier.height(240.dp).padding(horizontal = 24.dp)) {
                         Text(text = "Memuat data filter air...")
                         CircularProgressIndicator()
                     }
@@ -90,7 +98,7 @@ fun StoreScreen(
 
                 is Resource.Error -> {
                     fetchingFeaturedWaterFilter = false
-                    Column {
+                    Column(Modifier.height(240.dp).padding(horizontal = 24.dp)) {
                         Text(text = it.message ?: "Error mengambil data filter air")
                         Button(onClick = { fetchOnceWaterFilter() }) {
                             Text(text = "Muat ulang")
@@ -116,9 +124,7 @@ fun StoreScreen(
                 }
 
                 is Resource.Loading -> {
-                    fetchingWaterFilter = true
-                    fetchOnceWaterFilter()
-                    Row {
+                    Row(Modifier.height(240.dp).padding(horizontal = 24.dp)) {
                         Text(text = "Memuat data supplier air...")
                         CircularProgressIndicator()
                     }
@@ -126,7 +132,7 @@ fun StoreScreen(
 
                 is Resource.Error -> {
                     fetchingWaterFilter = false
-                    Column {
+                    Column(Modifier.height(240.dp).padding(horizontal = 24.dp)) {
                         Text(text = it.message ?: "Error mengambil data filter air")
                         Button(onClick = { fetchOnceWaterFilter() }) {
                             Text(text = "Muat ulang")
@@ -148,9 +154,8 @@ fun StoreScreen(
                 }
 
                 is Resource.Loading -> {
-                    fetchingWaterSupplier = true
                     fetchOnceWaterSupplier()
-                    Row {
+                    Row(Modifier.height(240.dp).padding(horizontal = 24.dp)) {
                         Text(text = "Memuat data supplier air...")
                         CircularProgressIndicator()
                     }
@@ -158,7 +163,7 @@ fun StoreScreen(
 
                 is Resource.Error -> {
                     fetchingWaterSupplier = false
-                    Column {
+                    Column(Modifier.height(240.dp).padding(horizontal = 24.dp)) {
                         Text(text = it.message ?: "Error mengambil data supplier air")
                         Button(onClick = { fetchOnceWaterSupplier() }) {
                             Text(text = "Muat ulang")

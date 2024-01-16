@@ -36,6 +36,17 @@ class RegisterViewModel @Inject constructor(private val authRepository: AuthRepo
     private val successEvetMessage = Channel<SingleEvent>()
     val successEventFlow = successEvetMessage.receiveAsFlow()
 
+    fun resetState() {
+        name.value =
+            InputData(data = "", errorMessage = null)
+        email.value =
+            InputData(data = "", errorMessage = null)
+        password.value =
+            InputData(data = "", errorMessage = null)
+        confirmPassword.value =
+            InputData(data = "", errorMessage = null)
+        buttonEnabled.value = false
+    }
 
     fun updateName(value: String) {
         val data = InputData(value).copy(
@@ -49,7 +60,7 @@ class RegisterViewModel @Inject constructor(private val authRepository: AuthRepo
     fun updateEmail(value: String) {
         val data = InputData(value).copy(
             data = value,
-            errorMessage = when{
+            errorMessage = when {
                 value == "" -> "Email tidak boleh kosong"
                 !value.matches(EMAIL_REGEX.toRegex()) -> "Format input email salah!"
                 else -> null
@@ -62,7 +73,7 @@ class RegisterViewModel @Inject constructor(private val authRepository: AuthRepo
     fun updatePassword(value: String) {
         val data = InputData(value).copy(
             data = value,
-            errorMessage = when{
+            errorMessage = when {
                 value == "" -> "Password tidak boleh kosong!"
                 value.length < 6 -> "Password minimal harus 6 karakter!"
                 else -> null
@@ -92,11 +103,12 @@ class RegisterViewModel @Inject constructor(private val authRepository: AuthRepo
     fun register(callbackOnSuccess: () -> Unit) {
         buttonEnabled.value = false
         viewModelScope.launch {
-            authRepository.signUpEmail(name.value.data, email.value.data, password.value.data).catch { }.collect {
+            authRepository.signUpEmail(name.value.data, email.value.data, password.value.data)
+                .catch { }.collect {
                 val gson = Gson()
                 val json = gson.toJson(it)
                 Log.d("TAG", "onCreate: signed user $json")
-                if(it?.data != null) callbackOnSuccess()
+                if (it?.data != null) callbackOnSuccess()
                 it?.errorMessage?.let {
                     errorEvetMessage.send(SingleEvent.MessageEvent(it))
                 }
@@ -105,7 +117,7 @@ class RegisterViewModel @Inject constructor(private val authRepository: AuthRepo
         }
     }
 
-    fun googleSignup(signUpData: UserData){
+    fun googleSignup(signUpData: UserData) {
         viewModelScope.launch {
             authRepository.signupGoogle(signUpData.userName, signUpData.email)
         }

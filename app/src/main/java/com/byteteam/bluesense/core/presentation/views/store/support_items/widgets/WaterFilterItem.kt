@@ -35,7 +35,7 @@ fun WaterFilterItem(
     modifier: Modifier = Modifier){
     Row(horizontalArrangement = Arrangement.spacedBy(12.dp), modifier = modifier
         .padding(bottom = 20.dp)
-        .height(120.dp)) {
+        .height(132.dp)) {
         Box(
             modifier = Modifier
                 .clip(RoundedCornerShape(12.dp))

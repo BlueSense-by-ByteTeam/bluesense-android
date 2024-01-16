@@ -1,6 +1,7 @@
 package com.byteteam.bluesense.core.presentation.views.store.water_supplier
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -30,14 +31,13 @@ import com.byteteam.bluesense.core.domain.model.WaterSupplierEntity
 fun SupplierItem(waterSupplierEntity: WaterSupplierEntity, modifier: Modifier = Modifier) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(12.dp), modifier = modifier
-            .padding(bottom = 20.dp)
-            .height(120.dp)
+            .height(136.dp)
     ) {
         Box(
             modifier = Modifier
                 .clip(RoundedCornerShape(12.dp))
                 .width(152.dp)
-                .height(119.dp)
+                .height(136.dp)
         ) {
             AsyncImage(
                 model = waterSupplierEntity.imageUrl,
@@ -70,21 +70,19 @@ fun SupplierItem(waterSupplierEntity: WaterSupplierEntity, modifier: Modifier = 
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)
             )
-            Row {
-                IconButton(onClick = { /*TODO*/ },  modifier = Modifier.size(24.dp)) {
+            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                     Image(
                         painter = painterResource(id = R.drawable.whatsapp_ic),
                         contentDescription = stringResource(R.string.whatsapp_icon),
-
+                        contentScale = ContentScale.FillBounds,
+                        modifier = Modifier.size(32.dp).clickable {  }
                     )
-                }
-                IconButton(onClick = { /*TODO*/ }) {
                     Image(
                         painter = painterResource(id = R.drawable.instagram_ic),
                         contentDescription = stringResource(R.string.instagram_icon),
-                        modifier = Modifier.size(24.dp)
+                        contentScale = ContentScale.FillBounds,
+                        modifier = Modifier.size(32.dp).clickable {  }
                     )
-                }
             }
         }
     }

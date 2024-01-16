@@ -55,7 +55,7 @@ fun DeviceInfoCard(
     waterStatusRealtime: StateFlow<String?>,
 ) {
     var isBad by remember { mutableStateOf(false) }
-
+    var isDataNull by remember { mutableStateOf(false) }
     Column(verticalArrangement = Arrangement.spacedBy(8.dp), modifier = modifier) {
         Box(
             modifier = Modifier
@@ -120,7 +120,9 @@ fun DeviceInfoCard(
                 .background(
                     if (deviceEntity != null) {
                         if (isBad) Yellow else MaterialTheme.colorScheme.primary
-                    } else Color.LightGray
+                    } else Color(
+                        0xFFF2F2F2
+                    )
                 )
                 .fillMaxWidth()
                 .clickable { if (deviceEntity != null) onTapDetailDevice(deviceEntity.userDeviceId) }
@@ -147,10 +149,14 @@ fun DeviceInfoCard(
                             else -> it.data?.quality == "buruk"
                         }
 
+                        isDataNull = (it.data?.id == null)
+
                         Text(
                             text = it.data?.quality ?: "-",
                             color =
-                            if (isBad) Color.Black else MaterialTheme.colorScheme.onPrimary,
+                            if (isBad) Color.Black else {
+                                if (it.data?.quality != null) MaterialTheme.colorScheme.onPrimary else Color.Black
+                            },
                             fontWeight = FontWeight.SemiBold
                         )
                     }
@@ -159,7 +165,13 @@ fun DeviceInfoCard(
 
             Text(
                 text = "Detail",
-                color = if (isBad) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onPrimary,
+                color = if (isBad) MaterialTheme.colorScheme.primary else {
+                    if (isDataNull) {
+                        Color.Gray
+                    } else {
+                        MaterialTheme.colorScheme.onPrimary
+                    }
+                },
                 fontWeight = FontWeight.SemiBold
             )
         }
@@ -170,14 +182,18 @@ fun DeviceInfoCard(
             Box(
                 modifier = Modifier
                     .clip(RoundedCornerShape(bottomStart = 12.dp))
-                    .background(if (deviceEntity != null) MaterialTheme.colorScheme.primary else Color.LightGray)
+                    .background(
+                        if (deviceEntity != null) MaterialTheme.colorScheme.primary else Color(
+                            0xFFF2F2F2
+                        )
+                    )
                     .weight(1f)
                     .padding(horizontal = 16.dp, vertical = 20.dp)
             ) {
                 Column {
                     Text(
                         text = "Kualitas Air",
-                        color = MaterialTheme.colorScheme.onPrimary
+                        color = if (isDataNull) Color.Black else MaterialTheme.colorScheme.onPrimary
                     )
 
                     deviceData.collectAsState().value.let {
@@ -196,7 +212,8 @@ fun DeviceInfoCard(
                             is Resource.Success -> Text(
                                 text = waterStatusRealtime.collectAsState().value
                                     ?: it.data?.quality ?: "-",
-                                color = MaterialTheme.colorScheme.onPrimary,
+                                color =
+                                if (it.data?.quality != null) MaterialTheme.colorScheme.onPrimary else Color.Black,
                                 fontWeight = FontWeight.Bold
                             )
                         }
@@ -207,14 +224,18 @@ fun DeviceInfoCard(
             Box(
                 modifier = Modifier
                     .clip(RoundedCornerShape(bottomEnd = 12.dp))
-                    .background(if (deviceEntity != null) MaterialTheme.colorScheme.primary else Color.LightGray)
+                    .background(
+                        if (deviceEntity != null) MaterialTheme.colorScheme.primary else Color(
+                            0xFFF2F2F2
+                        )
+                    )
                     .weight(1f)
                     .padding(horizontal = 16.dp, vertical = 20.dp)
             ) {
                 Column {
                     Text(
                         text = "Status Air",
-                        color = MaterialTheme.colorScheme.onPrimary
+                        color = if (isDataNull) Color.Black else MaterialTheme.colorScheme.onPrimary
                     )
                     deviceData.collectAsState().value.let {
                         when (it) {
@@ -232,7 +253,7 @@ fun DeviceInfoCard(
                             is Resource.Success -> Text(
                                 text = waterStatusRealtime.collectAsState().value ?: it.data?.status
                                 ?: "-",
-                                color = MaterialTheme.colorScheme.onPrimary,
+                                color = if (it.data?.quality != null) MaterialTheme.colorScheme.onPrimary else Color.Black,
                                 fontWeight = FontWeight.Bold
                             )
                         }

@@ -26,7 +26,6 @@ import com.byteteam.bluesense.core.presentation.helper.GoogleSignInClientHelper
 import com.byteteam.bluesense.core.presentation.views.device.add_form.AddDeviceFormViewModel
 import com.byteteam.bluesense.core.presentation.views.device.add_form.AddDeviceViewModel
 import com.byteteam.bluesense.core.presentation.views.device.detail.DetailDeviceViewModel
-import com.byteteam.bluesense.core.presentation.views.device.scan.ScanViewModel
 import com.byteteam.bluesense.core.presentation.views.home.HomeViewModel
 import com.byteteam.bluesense.core.presentation.views.onboard.OnBoardViewModel
 import com.byteteam.bluesense.core.presentation.views.reset_password.ResetPasswordViewModel
@@ -49,10 +48,8 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
 import okhttp3.internal.wait
 
-
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    private val scanViewModel: ScanViewModel by viewModels()
     private val authViewModel: AuthViewModel by viewModels()
     private val onBoardViewModel: OnBoardViewModel by viewModels()
     private val registerViewModel: RegisterViewModel by viewModels()
@@ -73,9 +70,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         actionBar?.hide()
         installSplashScreen()
-        runBlocking {
-            Log.d("TAG", "token FCM: ${FirebaseMessaging.getInstance().token.await()}")
-        }
 
         if (Build.VERSION.SDK_INT >= 33) {
             requestNotificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
@@ -159,7 +153,6 @@ class MainActivity : ComponentActivity() {
                     signInGoogle = { newGoogleSignIn() },
                     callbackOnSuccessSignIn = { callbackOnSuccessSignIn() },
                     callbackOnConnected = { callbackOnConnected(it) },
-                    scanViewModel = scanViewModel,
                     authViewModel = authViewModel,
                     onBoardViewModel = onBoardViewModel,
                     registerViewModel = registerViewModel,

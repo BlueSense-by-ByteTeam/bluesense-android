@@ -39,6 +39,13 @@ class AuthViewModel @Inject constructor(
         getCurrentUser()
     }
 
+    fun resetState() {
+        email.value = InputData("")
+        password.value = InputData("")
+        buttonEnabled.value = false
+        googleSigninEnabled.value = true
+    }
+
     fun updateEmail(value: String) {
         val data = InputData(value).copy(
             data = value,
@@ -91,7 +98,6 @@ class AuthViewModel @Inject constructor(
             eventChannel.send(SingleEvent.MessageEvent(it))
         }
     }
-
 
     fun getCurrentUser() {
         viewModelScope.launch {

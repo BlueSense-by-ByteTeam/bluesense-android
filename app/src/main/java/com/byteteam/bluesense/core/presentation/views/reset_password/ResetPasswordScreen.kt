@@ -12,6 +12,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -44,9 +45,13 @@ fun ResetPasswordScreen(
     inputEmail: InputData,
     buttonEnabled: Boolean,
     eventMessage: Flow<SingleEvent>,
+    onResetState: () -> Unit,
     navHostController:  NavHostController = rememberNavController(),
     modifier: Modifier = Modifier
 ) {
+    DisposableEffect(Unit){
+        onDispose { onResetState() }
+    }
     var errorMessage: String? by remember { mutableStateOf(null) }
     LaunchedEffect(Unit) {
         eventMessage?.collect { event ->

@@ -35,7 +35,7 @@ fun NotificationItem(){
                 .background(MaterialTheme.colorScheme.primary)
                 .padding(4.dp)
         )
-        Column {
+        Column(Modifier.weight(1f)) {
             Text(
                 text = "Air Buruk!",
                 fontWeight = FontWeight.Bold,
@@ -45,7 +45,7 @@ fun NotificationItem(){
                 text = "Penting! Kualitas air saat ini menunjukkan tingkat yang tidak memadai.",
                 modifier = Modifier.padding(bottom = 8.dp)
             )
-            Text(text = "06.06", color = Color.LightGray)
         }
+        Text(text = "06.06", color = Color.Black)
     }
 }
