@@ -2,8 +2,8 @@ package com.byteteam.bluesense.core.data.repositories
 
 import com.byteteam.bluesense.core.data.common.Resource
 import com.byteteam.bluesense.core.data.datastore.DataStorePreference
-import com.byteteam.bluesense.core.data.remote.network.services.bluesense.WaterFilterServices
-import com.byteteam.bluesense.core.data.remote.network.services.bluesense.WaterSupplierServices
+import com.byteteam.bluesense.core.data.source.remote.services.bluesense.WaterFilterServices
+import com.byteteam.bluesense.core.data.source.remote.services.bluesense.WaterSupplierServices
 import com.byteteam.bluesense.core.domain.model.WaterFilterEntity
 import com.byteteam.bluesense.core.domain.model.WaterSupplierEntity
 import com.byteteam.bluesense.core.domain.repositories.StoreRepository

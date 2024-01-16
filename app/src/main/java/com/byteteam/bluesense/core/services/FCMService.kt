@@ -6,8 +6,10 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.util.Log
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import com.byteteam.bluesense.MainActivity
 import com.byteteam.bluesense.R
@@ -22,6 +24,7 @@ class FCMService : FirebaseMessagingService() {
         Log.d(TAG, "onNewToken: $token")
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
         Log.d(TAG, "From: ${message.from}")
@@ -31,6 +34,7 @@ class FCMService : FirebaseMessagingService() {
         sendNotification(message.notification?.title, message.notification?.body)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun sendNotification(title: String?, messageBody: String?) {
         val contentIntent = Intent(applicationContext, MainActivity::class.java)
         val contentPendingIntent = PendingIntent.getActivity(

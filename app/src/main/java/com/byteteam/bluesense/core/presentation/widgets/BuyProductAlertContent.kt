@@ -1,5 +1,7 @@
 package com.byteteam.bluesense.core.presentation.widgets
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,10 +18,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import com.byteteam.bluesense.R
 import com.byteteam.bluesense.core.domain.model.WaterFilterEntity
 import com.byteteam.bluesense.core.presentation.views.store.detail.widgets.AffiliateShopTemplate
@@ -28,6 +32,7 @@ import com.byteteam.bluesense.core.presentation.views.store.detail.widgets.Affil
 fun BuyProductAlertContent(
     waterFilterEntity: WaterFilterEntity,
 ){
+
     Column(modifier = Modifier
         .height(412.dp)
         .padding(start = 24.dp, top = 24.dp, end = 24.dp, bottom = 48.dp)

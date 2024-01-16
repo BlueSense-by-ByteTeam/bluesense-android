@@ -1,9 +1,9 @@
 package com.byteteam.bluesense.core.di.module
 
 import com.byteteam.bluesense.core.data.datastore.DataStorePreference
-import com.byteteam.bluesense.core.data.remote.network.services.bluesense.WaterFilterServices
-import com.byteteam.bluesense.core.data.remote.network.services.bluesense.WaterSupplierServices
 import com.byteteam.bluesense.core.data.repositories.StoreRepositoryImpl
+import com.byteteam.bluesense.core.data.source.remote.services.bluesense.WaterFilterServices
+import com.byteteam.bluesense.core.data.source.remote.services.bluesense.WaterSupplierServices
 import com.byteteam.bluesense.core.domain.repositories.StoreRepository
 import dagger.Module
 import dagger.Provides

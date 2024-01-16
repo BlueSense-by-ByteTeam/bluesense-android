@@ -3,8 +3,8 @@ package com.byteteam.bluesense.core.data.repositories
 import android.util.Log
 import com.byteteam.bluesense.core.data.common.Resource
 import com.byteteam.bluesense.core.data.datastore.DataStorePreference
-import com.byteteam.bluesense.core.data.remote.network.services.bluesense.DeviceServices
-import com.byteteam.bluesense.core.data.remote.network.services.bluesense.HistoryLogServices
+import com.byteteam.bluesense.core.data.source.remote.services.bluesense.DeviceServices
+import com.byteteam.bluesense.core.data.source.remote.services.bluesense.HistoryLogServices
 import com.byteteam.bluesense.core.domain.model.LogHistoryEntity
 import com.byteteam.bluesense.core.domain.repositories.HistoryLogRepository
 import com.byteteam.bluesense.core.helper.toLogHistoryEntity

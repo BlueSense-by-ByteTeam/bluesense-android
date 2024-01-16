@@ -21,20 +21,5 @@ fun DescProductTemplate(
     Column(verticalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.padding(bottom = 20.dp)) {
         Text(text = stringResource(R.string.description), fontWeight = FontWeight.Bold)
         Text(text = desc)
-        Column {
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text(text = "Material", modifier = Modifier.width(64.dp))
-                Text(text = ": Plastik")
-            }
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text(text = "Ukuran", modifier = Modifier.width(64.dp))
-                Text(text = ": 15cm*10cm*5cm")
-            }
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text(text = "Berat", modifier = Modifier.width(64.dp))
-                Text(text = ": 250 gram")
-            }
-        }
     }
-
 }

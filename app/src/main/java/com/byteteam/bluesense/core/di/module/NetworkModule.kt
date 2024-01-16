@@ -1,14 +1,14 @@
 package com.byteteam.bluesense.core.di.module
 
 import com.byteteam.bluesense.core.data.datastore.DataStorePreference
-import com.byteteam.bluesense.core.data.remote.network.config.FirebaseTokenInterceptor
-import com.byteteam.bluesense.core.data.remote.network.services.bluesense.AuthServices
-import com.byteteam.bluesense.core.data.remote.network.services.bluesense.DeviceServices
-import com.byteteam.bluesense.core.data.remote.network.services.bluesense.HistoryLogServices
-import com.byteteam.bluesense.core.data.remote.network.services.bluesense.WaterFilterServices
-import com.byteteam.bluesense.core.data.remote.network.services.bluesense.WaterSupplierServices
-import com.byteteam.bluesense.core.data.remote.network.services.fcm.FCMServices
-import com.byteteam.bluesense.core.data.remote.network.services.location.IndonesianLocationAddressService
+import com.byteteam.bluesense.core.data.source.remote.config.FirebaseTokenInterceptor
+import com.byteteam.bluesense.core.data.source.remote.services.bluesense.AuthServices
+import com.byteteam.bluesense.core.data.source.remote.services.bluesense.DeviceServices
+import com.byteteam.bluesense.core.data.source.remote.services.bluesense.HistoryLogServices
+import com.byteteam.bluesense.core.data.source.remote.services.bluesense.WaterFilterServices
+import com.byteteam.bluesense.core.data.source.remote.services.bluesense.WaterSupplierServices
+import com.byteteam.bluesense.core.data.source.remote.services.fcm.FCMServices
+import com.byteteam.bluesense.core.data.source.remote.services.location.IndonesianLocationAddressService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

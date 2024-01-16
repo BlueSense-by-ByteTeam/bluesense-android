@@ -17,8 +17,8 @@ android {
         applicationId = "com.byteteam.bluesense"
         minSdk = 25
         targetSdk = 34
-        versionCode = 4
-        versionName = "1.4"
+        versionCode = 6
+        versionName = "1.5"
 
         val keystoreFile = project.rootProject.file("local.properties")
         val properties = Properties()
@@ -174,6 +174,13 @@ dependencies {
     implementation("androidx.camera:camera-camera2:1.3.1")
     implementation("androidx.camera:camera-lifecycle:1.3.1")
     implementation("androidx.camera:camera-view:1.3.1")
+    //Room database
+    val room_version = "2.4.3"
+    implementation("androidx.room:room-runtime:$room_version")
+    implementation("androidx.room:room-ktx:$room_version")
+    implementation("androidx.compose.runtime:runtime-livedata:1.2.1")
+    annotationProcessor ("androidx.room:room-compiler:$room_version")
+    kapt("androidx.room:room-compiler:$room_version")
 }
 // Allow references to generated code
 kapt {

@@ -2,9 +2,9 @@ package com.byteteam.bluesense.core.data.repositories
 
 import android.util.Log
 import com.byteteam.bluesense.core.data.datastore.DataStorePreference
-import com.byteteam.bluesense.core.data.remote.network.response.MessageResponse
-import com.byteteam.bluesense.core.data.remote.network.services.bluesense.DeviceServices
-import com.byteteam.bluesense.core.data.remote.network.services.fcm.FCMServices
+import com.byteteam.bluesense.core.data.source.remote.response.MessageResponse
+import com.byteteam.bluesense.core.data.source.remote.services.bluesense.DeviceServices
+import com.byteteam.bluesense.core.data.source.remote.services.fcm.FCMServices
 import com.byteteam.bluesense.core.domain.model.DeviceEntity
 import com.byteteam.bluesense.core.domain.model.DeviceLatestInfoEntity
 import com.byteteam.bluesense.core.domain.model.DevicePost

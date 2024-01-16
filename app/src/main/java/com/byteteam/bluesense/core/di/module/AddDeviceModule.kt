@@ -1,7 +1,7 @@
 package com.byteteam.bluesense.core.di.module
 
-import com.byteteam.bluesense.core.data.remote.network.services.location.IndonesianLocationAddressService
 import com.byteteam.bluesense.core.data.repositories.IndoLocalAddressRepositoryImpl
+import com.byteteam.bluesense.core.data.source.remote.services.location.IndonesianLocationAddressService
 import com.byteteam.bluesense.core.domain.repositories.IndoLocalAddressRepository
 import dagger.Module
 import dagger.Provides
