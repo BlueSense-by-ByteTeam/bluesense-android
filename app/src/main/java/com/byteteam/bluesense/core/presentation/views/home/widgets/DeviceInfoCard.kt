@@ -100,8 +100,8 @@ fun DeviceInfoCard(
                 }
                 Box(
                     modifier = Modifier
+                        .clip(RoundedCornerShape(8.dp))
                         .background(if (deviceEntity == null) MaterialTheme.colorScheme.primary else Color.LightGray)
-                        .clip(RoundedCornerShape(4.dp))
                         .size(36.dp)
                         .clickable {
                             if (deviceEntity == null) onTapAddDevice()
@@ -109,6 +109,7 @@ fun DeviceInfoCard(
                     Icon(
                         imageVector = Icons.Default.Add,
                         tint = Color.White,
+                        modifier = Modifier.align(Alignment.Center),
                         contentDescription = stringResource(R.string.add_icon)
                     )
                 }
@@ -135,7 +136,7 @@ fun DeviceInfoCard(
                     )
 
                     is Resource.Error -> Text(
-                        text = it.message ?: "-",
+                        text = it.message ?: "Error",
                         color = if (isBad) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onPrimary,
                         fontWeight = FontWeight.SemiBold
                     )
@@ -147,7 +148,7 @@ fun DeviceInfoCard(
                         }
 
                         Text(
-                            text = it.data?.quality ?: "belum ada data",
+                            text = it.data?.quality ?: "-",
                             color =
                             if (isBad) Color.Black else MaterialTheme.colorScheme.onPrimary,
                             fontWeight = FontWeight.SemiBold
@@ -188,13 +189,13 @@ fun DeviceInfoCard(
                             )
 
                             is Resource.Error -> Text(
-                                text = it.message ?: "-",
+                                text = it.message ?: "Error",
                                 color = MaterialTheme.colorScheme.onPrimary
                             )
 
                             is Resource.Success -> Text(
                                 text = waterStatusRealtime.collectAsState().value
-                                    ?: it.data?.quality ?: "belum ada data",
+                                    ?: it.data?.quality ?: "-",
                                 color = MaterialTheme.colorScheme.onPrimary,
                                 fontWeight = FontWeight.Bold
                             )
@@ -224,13 +225,13 @@ fun DeviceInfoCard(
                             )
 
                             is Resource.Error -> Text(
-                                text = it.message ?: "-",
+                                text = it.message ?: "Error",
                                 color = MaterialTheme.colorScheme.onPrimary
                             )
 
                             is Resource.Success -> Text(
                                 text = waterStatusRealtime.collectAsState().value ?: it.data?.status
-                                ?: "belum ada data",
+                                ?: "-",
                                 color = MaterialTheme.colorScheme.onPrimary,
                                 fontWeight = FontWeight.Bold
                             )

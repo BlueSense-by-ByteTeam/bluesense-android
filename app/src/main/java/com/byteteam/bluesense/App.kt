@@ -44,6 +44,7 @@ import com.byteteam.bluesense.core.presentation.views.onboard.OnBoardViewModel
 import com.byteteam.bluesense.core.presentation.views.profile.ProfileScreen
 import com.byteteam.bluesense.core.presentation.views.reset_password.ResetPasswordScreen
 import com.byteteam.bluesense.core.presentation.views.reset_password.ResetPasswordViewModel
+import com.byteteam.bluesense.core.presentation.views.scanner.ScannerPage
 import com.byteteam.bluesense.core.presentation.views.signin.AuthViewModel
 import com.byteteam.bluesense.core.presentation.views.signin.SignInData
 import com.byteteam.bluesense.core.presentation.views.signin.SigninScreen
@@ -112,7 +113,8 @@ fun App(
                     } else {
                         Screens.SignIn.route
                     }
-                }, navController = navController
+                },
+                navController = navController
             ) {
                 composable(Screens.OnBoarding.route) {
                     OnBoardScreen(navController)
@@ -222,8 +224,7 @@ fun App(
                     NotificationScreen(navController)
                 }
                 composable(Screens.History.route) {
-                    StatisticScreen(
-                        getHistoryToday = { historyViewModel.getTodayHistory() },
+                    StatisticScreen(getHistoryToday = { historyViewModel.getTodayHistory() },
                         getHistoryWeek = { historyViewModel.getWeekHistory() },
                         getHistoryMonth = { historyViewModel.getMonthHistory() },
                         getHistoryYear = { historyViewModel.getYearHistory() },
@@ -274,16 +275,8 @@ fun App(
                         }
                     }
 
-                    AddScreen(navHostController = navController, startScanDevice = {
-                        scanViewModel.startScan(context = context, callBackOnSuccess = {
-                            if (!URLUtil.isValidUrl(it)) {
-                                barcode = it
-                            } else {
-                                Toast.makeText(
-                                    context, "QR code tidak valid!", Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                        })
+                    AddScreen(navHostController = navController, navigateScanScreen = {
+                        navController.navigate(Screens.Scan.route)
                     })
                 }
                 composable(Screens.AddDeviceForm.route) {
@@ -361,10 +354,8 @@ fun App(
                     )
                 }
                 composable(Screens.WaterSupplierRecommendation.route) {
-                    WaterSupplierScreen(
-                        waterSuppliersState = storeViewModel.waterSuppliers,
-                        getWaterSupplier = { storeViewModel.getWaterSuppliers() }
-                    )
+                    WaterSupplierScreen(waterSuppliersState = storeViewModel.waterSuppliers,
+                        getWaterSupplier = { storeViewModel.getWaterSuppliers() })
                 }
                 composable(Screens.FilterRecommendation.route) {
                     val id = it.arguments?.getString("id")
@@ -381,8 +372,7 @@ fun App(
                     }
                 }
                 composable(Screens.ResetPassword.route) {
-                    ResetPasswordScreen(
-                        buttonEnabled = resetPasswordViewModel.buttonEnabled.collectAsState().value,
+                    ResetPasswordScreen(buttonEnabled = resetPasswordViewModel.buttonEnabled.collectAsState().value,
                         inputEmail = resetPasswordViewModel.inputEmail.collectAsState().value,
                         updateEmail = { resetPasswordViewModel.updateEmail(it) },
                         eventMessage = resetPasswordViewModel.eventFlow,
@@ -394,11 +384,22 @@ fun App(
                                     }
                                 }
                             })
-                        }
-                    )
+                        })
                 }
                 composable(Screens.SuccessResetPassword.route) {
                     SuccessResetPassScreen(navHostController = navController)
+                }
+                composable(Screens.Scan.route){
+                    ScannerPage(
+                        navHostController = navController,
+                        cbOnScanSuccess = {
+                            navController.navigate(Screens.AddDeviceForm.createRoute(it)){
+                                popUpTo(Screens.Scan.route){
+                                    inclusive=true
+                                }
+                            }
+                        }
+                    )
                 }
             }
         }

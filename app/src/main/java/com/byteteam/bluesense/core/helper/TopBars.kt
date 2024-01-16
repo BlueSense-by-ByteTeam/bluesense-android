@@ -96,7 +96,20 @@ fun Topbars(actions: Map<String, () -> Unit>, route: String, navHostController: 
                     text = "Tambah Alat"
                 )
             },
-            navigationIcon = { NavigationBackButton(navHostController = navHostController) }
+            navigationIcon = {
+                IconButton(onClick = {
+                    navHostController.navigate(Screens.AddDevice.route) {
+                        popUpTo(Screens.AddDeviceForm.route) {
+                            inclusive = true
+                        }
+                    }
+                }) {
+                    Icon(
+                        imageVector = Icons.Default.ArrowBack,
+                        contentDescription = stringResource(R.string.back_icon)
+                    )
+                }
+            }
         )
 
         Screens.DetailDevice.route -> TopAppBar(

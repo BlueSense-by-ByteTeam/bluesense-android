@@ -32,12 +32,11 @@ import com.byteteam.bluesense.R
 import com.byteteam.bluesense.core.helper.Screens
 import com.byteteam.bluesense.core.presentation.views.device.add.widgets.AddDeviceAlertContent
 import com.byteteam.bluesense.core.presentation.widgets.BottomDialog
-import com.byteteam.bluesense.core.presentation.widgets.ErrorAlertContent
 import com.byteteam.bluesense.ui.theme.BlueSenseTheme
 
 @Composable
 fun AddScreen(
-    startScanDevice: () -> Unit = {},
+    navigateScanScreen: () -> Unit = {},
     navHostController: NavHostController = rememberNavController(),
     modifier: Modifier = Modifier
 ) {
@@ -56,7 +55,7 @@ fun AddScreen(
             }) {
                 AddDeviceAlertContent(onScan = {
                     openDialog = false
-                    startScanDevice()
+                    navigateScanScreen()
                }, onManual = {
                     openDialog = false
                     navHostController.navigate(Screens.AddDeviceForm.createRoute("no_data")) {

@@ -85,6 +85,7 @@ android {
     buildFeatures {
         compose = true
         buildConfig = true
+        viewBinding = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
@@ -104,6 +105,11 @@ dependencies {
     implementation("com.google.android.gms:play-services-auth:20.7.0")
     implementation("androidx.datastore:datastore-core:1.0.0")
     implementation("com.google.firebase:firebase-messaging:23.4.0")
+    implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("com.google.android.material:material:1.11.0")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("com.google.android.gms:play-services-mlkit-text-recognition-common:19.0.0")
+    implementation("com.google.android.gms:play-services-mlkit-text-recognition:19.0.0")
     val nav_version = "2.7.6"
     val compose_version =  "1.5.1"
     val vico = "1.13.1"
@@ -162,7 +168,12 @@ dependencies {
     implementation("androidx.work:work-runtime:2.7.0-alpha05")
     //recaptcha for auth
     implementation("com.google.android.recaptcha:recaptcha:18.4.0")
-
+    //MLKIT BARCODE SCANNER
+    implementation("com.google.mlkit:barcode-scanning:17.2.0")
+    //CAMERA
+    implementation("androidx.camera:camera-camera2:1.3.1")
+    implementation("androidx.camera:camera-lifecycle:1.3.1")
+    implementation("androidx.camera:camera-view:1.3.1")
 }
 // Allow references to generated code
 kapt {

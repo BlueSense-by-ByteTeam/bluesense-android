@@ -22,16 +22,17 @@ fun OptionStatTemplate(sortDatas: Map<String, SortData>, selectedData: SortData?
     Text(text = "Ringkasan Harian", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, modifier = modifier.padding(horizontal = 24.dp, vertical = 12.dp))
     LazyRow(contentPadding = PaddingValues(start = 24.dp)) {
         items(sortDatas.keys.toList()) {
+            val borderColor = if (selectedData==sortDatas[it]) MaterialTheme.colorScheme.primary else Color(0xFFD9D9D9)
             OutlinedButton(
                 onClick = { onClick(sortDatas[it]) },
                 shape = RoundedCornerShape(8.dp),
-                border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.primary),
+                border = BorderStroke(width = 1.dp, color = borderColor),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = if (selectedData==sortDatas[it]) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.background
                 ),
                 modifier = Modifier.padding(end = 12.dp)
             ) {
-                Text(text = it, color = if (selectedData==sortDatas[it]) Color.White else MaterialTheme.colorScheme.primary)
+                Text(text = it, color = if (selectedData==sortDatas[it]) Color.White else Color.Black)
             }
         }
     }

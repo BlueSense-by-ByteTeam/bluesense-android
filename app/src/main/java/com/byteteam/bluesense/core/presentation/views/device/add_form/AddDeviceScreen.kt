@@ -2,6 +2,7 @@ package com.byteteam.bluesense.core.presentation.views.device.add_form
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
@@ -19,6 +20,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Devices.PIXEL_4
@@ -75,11 +77,11 @@ fun AddDeviceFormScreen(
     Column(
         Modifier
             .fillMaxWidth()
-            .wrapContentHeight()
-            .imePadding()
             .verticalScroll(rememberScrollState())
-            .fillMaxHeight()
-            .padding(horizontal = 20.dp)
+            .padding(horizontal = 20.dp),
+//            .wrapContentHeight(align = Alignment.Top)
+//            .fillMaxHeight()
+        verticalArrangement = Arrangement.Top
     ) {
         errorMessage?.let {
             BottomDialog(onDismissRequest = {
@@ -147,6 +149,7 @@ fun AddDeviceFormScreen(
                 modifier = Modifier.fillMaxWidth()
             )
         }
+        Spacer(modifier = Modifier.weight(1f))
         Button(
             enabled = addDeviceScreenData.buttonEnabled,
             onClick = addDeviceScreenData.postDevice,

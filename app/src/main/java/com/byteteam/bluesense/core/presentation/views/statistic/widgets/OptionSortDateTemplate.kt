@@ -21,10 +21,12 @@ import com.byteteam.bluesense.core.presentation.tokens.SortDateLog
 fun OptionSortDateTemplate(sortDates: Map<String, SortDateLog>, selectedDate: SortDateLog?, onClick: (SortDateLog?) -> Unit, modifier: Modifier = Modifier){
     LazyRow(contentPadding = PaddingValues(start = 24.dp)) {
         items(sortDates.keys.toList()) {
+            val borderColor = if (selectedDate==sortDates[it]) MaterialTheme.colorScheme.primary else Color(0xFFD9D9D9)
+
             OutlinedButton(
                 onClick = { onClick(sortDates[it]) },
                 shape = RoundedCornerShape(8.dp),
-                border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.primary),
+                border = BorderStroke(width = 1.dp, color = borderColor),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = if (selectedDate == sortDates[it]) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.background
                 ),
@@ -32,7 +34,7 @@ fun OptionSortDateTemplate(sortDates: Map<String, SortDateLog>, selectedDate: So
             ) {
                 Text(
                     text = it,
-                    color = if (selectedDate == sortDates[it]) Color.White else MaterialTheme.colorScheme.primary
+                    color = if (selectedDate == sortDates[it]) Color.White else Color.Black
                 )
             }
         }

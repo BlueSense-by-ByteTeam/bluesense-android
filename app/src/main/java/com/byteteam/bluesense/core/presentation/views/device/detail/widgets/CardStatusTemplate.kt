@@ -8,8 +8,10 @@ import androidx.compose.material.icons.filled.WaterDrop
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.unit.dp
+import com.byteteam.bluesense.R
 import com.byteteam.bluesense.core.domain.model.SensorData
 import kotlinx.coroutines.flow.StateFlow
 
@@ -31,7 +33,7 @@ fun CardStatusTemplate(
                         else -> it.capitalize()
                     }
                 },
-                iconVector = Icons.Default.WaterDrop,
+                iconPainter = painterResource(id = R.drawable.ic_water_droplet),
                 modifier = Modifier.weight(1f)
             )
             CardStatus(
@@ -42,7 +44,7 @@ fun CardStatusTemplate(
                         else -> "Tidak dapat diminum"
                     }
                 },
-                iconVector = Icons.Default.WaterDrop,
+                iconPainter = painterResource(id = R.drawable.ic_water_quality_vector),
                 modifier = Modifier.weight(1f)
             )
         }
@@ -50,13 +52,13 @@ fun CardStatusTemplate(
             CardStatus(
                 label = "TDS (PPM)",
                 text = (sensorData?.collectAsState()?.value?.tds ?: 0.0).toString(),
-                iconVector = Icons.Default.WaterDrop,
+                iconPainter = painterResource(id = R.drawable.ic_tds),
                 modifier = Modifier.weight(1f)
             )
             CardStatus(
                 label = "Level PH)",
                 text = (sensorData?.collectAsState()?.value?.ph ?: 0.0).toString(),
-                iconVector = Icons.Default.WaterDrop,
+                iconPainter = painterResource(id = R.drawable.ic_ph),
                 modifier = Modifier.weight(1f)
             )
         }
