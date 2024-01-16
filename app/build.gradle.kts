@@ -28,6 +28,7 @@ android {
         val mqttUsername = properties.getProperty("MQTT_USERNAME") ?: ""
         val mqttPassword = properties.getProperty("MQTT_PASSWORD") ?: ""
         val firebaseServerClientId = properties.getProperty("FIREBASE_SERVER_CLIENT_ID") ?: ""
+        val fcmAccessKey = properties.getProperty("FCM_ACCESS_KEY") ?: ""
 
         buildConfigField(
             type = "String",
@@ -48,6 +49,11 @@ android {
             type = "String",
             name = "FIREBASE_SERVER_CLIENT_ID",
             value = firebaseServerClientId
+        )
+        buildConfigField(
+            type = "String",
+            name = "FCM_ACCESS_KEY",
+            value = fcmAccessKey
         )
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"

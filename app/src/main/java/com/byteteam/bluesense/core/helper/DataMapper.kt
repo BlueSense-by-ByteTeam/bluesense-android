@@ -3,6 +3,7 @@ package com.byteteam.bluesense.core.helper
 import com.byteteam.bluesense.core.data.remote.network.response.devices.GetDeviceLatestInfoResponse
 import com.byteteam.bluesense.core.data.remote.network.response.devices.GetDevicesResponse
 import com.byteteam.bluesense.core.data.remote.network.response.devices.GetDevicesResponseOld
+import com.byteteam.bluesense.core.data.remote.network.response.fcm.FCMDetailResponse
 import com.byteteam.bluesense.core.data.remote.network.response.history.GetHistoryResponse
 import com.byteteam.bluesense.core.data.remote.network.response.indonesian_location.GetCities
 import com.byteteam.bluesense.core.data.remote.network.response.indonesian_location.GetCitiesItem
@@ -127,3 +128,5 @@ fun GetHistoryResponse.toLogHistoryEntity(): LogHistoryEntity = LogHistoryEntity
         )
     } ?: listOf(),
 )
+
+fun FCMDetailResponse.getTopics(): List<String> = this.rel?.topics?.keys?.toList() ?: listOf()

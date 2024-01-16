@@ -6,6 +6,7 @@ import android.app.Activity
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -33,7 +34,6 @@ import com.byteteam.bluesense.core.presentation.views.signin.AuthViewModel
 import com.byteteam.bluesense.core.presentation.views.signup.RegisterViewModel
 import com.byteteam.bluesense.core.presentation.views.statistic.StatisticHistoryViewModel
 import com.byteteam.bluesense.core.presentation.views.store.StoreViewModel
-import com.byteteam.bluesense.core.services.FCMService
 import com.byteteam.bluesense.ui.theme.BlueSenseTheme
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
@@ -44,6 +44,10 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
+import com.google.firebase.messaging.FirebaseMessaging
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.tasks.await
+import okhttp3.internal.wait
 
 
 @AndroidEntryPoint
@@ -69,15 +73,14 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         actionBar?.hide()
         installSplashScreen()
+        runBlocking {
+            Log.d("TAG", "token FCM: ${FirebaseMessaging.getInstance().token.await()}")
+        }
 
         if (Build.VERSION.SDK_INT >= 33) {
             requestNotificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
         }
 
-        FCMService.subscribeTopic(
-            this,
-            "it_should_device_id"
-        )// TODO: the topic should get from REST server data
 
         val mqttConnectOptions = MqttConnectOptions()
         mqttConnectOptions.apply {

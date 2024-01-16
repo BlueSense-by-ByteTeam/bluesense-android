@@ -102,7 +102,7 @@ fun DeviceInfoCard(
                     modifier = Modifier
                         .background(if (deviceEntity == null) MaterialTheme.colorScheme.primary else Color.LightGray)
                         .clip(RoundedCornerShape(4.dp))
-                        .size(24.dp)
+                        .size(36.dp)
                         .clickable {
                             if (deviceEntity == null) onTapAddDevice()
                         }) {

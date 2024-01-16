@@ -1,22 +1,28 @@
 package com.byteteam.bluesense.core.data.repositories
 
+import android.util.Log
 import com.byteteam.bluesense.core.data.datastore.DataStorePreference
 import com.byteteam.bluesense.core.data.remote.network.response.MessageResponse
 import com.byteteam.bluesense.core.data.remote.network.services.bluesense.DeviceServices
+import com.byteteam.bluesense.core.data.remote.network.services.fcm.FCMServices
 import com.byteteam.bluesense.core.domain.model.DeviceEntity
 import com.byteteam.bluesense.core.domain.model.DeviceLatestInfoEntity
 import com.byteteam.bluesense.core.domain.model.DevicePost
 import com.byteteam.bluesense.core.domain.repositories.DeviceRepository
+import com.byteteam.bluesense.core.helper.getTopics
 import com.byteteam.bluesense.core.helper.toDeviceEntities
 import com.byteteam.bluesense.core.helper.toDeviceLatestInfoEntity
+import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 class DeviceRepositoryImpl @Inject constructor(
     private val dataStorePreference: DataStorePreference,
-    private val deviceServices: DeviceServices
+    private val deviceServices: DeviceServices,
+    private val fcmServices: FCMServices
 ) : DeviceRepository {
     override suspend fun getDevices(): Flow<List<DeviceEntity>> {
         try {
@@ -41,6 +47,7 @@ class DeviceRepositoryImpl @Inject constructor(
 
     override suspend fun deleteDevice(id: String): Flow<MessageResponse> {
         try {
+            unsubsAllFCMTopics()
             val token = dataStorePreference.getAuthToken().firstOrNull()
             val result = deviceServices.deleteDevice(authToken = "Bearer $token", id = id)
             return flowOf(result)
@@ -56,6 +63,16 @@ class DeviceRepositoryImpl @Inject constructor(
             return flowOf(result)
         } catch (e: Exception) {
             throw e
+        }
+    }
+
+    private suspend fun unsubsAllFCMTopics(){
+        val fcmToken = FirebaseMessaging.getInstance().token.await()
+        val response = fcmServices.getDetails(authToken = com.byteteam.bluesense.BuildConfig.FCM_ACCESS_KEY, token = fcmToken)
+        val topics = response.getTopics()
+        topics.map {
+            Log.d("Subscribed topic", "signOut: $it")
+            FirebaseMessaging.getInstance().unsubscribeFromTopic(it)
         }
     }
 }

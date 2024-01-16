@@ -2,6 +2,7 @@ package com.byteteam.bluesense.core.di.module
 
 import com.byteteam.bluesense.core.data.datastore.DataStorePreference
 import com.byteteam.bluesense.core.data.remote.network.services.bluesense.DeviceServices
+import com.byteteam.bluesense.core.data.remote.network.services.fcm.FCMServices
 import com.byteteam.bluesense.core.data.repositories.DeviceRepositoryImpl
 import com.byteteam.bluesense.core.domain.repositories.DeviceRepository
 import dagger.Module
@@ -18,6 +19,7 @@ object DeviceModule {
         fun provideDeviceRepository(
             dataStorePreference: DataStorePreference,
             deviceServices: DeviceServices,
-        ) : DeviceRepository = DeviceRepositoryImpl(dataStorePreference, deviceServices)
+            fcmServices: FCMServices,
+        ) : DeviceRepository = DeviceRepositoryImpl(dataStorePreference, deviceServices, fcmServices)
 
 }

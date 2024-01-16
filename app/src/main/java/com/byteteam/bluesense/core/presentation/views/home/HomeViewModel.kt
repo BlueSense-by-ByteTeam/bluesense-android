@@ -1,5 +1,7 @@
 package com.byteteam.bluesense.core.presentation.views.home
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -7,7 +9,9 @@ import com.byteteam.bluesense.core.data.common.Resource
 import com.byteteam.bluesense.core.domain.model.DeviceEntity
 import com.byteteam.bluesense.core.domain.model.DeviceLatestInfoEntity
 import com.byteteam.bluesense.core.domain.repositories.DeviceRepository
+import com.byteteam.bluesense.core.services.FCMService
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
@@ -15,8 +19,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
+@SuppressLint("StaticFieldLeak")
 class HomeViewModel @Inject constructor(
-    private val deviceRepository: DeviceRepository
+    private val deviceRepository: DeviceRepository,
+    @ApplicationContext private val appContext: Context
 ) : ViewModel() {
     private var _devices: MutableStateFlow<Resource<List<DeviceEntity>>> =
         MutableStateFlow(Resource.Loading())
@@ -36,6 +42,7 @@ class HomeViewModel @Inject constructor(
                     _devices.value = Resource.Success(it)
                     if (it.isNotEmpty()) {
                         getDetailDeviceInfo(it[0].id)
+                        FCMService.subscribeTopic(appContext, it[0].macId)
                     }
                 }
             } catch (e: Exception) {

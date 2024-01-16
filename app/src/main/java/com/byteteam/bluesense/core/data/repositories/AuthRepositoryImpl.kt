@@ -3,13 +3,17 @@ package com.byteteam.bluesense.core.data.repositories
 import android.util.Log
 import com.byteteam.bluesense.core.data.datastore.DataStorePreference
 import com.byteteam.bluesense.core.data.remote.network.services.bluesense.AuthServices
+import com.byteteam.bluesense.core.data.remote.network.services.fcm.FCMServices
 import com.byteteam.bluesense.core.domain.model.SignInResult
 import com.byteteam.bluesense.core.domain.model.SignUpPost
 import com.byteteam.bluesense.core.domain.model.UserData
 import com.byteteam.bluesense.core.domain.repositories.AuthRepository
+import com.byteteam.bluesense.core.helper.getTopics
 import com.byteteam.bluesense.core.presentation.helper.GoogleSignInClientHelper
+import com.google.firebase.BuildConfig
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
+import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flowOf
@@ -19,10 +23,23 @@ import javax.inject.Inject
 class AuthRepositoryImpl @Inject constructor(
     private val dataStorePreference: DataStorePreference,
     private val googleSignInClient: GoogleSignInClientHelper,
-    private val authServices: AuthServices
+    private val authServices: AuthServices,
+    private val fcmServices: FCMServices
 ) : AuthRepository {
+
+    private suspend fun unsubsAllFCMTopics(){
+        val fcmToken = FirebaseMessaging.getInstance().token.await()
+        val response = fcmServices.getDetails(authToken = com.byteteam.bluesense.BuildConfig.FCM_ACCESS_KEY, token = fcmToken)
+        val topics = response.getTopics()
+        topics.map {
+            Log.d("Subscribed topic", "signOut: $it")
+            FirebaseMessaging.getInstance().unsubscribeFromTopic(it)
+        }
+    }
     override suspend fun signInEmail(email: String, password: String): Flow<SignInResult?> {
         try {
+            unsubsAllFCMTopics()
+
             val result = Firebase.auth.signInWithEmailAndPassword(email, password).await()
             val idToken = result.user!!.getIdToken(true).await()
             val signInResult = SignInResult(
@@ -138,7 +155,15 @@ class AuthRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun signOut() = googleSignInClient.signOut()
+    override suspend fun signOut() {
+        try {
+           unsubsAllFCMTopics()
+        }catch (e: Exception){
+            e.printStackTrace()
+        }finally {
+            googleSignInClient.signOut()
+        }
+    }
     override suspend fun forgotPassword(email: String): Flow<String> {
         try {
             Firebase.auth.sendPasswordResetEmail(email).await()

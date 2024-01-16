@@ -69,11 +69,11 @@ class FCMService : FirebaseMessagingService() {
 
         fun subscribeTopic(context: Context, topic: String){
             try {
-//                val topic = "it_should_device_id"
+
                 FirebaseMessaging.getInstance().subscribeToTopic(topic)
-                Toast.makeText(context, "Subcribed at topic $topic", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Notifikasi aktif untuk device id: $topic", Toast.LENGTH_SHORT).show()
             }catch (e: Exception){
-                Toast.makeText(context, "Error ${e.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Gagal menginisiasi notifikasi. Error: ${e.message}", Toast.LENGTH_SHORT).show()
             }
         }
     }

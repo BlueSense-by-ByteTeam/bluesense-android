@@ -7,6 +7,7 @@ import com.byteteam.bluesense.core.data.remote.network.services.bluesense.Device
 import com.byteteam.bluesense.core.data.remote.network.services.bluesense.HistoryLogServices
 import com.byteteam.bluesense.core.data.remote.network.services.bluesense.WaterFilterServices
 import com.byteteam.bluesense.core.data.remote.network.services.bluesense.WaterSupplierServices
+import com.byteteam.bluesense.core.data.remote.network.services.fcm.FCMServices
 import com.byteteam.bluesense.core.data.remote.network.services.location.IndonesianLocationAddressService
 import dagger.Module
 import dagger.Provides
@@ -83,5 +84,11 @@ object NetworkModule {
     fun provideHistoryLogApiServices(retrofitBuilder: Retrofit.Builder): HistoryLogServices = retrofitBuilder.baseUrl(
         BLUESENSE_BASE_URL).build().create(
         HistoryLogServices::class.java
+    )
+    @Provides
+    @Singleton
+    fun provideFCMApiServices(retrofitBuilder: Retrofit.Builder): FCMServices = retrofitBuilder.baseUrl(
+        "https://iid.googleapis.com/iid/").build().create(
+        FCMServices::class.java
     )
 }
