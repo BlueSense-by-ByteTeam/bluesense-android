@@ -19,11 +19,14 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
@@ -38,6 +41,7 @@ import com.byteteam.bluesense.ui.theme.RedDanger
 fun InputField(
     label: String,
     outlined: Boolean = false,
+    withInitialFocus: Boolean = false,
     keyboardType: KeyboardType = KeyboardType.Text,
     errorMessage: String? = null,
     value: String? = null,
@@ -49,12 +53,18 @@ fun InputField(
     else Icons.Outlined.VisibilityOff
 
     val description = if (isSecure) "Hide password" else "Show password"
+    val focusRequester = remember { FocusRequester() }
+
+
+    LaunchedEffect(Unit) {
+        if(withInitialFocus) focusRequester.requestFocus()
+    }
 
     Column {
         if (outlined) {
             OutlinedTextField(
                 value = value ?: "",
-                modifier = modifier,
+                modifier = modifier.focusRequester(focusRequester),
                 visualTransformation = if (!isSecure) VisualTransformation.None else PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
                 shape = RoundedCornerShape(12.dp),
@@ -71,7 +81,7 @@ fun InputField(
         } else {
             TextField(
                 value = value ?: "",
-                modifier = modifier,
+                modifier = modifier.focusRequester(focusRequester),
                 visualTransformation = if (!isSecure) VisualTransformation.None else PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
                 isError = errorMessage != null,

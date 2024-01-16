@@ -155,4 +155,15 @@ class AddDeviceFormViewModel @Inject constructor(
             }
         }
     }
+
+    fun resetState(){
+        name.value = InputData("")
+        id.value = InputData("")
+        province.value = InputData("")
+        city.value = InputData("")
+        district.value = InputData("")
+        address.value = InputData("")
+        waterSource.value = InputData("")
+        _buttonEnabled.value = false
+    }
 }

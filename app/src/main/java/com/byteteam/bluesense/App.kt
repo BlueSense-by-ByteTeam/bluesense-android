@@ -1,8 +1,6 @@
 package com.byteteam.bluesense
 
 import android.util.Log
-import android.webkit.URLUtil
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -224,7 +222,8 @@ fun App(
                     NotificationScreen(navController)
                 }
                 composable(Screens.History.route) {
-                    StatisticScreen(getHistoryToday = { historyViewModel.getTodayHistory() },
+                    StatisticScreen(
+                        getHistoryToday = { historyViewModel.getTodayHistory() },
                         getHistoryWeek = { historyViewModel.getWeekHistory() },
                         getHistoryMonth = { historyViewModel.getMonthHistory() },
                         getHistoryYear = { historyViewModel.getYearHistory() },
@@ -316,6 +315,7 @@ fun App(
                     )
 
                     AddDeviceFormScreen(
+                        resetFormState = { addDeviceFormViewModel.resetState() },
                         provinces = addDeviceViewModel.province.collectAsState().value,
                         cities = addDeviceViewModel.cities.collectAsState().value,
                         districs = addDeviceViewModel.districts.collectAsState().value,
@@ -389,13 +389,13 @@ fun App(
                 composable(Screens.SuccessResetPassword.route) {
                     SuccessResetPassScreen(navHostController = navController)
                 }
-                composable(Screens.Scan.route){
+                composable(Screens.Scan.route) {
                     ScannerPage(
                         navHostController = navController,
                         cbOnScanSuccess = {
-                            navController.navigate(Screens.AddDeviceForm.createRoute(it)){
-                                popUpTo(Screens.Scan.route){
-                                    inclusive=true
+                            navController.navigate(Screens.AddDeviceForm.createRoute(it)) {
+                                popUpTo(Screens.Scan.route) {
+                                    inclusive = true
                                 }
                             }
                         }

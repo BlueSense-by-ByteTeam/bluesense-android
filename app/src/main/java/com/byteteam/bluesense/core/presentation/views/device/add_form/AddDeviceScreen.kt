@@ -1,13 +1,11 @@
 package com.byteteam.bluesense.core.presentation.views.device.add_form
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -15,12 +13,12 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Devices.PIXEL_4
@@ -38,10 +36,10 @@ import com.byteteam.bluesense.core.presentation.widgets.ErrorAlertContent
 import com.byteteam.bluesense.core.presentation.widgets.InputField
 import com.byteteam.bluesense.ui.theme.BlueSenseTheme
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
 fun AddDeviceFormScreen(
+    resetFormState: () -> Unit,
     addDeviceScreenData: AddDeviceScreenData,
     idDeviceFromUrl: String?,
     provinces: List<ProvinceEntity>,
@@ -53,6 +51,8 @@ fun AddDeviceFormScreen(
     var provinceId: Int? by remember { mutableStateOf(null) }
     var cityId: Int? by remember { mutableStateOf(null) }
     var districtId: Int? by remember { mutableStateOf(null) }
+    var errorMessage: String? by remember { mutableStateOf(null) }
+    var firstRunWithDeviceId by remember{ mutableStateOf(false)  }
 
     LaunchedEffect(provinceId) {
         if (provinceId != null) getCitiesItem(provinceId!!)
@@ -62,18 +62,29 @@ fun AddDeviceFormScreen(
         if (cityId != null) getDistrictItem(provinceId!!, cityId!!)
     }
 
-    LaunchedEffect(Unit){
-        if(idDeviceFromUrl != "no_data") addDeviceScreenData.updateId(idDeviceFromUrl!!)
-    }
-
-    var errorMessage: String? by remember { mutableStateOf(null) }
     LaunchedEffect(Unit) {
+        Log.d("Add device screen", "launchedeffect run: ")
+        if(idDeviceFromUrl != "no_data"){
+            addDeviceScreenData.updateId(idDeviceFromUrl!!)
+            firstRunWithDeviceId = true
+        }
         addDeviceScreenData.eventMessage?.collect { event ->
             when (event) {
                 is SingleEvent.MessageEvent -> errorMessage = event.message
             }
         }
     }
+
+    DisposableEffect(Unit){
+        onDispose {
+            if(!firstRunWithDeviceId){
+                Log.d("Add device screen", "disposable run: ")
+                resetFormState()
+            }
+            firstRunWithDeviceId = false
+        }
+    }
+
     Column(
         Modifier
             .fillMaxWidth()
@@ -99,12 +110,15 @@ fun AddDeviceFormScreen(
             modifier = Modifier.padding(bottom = 24.dp)
         ) {
             InputField(
+                errorMessage = addDeviceScreenData.name.errorMessage,
+                withInitialFocus = true,
                 label = stringResource(R.string.device_name),
                 value = addDeviceScreenData.name.data,
                 onUpdate = addDeviceScreenData.updateName,
                 modifier = Modifier.fillMaxWidth()
             )
             InputField(
+                errorMessage = addDeviceScreenData.id.errorMessage,
                 label = stringResource(R.string.id_device),
                 value =  addDeviceScreenData.id.data,
                 onUpdate = addDeviceScreenData.updateId,
@@ -138,11 +152,13 @@ fun AddDeviceFormScreen(
                 modifier = Modifier.fillMaxWidth()
             )
             InputField(
+                errorMessage = addDeviceScreenData.address.errorMessage,
                 label = stringResource(R.string.address), value = addDeviceScreenData.address.data,
                 onUpdate = addDeviceScreenData.updateAddress,
                 modifier = Modifier.fillMaxWidth()
             )
             InputField(
+                errorMessage = addDeviceScreenData.waterSource.errorMessage,
                 label = stringResource(R.string.water_source),
                 value = addDeviceScreenData.waterSource.data,
                 onUpdate = addDeviceScreenData.updateWaterSource,

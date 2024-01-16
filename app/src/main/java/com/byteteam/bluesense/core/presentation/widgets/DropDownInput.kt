@@ -52,10 +52,6 @@ fun DropDownInput(label: String, options: List<Pair<String, Int>>, callbakOnSele
         Icons.Filled.KeyboardArrowDown
     }
 
-    LaunchedEffect(Unit) {
-        focusRequester.requestFocus()
-    }
-
     Column {
         TextField(
             value = selectedText,

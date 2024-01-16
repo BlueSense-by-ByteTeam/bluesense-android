@@ -98,11 +98,7 @@ fun Topbars(actions: Map<String, () -> Unit>, route: String, navHostController: 
             },
             navigationIcon = {
                 IconButton(onClick = {
-                    navHostController.navigate(Screens.AddDevice.route) {
-                        popUpTo(Screens.AddDeviceForm.route) {
-                            inclusive = true
-                        }
-                    }
+                    navHostController.popBackStack()
                 }) {
                     Icon(
                         imageVector = Icons.Default.ArrowBack,
