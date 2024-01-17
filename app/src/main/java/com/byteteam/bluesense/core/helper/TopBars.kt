@@ -28,6 +28,7 @@ fun Topbars(actions: Map<String, () -> Unit>, route: String, navHostController: 
     val topAppBarColors = TopAppBarDefaults.topAppBarColors(
         containerColor = MaterialTheme.colorScheme.background
     )
+
     when (route) {
         Screens.Home.route -> TopAppBar(
             colors = topAppBarColors,
@@ -76,7 +77,7 @@ fun Topbars(actions: Map<String, () -> Unit>, route: String, navHostController: 
             },
             actions = {
                 IconButton(onClick = {
-
+                    actions[Screens.Notification.route]?.invoke()
                 }) {
                     Icon(
                         imageVector = Icons.Default.Delete,

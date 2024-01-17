@@ -14,10 +14,6 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 @Module
 object DatabaseModule {
-    @Provides
-    fun provideAttendanceDao(appDatabase: MainDatabase): NotificationDao {
-        return appDatabase.notificationDao()
-    }
 
     @Provides
     @Singleton
@@ -27,5 +23,9 @@ object DatabaseModule {
             MainDatabase::class.java,
             "bluesense_db"
         ).build()
+    }
+    @Provides
+    fun provideAttendanceDao(appDatabase: MainDatabase): NotificationDao {
+        return appDatabase.notificationDao()
     }
 }

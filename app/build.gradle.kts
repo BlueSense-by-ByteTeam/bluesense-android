@@ -131,8 +131,8 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest")
     //PAHO MQTT
 //    implementation("org.eclipse.paho:org.eclipse.paho.android.service:1.1.1")
-    implementation("org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.5")
-    implementation("com.github.hannesa2:paho.mqtt.android:3.3.5")
+//    implementation("org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.5")
+    implementation("com.github.hannesa2:paho.mqtt.android:4.2")
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
     //QR Scanner
     implementation("com.google.android.gms:play-services-code-scanner:16.1.0")
@@ -175,7 +175,7 @@ dependencies {
     implementation("androidx.camera:camera-lifecycle:1.3.1")
     implementation("androidx.camera:camera-view:1.3.1")
     //Room database
-    val room_version = "2.4.3"
+    val room_version = "2.5.1"
     implementation("androidx.room:room-runtime:$room_version")
     implementation("androidx.room:room-ktx:$room_version")
     implementation("androidx.compose.runtime:runtime-livedata:1.2.1")

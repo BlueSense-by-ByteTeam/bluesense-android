@@ -36,6 +36,7 @@ import com.byteteam.bluesense.core.presentation.views.getstarted.GetStartedScree
 import com.byteteam.bluesense.core.presentation.views.home.HomeScreen
 import com.byteteam.bluesense.core.presentation.views.home.HomeViewModel
 import com.byteteam.bluesense.core.presentation.views.notification.NotificationScreen
+import com.byteteam.bluesense.core.presentation.views.notification.NotificationViewModel
 import com.byteteam.bluesense.core.presentation.views.onboard.OnBoardScreen
 import com.byteteam.bluesense.core.presentation.views.onboard.OnBoardViewModel
 import com.byteteam.bluesense.core.presentation.views.profile.ProfileScreen
@@ -75,12 +76,13 @@ fun App(
     storeViewModel: StoreViewModel,
     resetPasswordViewModel: ResetPasswordViewModel,
     historyViewModel: StatisticHistoryViewModel,
+    notificationViewModel: NotificationViewModel,
 ) {
 
     Scaffold(topBar = {
         Topbars(
             route = currentRoute ?: "",
-            actions = mapOf(Screens.DetailDevice.route to { detailDeviceViewModel.openDeleteModal() }),
+            actions = mapOf(Screens.DetailDevice.route to { detailDeviceViewModel.openDeleteModal() }, Screens.Notification.route to { notificationViewModel.openDeleteModal()  }),
             navHostController = navController
         )
     }, bottomBar = {
@@ -219,7 +221,14 @@ fun App(
                     )
                 }
                 composable(Screens.Notification.route) {
-                    NotificationScreen(navController)
+                    NotificationScreen(
+                        notificationState = notificationViewModel.notifications,
+                        getNotification = {notificationViewModel.getNotificationsCurrentUser()},
+                        deleteNotification = {notificationViewModel.deleteNotificationsCurrentUser()},
+                        closeDeleteModal = {notificationViewModel.closeDeleteModal()},
+                        isModalOpen = notificationViewModel.isDeleteModalOpen.collectAsState().value,
+                        onDelete  = notificationViewModel.onDelete.collectAsState().value,
+                    )
                 }
                 composable(Screens.History.route) {
                     StatisticScreen(

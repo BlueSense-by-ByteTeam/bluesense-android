@@ -51,6 +51,7 @@ class AuthRepositoryImpl @Inject constructor(
                 ),
                 errorMessage = null
             )
+            dataStorePreference.setUserId(result.user?.uid ?: "")
             dataStorePreference.setAuthToken(idToken.token ?: "")
             return flowOf(signInResult)
         } catch (e: Exception) {
@@ -88,6 +89,8 @@ class AuthRepositoryImpl @Inject constructor(
                 profilePicUrl = result.user?.photoUrl.toString() ,
                 credential = idToken.token ?: ""
             )
+
+            dataStorePreference.setUserId(result.user?.uid ?: "")
             dataStorePreference.setAuthToken(idToken.token ?: "")
             return flowOf(SignInResult(data = data, errorMessage = null))
         } catch (e: Exception) {
@@ -122,6 +125,8 @@ class AuthRepositoryImpl @Inject constructor(
                 profilePicUrl = user?.photoUrl.toString() ,
                 credential = idToken.token ?: ""
             )
+
+            dataStorePreference.setUserId(user?.uid ?: "")
             return flowOf(SignInResult(data = data, errorMessage = null))
         }catch (e: Exception){
             return flowOf(SignInResult(data = null, errorMessage = e.message))

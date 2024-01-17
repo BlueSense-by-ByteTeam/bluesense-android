@@ -44,6 +44,7 @@ class GoogleSignInClientHelper @Inject constructor(
 
             val data = user?.let {
                 dataStorePreference.setAuthToken(googleIdToken)
+                dataStorePreference.setUserId(it.uid)
                 UserData(
                     userId = it.uid,
                     userName = it.displayName ?: "-",
@@ -73,6 +74,7 @@ class GoogleSignInClientHelper @Inject constructor(
             client.signOut().await()
             auth.signOut()
             dataStorePreference.setAuthToken("")
+            dataStorePreference.setUserId("")
         } catch (e: Exception) {
             e.printStackTrace()
             if (e is CancellationException) throw e

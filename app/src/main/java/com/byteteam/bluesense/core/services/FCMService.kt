@@ -13,12 +13,23 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import com.byteteam.bluesense.MainActivity
 import com.byteteam.bluesense.R
+import com.byteteam.bluesense.core.data.source.local.room.dao.NotificationDao
+import com.byteteam.bluesense.core.data.source.local.room.model.NotificationEntity
+import com.byteteam.bluesense.core.domain.repositories.NotificationRepository
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import dagger.hilt.android.AndroidEntryPoint
+import java.util.UUID
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class FCMService : FirebaseMessagingService() {
     private val TAG = this.javaClass.simpleName
+
+    @Inject
+    lateinit var notificationRepository: NotificationRepository
+
     override fun onNewToken(token: String) {
         super.onNewToken(token)
         Log.d(TAG, "onNewToken: $token")
@@ -31,6 +42,15 @@ class FCMService : FirebaseMessagingService() {
         Log.d(TAG, "Message data payload: " + message.data)
         Log.d(TAG, "Message Notification Body: ${message.notification?.body}")
 
+        val notificationEntity = NotificationEntity(
+            id = UUID.randomUUID().toString(),
+            userId = "user-dummy",
+            title = message.notification?.title ?: "Peringatan",
+            body = message.notification?.body ?: "Airmu tidak layak!",
+            createdAt = "-"
+        )
+
+        notificationRepository.insertNewNotification(notificationEntity)
         sendNotification(message.notification?.title, message.notification?.body)
     }
 

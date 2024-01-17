@@ -62,6 +62,11 @@ class MqttClientHelper(
         })
     }
 
+    fun release(){
+        client?.unregisterResources();
+        client?.close();
+    }
+
     private fun MqttAndroidClient.subscribeToTopic(topic: String, cbOnConnected: () -> Unit = {}, cbOnFail: () -> Unit = {}) {
         this.subscribe(topic, QoS.AtLeastOnce.value, null, object : IMqttActionListener {
             override fun onSuccess(asyncActionToken: IMqttToken) {
