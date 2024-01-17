@@ -95,4 +95,6 @@
     <string name="ph_title">PH</string>
     <string name="ph_desc">pH adalah parameter penting yang mengukur tingkat keasaman atau kebasaan dalam air. Rentang pH berkisar dari 0 hingga 14, di mana nilai 7 dianggap netral. Nilai di bawah 7 menunjukkan keasaman, sedangkan nilai di atas 7 menunjukkan kebasaan. Pengukuran pH menjadi kunci dalam menentukan kualitas air karena berbagai kegiatan biologis dan kimia dipengaruhi oleh tingkat keasaman atau kebasaan.</string>
     <string name="permission_camera_rejeected">Untuk bisa menggunakan fitur ini anda harus mengizinkan akses permission kamera. Buka setting aplikasi untuk mengizinkan permission kamera.</string>
+    <string name="no_notification">Tidak ada notifikasi</string>
+    <string name="no_notification_desc">Tidak ada notifikasi yang perlu diperhatikan saat ini.</string>
 </resources>

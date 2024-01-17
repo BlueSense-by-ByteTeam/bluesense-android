@@ -41,40 +41,52 @@ class DetailDeviceViewModel @Inject constructor(
     private val eventChannel = Channel<SingleEvent>()
     val eventFlow = eventChannel.receiveAsFlow()
 
-    fun updateDeviceStatus(status: Boolean){
+    fun updateDeviceStatus(status: Boolean) {
         _isConnected.value = status
     }
-    
-    fun openDeleteModal(){
+
+    fun openDeleteModal() {
         _openDeleteModal.value = true
     }
-    
-    fun closeDeleteModal(){
+
+    fun closeDeleteModal() {
         _openDeleteModal.value = false
     }
-    
-    fun deleteDevice(id: String, callbackOnSuccess: () -> Unit){
+
+    fun deleteDevice(id: String, callbackOnSuccess: () -> Unit) {
         viewModelScope.launch {
             _onDelete.value = true
             try {
                 deviceRepository.deleteDevice(id).catch {
-                    eventChannel.send(SingleEvent.MessageEvent(it.message ?: "Error delete device data"))
-                }.collect{
+                    eventChannel.send(
+                        SingleEvent.MessageEvent(
+                            it.message ?: "Error delete device data"
+                        )
+                    )
+                }.collect {
                     callbackOnSuccess()
+                    reset()
                 }
             } catch (e: Exception) {
                 eventChannel.send(SingleEvent.MessageEvent(e.message ?: "Error delete device data"))
-            }finally {
+            } finally {
                 _onDelete.value = false
                 _openDeleteModal.value = false
             }
         }
     }
 
-    fun updateDeviceSensorValue(data: SensorData){
+    private fun reset() {
+        _isConnected.value = false
+        _data.value = null
+        _waterStatus.value = null
+        _waterQuality.value = null
+    }
+
+    fun updateDeviceSensorValue(data: SensorData) {
         val detectionResult = WaterQuality.checkWater(data.tds, data.ph)
         _data.value = data
-        _waterQuality.value = if(detectionResult.first) "baik" else "buruk"
-        _waterStatus.value = if(detectionResult.second) "baik" else "buruk"
+        _waterQuality.value = if (detectionResult.first) "baik" else "buruk"
+        _waterStatus.value = if (detectionResult.second) "baik" else "buruk"
     }
 }

@@ -1,5 +1,7 @@
 package com.byteteam.bluesense.core.presentation.views.notification.widgets
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,9 +19,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.byteteam.bluesense.core.data.source.local.room.model.NotificationEntity
+import com.byteteam.bluesense.core.helper.formatUIDate
+import java.time.LocalDateTime
 
 @Composable
-fun NotificationItem(){
+fun NotificationItem(
+    notificationEntity: NotificationEntity
+){
     Row(
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp)
@@ -37,15 +44,15 @@ fun NotificationItem(){
         )
         Column(Modifier.weight(1f)) {
             Text(
-                text = "Air Buruk!",
+                text = notificationEntity.title ?: "Air Buruk!",
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
             Text(
-                text = "Penting! Kualitas air saat ini menunjukkan tingkat yang tidak memadai.",
+                text = notificationEntity.body ?: "Penting! Kualitas air saat ini menunjukkan tingkat yang tidak memadai.",
                 modifier = Modifier.padding(bottom = 8.dp)
             )
         }
-        Text(text = "06.06", color = Color.Black)
+        Text(text = notificationEntity.createdAt.formatUIDate(), color = Color.Black)
     }
 }

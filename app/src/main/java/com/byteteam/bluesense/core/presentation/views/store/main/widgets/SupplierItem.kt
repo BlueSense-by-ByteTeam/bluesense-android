@@ -18,6 +18,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.byteteam.bluesense.R
@@ -37,8 +38,10 @@ fun SupplierItem(waterSupplierEntity: WaterSupplierEntity, modifier: Modifier = 
             .padding(end = 8.dp)
             .clip(RoundedCornerShape(12.dp))
             .width(150.dp)
+            .height(194.dp)
+            .padding(bottom = 7.dp)
     ) {
-        Column(Modifier.padding(bottom = 7.dp)) {
+        Column() {
             AsyncImage(
                 model = waterSupplierEntity.imageUrl,
                 contentDescription = stringResource(R.string.water_supplier_image),
@@ -47,6 +50,8 @@ fun SupplierItem(waterSupplierEntity: WaterSupplierEntity, modifier: Modifier = 
             )
             Text(
                 text = waterSupplierEntity.name,
+                maxLines=2,
+                overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.padding(
                     top = 8.dp,
                     start = 12.dp,

@@ -32,6 +32,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.byteteam.bluesense.R
@@ -152,7 +153,11 @@ fun DeviceInfoCard(
                         isDataNull = (it.data?.id == null)
 
                         Text(
-                            text = it.data?.quality ?: "-",
+                            text = when {
+                                statusDevice.collectAsState().value && it.data?.quality == "buruk" -> "Air buruk!"
+                                statusDevice.collectAsState().value && it.data?.quality == "baik" -> "Air aman"
+                                else -> "-"
+                            },
                             color =
                             if (isBad) Color.Black else {
                                 if (it.data?.quality != null) MaterialTheme.colorScheme.onPrimary else Color.Black
@@ -188,7 +193,8 @@ fun DeviceInfoCard(
                         )
                     )
                     .weight(1f)
-                    .padding(horizontal = 16.dp, vertical = 20.dp)
+                    .height(96.dp)
+                    .padding(horizontal = 16.dp, vertical = 12.dp)
             ) {
                 Column {
                     Text(
@@ -210,8 +216,13 @@ fun DeviceInfoCard(
                             )
 
                             is Resource.Success -> Text(
-                                text = waterStatusRealtime.collectAsState().value
-                                    ?: it.data?.quality ?: "-",
+                                text =
+                                when {
+                                    !statusDevice.collectAsState().value -> "-"
+                                    statusDevice.collectAsState().value && waterStatusRealtime.collectAsState().value != null -> waterStatusRealtime.collectAsState().value!!.capitalize()
+                                    statusDevice.collectAsState().value && it.data?.quality != null -> it.data?.quality!!.capitalize()
+                                    else -> "-"
+                                },
                                 color =
                                 if (it.data?.quality != null) MaterialTheme.colorScheme.onPrimary else Color.Black,
                                 fontWeight = FontWeight.Bold
@@ -230,7 +241,8 @@ fun DeviceInfoCard(
                         )
                     )
                     .weight(1f)
-                    .padding(horizontal = 16.dp, vertical = 20.dp)
+                    .height(96.dp)
+                    .padding(horizontal = 16.dp, vertical = 12.dp)
             ) {
                 Column {
                     Text(
@@ -251,8 +263,12 @@ fun DeviceInfoCard(
                             )
 
                             is Resource.Success -> Text(
-                                text = waterStatusRealtime.collectAsState().value ?: it.data?.status
-                                ?: "-",
+                                text =
+                                when {
+                                    statusDevice.collectAsState().value && waterStatusRealtime.collectAsState().value == "baik" || it.data?.status == "baik" -> "Dapat diminum"
+                                    statusDevice.collectAsState().value && waterStatusRealtime.collectAsState().value == "buruk" || it.data?.status == "buruk" -> "Tidak Dapat diminum"
+                                    else -> "-"
+                                },
                                 color = if (it.data?.quality != null) MaterialTheme.colorScheme.onPrimary else Color.Black,
                                 fontWeight = FontWeight.Bold
                             )

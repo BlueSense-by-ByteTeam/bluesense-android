@@ -66,6 +66,7 @@ fun App(
     signInGoogle: () -> Unit,
     callbackOnSuccessSignIn: () -> Unit,
     callbackOnConnected: (DeviceEntity) -> Unit,
+    callbackOnDisconnectDevice: (String) -> Unit,
     authViewModel: AuthViewModel,
     onBoardViewModel: OnBoardViewModel,
     registerViewModel: RegisterViewModel,
@@ -78,11 +79,13 @@ fun App(
     historyViewModel: StatisticHistoryViewModel,
     notificationViewModel: NotificationViewModel,
 ) {
-
+    var mqttTopic by remember { mutableStateOf("") }
     Scaffold(topBar = {
         Topbars(
             route = currentRoute ?: "",
-            actions = mapOf(Screens.DetailDevice.route to { detailDeviceViewModel.openDeleteModal() }, Screens.Notification.route to { notificationViewModel.openDeleteModal()  }),
+            actions = mapOf(
+                Screens.DetailDevice.route to { detailDeviceViewModel.openDeleteModal() },
+                Screens.Notification.route to { notificationViewModel.openDeleteModal() }),
             navHostController = navController
         )
     }, bottomBar = {
@@ -141,7 +144,7 @@ fun App(
                         password = authViewModel.password.collectAsState().value,
                         onUpdateEmail = { authViewModel.updateEmail(it) },
                         onUpdatePassword = { authViewModel.updatePassword(it) },
-                        onResetState = {authViewModel.resetState()},
+                        onResetState = { authViewModel.resetState() },
                         onTapSignInEmailPassword = {
                             authViewModel.signInEmailPassword(callbackOnSuccess = {
                                 homeViewModel.getDevices()
@@ -171,7 +174,7 @@ fun App(
                     }
 
                     val data = SignupScreenContentData(
-                        onResetState = {registerViewModel.resetState()},
+                        onResetState = { registerViewModel.resetState() },
                         name = registerViewModel.name.collectAsState().value,
                         email = registerViewModel.email.collectAsState().value,
                         password = registerViewModel.password.collectAsState().value,
@@ -213,7 +216,10 @@ fun App(
                         waterQualityRealtime = detailDeviceViewModel.waterQuality,
                         waterStatusRealtime = detailDeviceViewModel.waterStatus,
                         statusDevice = detailDeviceViewModel.isConnected,
-                        cbOnDeviceConnected = { callbackOnConnected(it) },
+                        cbOnDeviceConnected = {
+                            callbackOnConnected(it)
+                            mqttTopic = it.mqttTopic
+                        },
                         devices = homeViewModel.devices,
                         detailDevice = homeViewModel.detailDeviceLatestInfo,
                         getDevices = { homeViewModel.getDevices() },
@@ -223,11 +229,11 @@ fun App(
                 composable(Screens.Notification.route) {
                     NotificationScreen(
                         notificationState = notificationViewModel.notifications,
-                        getNotification = {notificationViewModel.getNotificationsCurrentUser()},
-                        deleteNotification = {notificationViewModel.deleteNotificationsCurrentUser()},
-                        closeDeleteModal = {notificationViewModel.closeDeleteModal()},
+                        getNotification = { notificationViewModel.getNotificationsCurrentUser() },
+                        deleteNotification = { notificationViewModel.deleteNotificationsCurrentUser() },
+                        closeDeleteModal = { notificationViewModel.closeDeleteModal() },
                         isModalOpen = notificationViewModel.isDeleteModalOpen.collectAsState().value,
-                        onDelete  = notificationViewModel.onDelete.collectAsState().value,
+                        onDelete = notificationViewModel.onDelete.collectAsState().value,
                     )
                 }
                 composable(Screens.History.route) {
@@ -340,7 +346,8 @@ fun App(
                 }
                 composable(Screens.DetailDevice.route) {
                     val id = it.arguments?.getString("id")
-
+                    val mqttTopic = it.arguments?.getString("mqttTopic")
+//                    val mqttTopic = homeViewModel.devices?.collectAsState()?.value?.data?.get(0)?.mqttTopic
                     DetailDeviceScreen(
                         statusDevice = detailDeviceViewModel.isConnected,
                         sensorData = detailDeviceViewModel.data,
@@ -352,6 +359,7 @@ fun App(
                         waterStatusRealtime = detailDeviceViewModel.waterStatus,
                         onDeleteDevice = {
                             detailDeviceViewModel.deleteDevice(id ?: "", callbackOnSuccess = {
+                                callbackOnDisconnectDevice(mqttTopic ?: "-")
                                 navController.navigate(Screens.Home.route) {
                                     popUpTo(Screens.DetailDevice.createRoute(id ?: "")) {
                                         inclusive = true
@@ -378,7 +386,7 @@ fun App(
                         )
                     } else {
                         DetailProductScreen(
-                            getFeaturedWaterFilter = {storeViewModel.getFeaturedWaterFilters()},
+                            getFeaturedWaterFilter = { storeViewModel.getFeaturedWaterFilters() },
                             waterFilterState = storeViewModel.featuredWaterFilter
                         )
                     }

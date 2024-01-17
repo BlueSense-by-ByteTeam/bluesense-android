@@ -7,6 +7,7 @@ import com.byteteam.bluesense.core.domain.model.WaterFilterEntity
 import com.byteteam.bluesense.core.domain.model.WaterSupplierEntity
 import com.byteteam.bluesense.core.domain.repositories.StoreRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
@@ -26,7 +27,7 @@ class StoreViewModel @Inject constructor(
     val featuredWaterFilter: StateFlow<Resource<WaterFilterEntity>> = _featuredWaterFilter
 
     fun getWaterSuppliers(){
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 storeRepository.getWaterSuppliers().catch {
                     _waterSuppliers.value = Resource.Error(it.message ?: "Error saat mengambil data supplier air!")
@@ -39,7 +40,7 @@ class StoreViewModel @Inject constructor(
         }
     }
     fun getWaterFilters(){
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 storeRepository.getWaterFilters().catch {
                     _waterFilters.value = Resource.Error(it.message ?: "Error saat mengambil data supplier air!")
@@ -53,7 +54,7 @@ class StoreViewModel @Inject constructor(
     }
 
     fun getFeaturedWaterFilters(){
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 storeRepository.getFeaturedWaterFilter().catch {
                     _featuredWaterFilter.value = Resource.Error(it.message ?: "Error saat mengambil data supplier air!")

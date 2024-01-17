@@ -1,5 +1,6 @@
 package com.byteteam.bluesense.core.presentation.views.notification
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.byteteam.bluesense.core.data.common.Resource
@@ -7,6 +8,7 @@ import com.byteteam.bluesense.core.data.source.local.room.model.NotificationEnti
 import com.byteteam.bluesense.core.domain.repositories.NotificationRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
@@ -33,6 +35,7 @@ class NotificationViewModel @Inject constructor(
     }
 
     fun getNotificationsCurrentUser(){
+        Log.d("TAG", "getNotificationsCurrentUser: ")
         _notifications.value = Resource.Loading()
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -51,12 +54,14 @@ class NotificationViewModel @Inject constructor(
         _onDelete.value = true
         viewModelScope.launch(Dispatchers.IO) {
             _notifications.value = Resource.Loading()
+            delay(200)
             try {
                 notificationRepository.deleteNotificationFromCurrentUser()
             }catch (e: Exception){
                 _notifications.value = Resource.Error(e.message ?: "Error saat mengambil data notifikasi")
             }finally {
                 _onDelete.value = false
+                closeDeleteModal()
             }
         }
     }

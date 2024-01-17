@@ -12,6 +12,7 @@ import com.byteteam.bluesense.core.domain.repositories.DeviceRepository
 import com.byteteam.bluesense.core.services.FCMService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
@@ -33,7 +34,7 @@ class HomeViewModel @Inject constructor(
     val detailDeviceLatestInfo: StateFlow<Resource<DeviceLatestInfoEntity?>> = _detailDeviceInfo
 
     fun getDevices() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             _devices.value = Resource.Loading()
             try {
                 deviceRepository.getDevices().catch {
@@ -43,6 +44,9 @@ class HomeViewModel @Inject constructor(
                     if (it.isNotEmpty()) {
                         getDetailDeviceInfo(it[0].id)
                         FCMService.subscribeTopic(appContext, it[0].macId)
+                    }else{
+//                        Log.d(TAG, "getDevices: ")
+                        resetDetailDeviceInfo()
                     }
                 }
             } catch (e: Exception) {
@@ -51,8 +55,12 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    private fun resetDetailDeviceInfo(){
+        _detailDeviceInfo.value = Resource.Success(null)
+    }
+
     private fun getDetailDeviceInfo(id: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             _detailDeviceInfo.value = Resource.Loading()
             try {
                 deviceRepository.getLatestDeviceDetail(id).catch {

@@ -82,6 +82,7 @@ class MainActivity : ComponentActivity() {
         mqttConnectOptions.apply {
             this.userName = BuildConfig.MQTT_USERNAME
             this.password = BuildConfig.MQTT_PASSWORD.toCharArray()
+            this.isAutomaticReconnect = true
         }
 
         setContent {
@@ -148,6 +149,10 @@ class MainActivity : ComponentActivity() {
                 )
             }
 
+            fun callbackOndisconnectDevice(topic: String) {
+                mqttClientHelper?.client?.unsubscribe(topic)
+            }
+
             BlueSenseTheme {
                 App(
                     currentRoute = currentRoute,
@@ -166,6 +171,7 @@ class MainActivity : ComponentActivity() {
                     resetPasswordViewModel = resetPasswordViewModel,
                     historyViewModel = historyViewModel,
                     notificationViewModel = notificationViewModel,
+                    callbackOnDisconnectDevice = { callbackOndisconnectDevice(it) }
                 )
             }
         }

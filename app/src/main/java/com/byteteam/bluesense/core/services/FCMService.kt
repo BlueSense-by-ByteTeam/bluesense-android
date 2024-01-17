@@ -16,10 +16,15 @@ import com.byteteam.bluesense.R
 import com.byteteam.bluesense.core.data.source.local.room.dao.NotificationDao
 import com.byteteam.bluesense.core.data.source.local.room.model.NotificationEntity
 import com.byteteam.bluesense.core.domain.repositories.NotificationRepository
+import com.byteteam.bluesense.core.helper.getFormatedDate
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.util.Date
 import java.util.UUID
 import javax.inject.Inject
 
@@ -47,11 +52,11 @@ class FCMService : FirebaseMessagingService() {
             userId = "user-dummy",
             title = message.notification?.title ?: "Peringatan",
             body = message.notification?.body ?: "Airmu tidak layak!",
-            createdAt = "-"
+            createdAt = Date().getFormatedDate()
         )
 
-        notificationRepository.insertNewNotification(notificationEntity)
         sendNotification(message.notification?.title, message.notification?.body)
+        notificationRepository.insertNewNotification(notificationEntity)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -64,7 +69,8 @@ class FCMService : FirebaseMessagingService() {
             PendingIntent.FLAG_IMMUTABLE
         )
 
-        val notificationBuilder = NotificationCompat.Builder(applicationContext,
+        val notificationBuilder = NotificationCompat.Builder(
+            applicationContext,
             NOTIFICATION_CHANNEL_ID
         )
             .setSmallIcon(R.drawable.bluesense_ic_white_no_bg)
@@ -74,13 +80,21 @@ class FCMService : FirebaseMessagingService() {
             .setContentIntent(contentPendingIntent)
             .setAutoCancel(true)
 
-        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val channel = NotificationChannel(NOTIFICATION_CHANNEL_ID, NOTIFICATION_CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH)
+        val notificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val channel = NotificationChannel(
+            NOTIFICATION_CHANNEL_ID,
+            NOTIFICATION_CHANNEL_NAME,
+            NotificationManager.IMPORTANCE_HIGH
+        )
         notificationBuilder.setChannelId(NOTIFICATION_CHANNEL_ID)
         notificationManager.createNotificationChannel(channel)
-        notificationManager.notify(NOTIFICATION_ID, notificationBuilder.setDefaults(Notification.DEFAULT_ALL).setPriority(
-            NotificationCompat.PRIORITY_MAX)
-            .build())
+        notificationManager.notify(
+            NOTIFICATION_ID, notificationBuilder.setDefaults(Notification.DEFAULT_ALL).setPriority(
+                NotificationCompat.PRIORITY_MAX
+            )
+                .build()
+        )
     }
 
 
@@ -91,13 +105,24 @@ class FCMService : FirebaseMessagingService() {
         private const val NOTIFICATION_CHANNEL_NAME = "Firebase Notification"
 
 
-        fun subscribeTopic(context: Context, topic: String){
+        fun subscribeTopic(context: Context, topic: String) {
             try {
-
                 FirebaseMessaging.getInstance().subscribeToTopic(topic)
-                Toast.makeText(context, "Notifikasi aktif untuk device id: $topic", Toast.LENGTH_SHORT).show()
-            }catch (e: Exception){
-                Toast.makeText(context, "Gagal menginisiasi notifikasi. Error: ${e.message}", Toast.LENGTH_SHORT).show()
+                CoroutineScope(Dispatchers.Main).launch {
+                    Toast.makeText(
+                        context,
+                        "Notifikasi aktif untuk device id: $topic",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            } catch (e: Exception) {
+                CoroutineScope(Dispatchers.Main).launch {
+                    Toast.makeText(
+                        context,
+                        "Gagal menginisiasi notifikasi. Error: ${e.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
         }
     }

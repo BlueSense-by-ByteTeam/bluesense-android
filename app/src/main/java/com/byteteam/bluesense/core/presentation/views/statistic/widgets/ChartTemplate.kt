@@ -1,6 +1,7 @@
 package com.byteteam.bluesense.core.presentation.views.statistic.widgets
 
 import android.graphics.Color
+import androidx.compose.foundation.layout.height
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -49,7 +50,7 @@ fun ChartTemplate(chartEntryModelProducer: ChartEntryModelProducer, modifier: Mo
         entityColors = listOf(MaterialTheme.colorScheme.primary),
     )) {
         Chart(
-            modifier = modifier,
+            modifier = modifier.height(194.dp),
             chart = columnChart(),
             chartModelProducer = chartEntryModelProducer,
             startAxis = rememberStartAxis(),

@@ -14,21 +14,29 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.byteteam.bluesense.core.presentation.tokens.SortData
 import com.byteteam.bluesense.core.presentation.tokens.SortDateLog
 
 @Composable
-fun OptionSortDateTemplate(sortDates: Map<String, SortDateLog>, selectedDate: SortDateLog?, onClick: (SortDateLog?) -> Unit, modifier: Modifier = Modifier){
+fun OptionSortDateTemplate(
+    sortDates: Map<String, SortDateLog>,
+    selectedDate: SortDateLog?,
+    onClick: (SortDateLog?) -> Unit,
+    disabledClick: Boolean = false,
+    modifier: Modifier = Modifier
+) {
     LazyRow(contentPadding = PaddingValues(start = 24.dp)) {
         items(sortDates.keys.toList()) {
-            val borderColor = if (selectedDate==sortDates[it]) MaterialTheme.colorScheme.primary else Color(0xFFD9D9D9)
+            val borderColor =
+                if (selectedDate == sortDates[it]) MaterialTheme.colorScheme.primary else Color(
+                    0xFFD9D9D9
+                )
 
             OutlinedButton(
-                onClick = { onClick(sortDates[it]) },
+                onClick = { if(!disabledClick) onClick(sortDates[it]) },
                 shape = RoundedCornerShape(8.dp),
                 border = BorderStroke(width = 1.dp, color = borderColor),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = if (selectedDate == sortDates[it]) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.background
+                    containerColor = (if (selectedDate == sortDates[it]) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.background).copy(alpha = if(disabledClick) 0.4f else 1f)
                 ),
                 modifier = Modifier.padding(end = 12.dp)
             ) {

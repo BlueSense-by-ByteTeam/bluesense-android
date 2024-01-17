@@ -13,19 +13,23 @@ import androidx.compose.ui.unit.dp
 import com.byteteam.bluesense.R
 
 @Composable
-fun StatsTextTemplate(modifier: Modifier = Modifier){
+fun StatsTextTemplate(
+    min: String,
+    max: String,
+    average: String,
+    modifier: Modifier = Modifier){
     Column(modifier.padding(top = 20.dp, start = 24.dp, end = 24.dp)) {
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
             Text(text = stringResource(R.string.minimal))
-            Text(text = "Baik")
+            Text(text =  min)
         }
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
             Text(text = stringResource(R.string.average))
-            Text(text = "Baik")
+            Text(text = average)
         }
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
             Text(text = stringResource(R.string.maximal))
-            Text(text = "Baik")
+            Text(text = average)
         }
     }
 }

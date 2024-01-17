@@ -1,7 +1,11 @@
 package com.byteteam.bluesense.core.presentation.views.home
 
+import android.util.Log
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -62,10 +66,11 @@ fun HomeScreen(
     var dataEntity: DeviceEntity? by remember { mutableStateOf(null) }
 
     LaunchedEffect(dataEntity) {
+        Log.d("TAG", "HomeScreen: $dataEntity")
         if (dataEntity != null) cbOnDeviceConnected(dataEntity!!)
     }
 
-    fun fetchData(){
+    fun fetchData() {
         fetchingApi = true
         getDevices()
     }
@@ -84,12 +89,17 @@ fun HomeScreen(
                 when (it) {
                     is Resource.Loading -> {
                         if (!fetchingApi) fetchData()
-                        CircularProgressIndicator()
+                        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+                            CircularProgressIndicator()
+                        }
                     }
 
                     is Resource.Error -> {
                         fetchingApi = false
-                        ErrorHandler(onPressRetry = { fetchData() }, errorText = "Error: ${it.message}")
+                        ErrorHandler(
+                            onPressRetry = { fetchData() },
+                            errorText = "Error: ${it.message}"
+                        )
                     }
 
                     is Resource.Success -> {

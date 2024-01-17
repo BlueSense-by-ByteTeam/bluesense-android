@@ -44,6 +44,10 @@ fun BannerWaterStatus(
             .padding(vertical = 12.dp, horizontal = 20.dp)
     ) {
         if (connected) {
+
+            Log.d("TAG", "BannerWaterStatus: $waterQualityRealtimeState")
+            Log.d("TAG", "BannerWaterStatus: $waterQualityHistory")
+
             Text(
                 text = when {
                     waterQualityRealtimeState == "baik" -> "Air Aman!"
@@ -53,6 +57,7 @@ fun BannerWaterStatus(
                 when {
                     waterQualityRealtimeState == "buruk" -> Color.Black
                     waterQualityHistory == "buruk" -> Color.Black
+                    waterQualityRealtimeState == null && waterQualityHistory == null -> Color.Black
                     else -> MaterialTheme.colorScheme.onPrimary
                 }
             )
@@ -71,7 +76,7 @@ fun BannerWaterStatus(
             )
         } else {
             Text(
-                text = "Check alat deteksi atau hubungkan ulang alat.",
+                text = "Cek alat deteksi atau hubungkan ulang alat.",
                 color = MaterialTheme.colorScheme.onPrimary
             )
         }

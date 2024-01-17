@@ -7,6 +7,7 @@ import com.byteteam.bluesense.core.data.common.Resource
 import com.byteteam.bluesense.core.domain.model.LogHistoryEntity
 import com.byteteam.bluesense.core.domain.repositories.HistoryLogRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
@@ -21,7 +22,7 @@ class StatisticHistoryViewModel  @Inject constructor(
     val historyLogs: StateFlow<Resource<LogHistoryEntity>> = _historyLogs
 
     fun getTodayHistory(){
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             _historyLogs.value = Resource.Loading()
             try {
                 historyLogRepository.getTodayHistory().catch {
@@ -41,7 +42,7 @@ class StatisticHistoryViewModel  @Inject constructor(
     }
 
     fun getWeekHistory(){
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             _historyLogs.value = Resource.Loading()
             try {
                 historyLogRepository.getWeekHistory().catch {
@@ -56,7 +57,7 @@ class StatisticHistoryViewModel  @Inject constructor(
     }
 
     fun getMonthHistory(){
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             _historyLogs.value = Resource.Loading()
             try {
                 historyLogRepository.getMonthHistory().catch {
@@ -71,7 +72,7 @@ class StatisticHistoryViewModel  @Inject constructor(
     }
 
     fun getYearHistory(){
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             _historyLogs.value = Resource.Loading()
             try {
                 historyLogRepository.getYearHistory().catch {

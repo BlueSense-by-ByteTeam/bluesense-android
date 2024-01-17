@@ -40,14 +40,14 @@ fun HomeScreenContent(
             waterQualityRealtime = waterQualityRealtime,
             waterStatusRealtime = waterStatusRealtime,
             onTapAddDevice = { navHostController.navigate(Screens.AddDevice.route) },
-            onTapDetailDevice = { navHostController.navigate(Screens.DetailDevice.createRoute(it)) },
+            onTapDetailDevice = { id -> navHostController.navigate(Screens.DetailDevice.createRoute(id)) },
             deviceData = deviceInfo,
             modifier = Modifier.padding(bottom = 24.dp)
         )
         Text(
             text = stringResource(R.string.elevate_your_water_quality),
             style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.Bold,
+            fontWeight = FontWeight.SemiBold,
             modifier = Modifier.padding(bottom = 20.dp)
         )
         WaterFilterBanner()
