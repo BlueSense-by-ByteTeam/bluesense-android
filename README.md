@@ -104,3 +104,7 @@ In addiction, there are also features that will help users get access to clean w
    BLUESENSE_BASE_URL = "https://bluesense.tech/"
    ```
 3. build the project in Android Studio
+
+For add device QR you can use this qr code
+
+<img src="./readme_assets/qr.jpg" width="224" alt="monitoring" />

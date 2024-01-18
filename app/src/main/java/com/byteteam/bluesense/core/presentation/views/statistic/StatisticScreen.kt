@@ -121,7 +121,9 @@ fun StatisticScreen(
                 is Resource.Error -> {
                     isFetchingData = false
                     Column(
-                        Modifier.height(194.dp).fillMaxWidth(),
+                        Modifier
+                            .height(194.dp)
+                            .fillMaxWidth(),
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center
                     ) {
@@ -134,16 +136,38 @@ fun StatisticScreen(
 
                 is Resource.Success -> {
                     isFetchingData = false
-                    val entries = getEntriesData(selectedData, it?.data?.logs).asReversed()
+                    val entries = getEntriesData(selectedData, it?.data?.logs)
                     val stats = getMinMaxAverage(selectedData, it?.data)
-                    val dateTimes = (it?.data?.logs?.map { it.createdAt.parseDateStringWithTimeZoneGMT7() } ?: listOf()).asReversed()
-                    ChartTemplate(dateTimes = dateTimes, chartEntryModelProducer = ChartEntryModelProducer(entries))
-                    if (selectedData == SortData.STATUS || selectedData == SortData.QUALITY) LegendTemplate()
-                    OptionStatTemplate(
-                        disabledClick = isFetchingData,
-                        sortDatas = sortDatas,
-                        selectedData = selectedData,
-                        onClick = { selectedData = it })
+                    if (entries.isEmpty()) {
+                        Column(
+                            Modifier
+                                .height(194.dp)
+                                .fillMaxWidth(),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center
+                        ) {
+
+                            Text(text = "Belum ada data log perangkat")
+                        }
+                    } else {
+
+                        val reversedEntries = entries.asReversed()
+                        val dateTimes =
+                            (it?.data?.logs?.map { it.createdAt.parseDateStringWithTimeZoneGMT7() }
+                                ?: listOf())
+                        val reversedDateTimes = dateTimes.asReversed()
+                        ChartTemplate(
+                            dateTimes = reversedDateTimes,
+                            chartEntryModelProducer = ChartEntryModelProducer(reversedEntries)
+                        )
+                        if (selectedData == SortData.STATUS || selectedData == SortData.QUALITY) LegendTemplate()
+                        OptionStatTemplate(
+                            disabledClick = isFetchingData,
+                            sortDatas = sortDatas,
+                            selectedData = selectedData,
+                            onClick = { selectedData = it })
+
+                    }
                     StatsTextTemplate(
                         min = stats.first,
                         max = stats.second,
