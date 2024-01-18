@@ -29,6 +29,7 @@ android {
         val mqttPassword = properties.getProperty("MQTT_PASSWORD") ?: ""
         val firebaseServerClientId = properties.getProperty("FIREBASE_SERVER_CLIENT_ID") ?: ""
         val fcmAccessKey = properties.getProperty("FCM_ACCESS_KEY") ?: ""
+        val bluesenseBaseUrl = properties.getProperty("BLUESENSE_BASE_URL") ?: ""
 
         buildConfigField(
             type = "String",
@@ -54,6 +55,11 @@ android {
             type = "String",
             name = "FCM_ACCESS_KEY",
             value = fcmAccessKey
+        )
+        buildConfigField(
+            type = "String",
+            name = "BLUESENSE_BASE_URL",
+            value = bluesenseBaseUrl
         )
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"

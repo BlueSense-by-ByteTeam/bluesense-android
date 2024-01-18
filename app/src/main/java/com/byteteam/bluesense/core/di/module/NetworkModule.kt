@@ -1,5 +1,6 @@
 package com.byteteam.bluesense.core.di.module
 
+import com.byteteam.bluesense.BuildConfig
 import com.byteteam.bluesense.core.data.datastore.DataStorePreference
 import com.byteteam.bluesense.core.data.source.remote.config.FirebaseTokenInterceptor
 import com.byteteam.bluesense.core.data.source.remote.services.bluesense.AuthServices
@@ -23,7 +24,7 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
-    val BLUESENSE_BASE_URL = "https://bluesenseapi-1-l2019661.deta.app/"
+    val BLUESENSE_BASE_URL = BuildConfig.BLUESENSE_BASE_URL
     @Provides
     @Singleton
     fun provideFirebaseAuthTokenInterceptor(
