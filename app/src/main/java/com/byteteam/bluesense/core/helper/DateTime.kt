@@ -1,7 +1,13 @@
 package com.byteteam.bluesense.core.helper
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import java.text.SimpleDateFormat
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 import java.util.Date
 
 fun Date.getFormatedDate(): String{
@@ -30,6 +36,22 @@ fun String.formatUIDate(): String{
         }
     }catch (e: Exception){
         e.printStackTrace()
+        return this
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun String.parseDateStringWithTimeZoneGMT7(): String {
+    try {
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSX")
+        val dateTime = LocalDateTime.parse(this, formatter)
+
+        val zonedDateTime = ZonedDateTime.of(dateTime, ZoneId.of("GMT+7"))
+        val date = Date.from(zonedDateTime.toInstant())
+//        date.hours = date.hours+7
+
+        return date.getFormatedDate().formatUIDate()
+    }catch (e: Exception){
         return this
     }
 }

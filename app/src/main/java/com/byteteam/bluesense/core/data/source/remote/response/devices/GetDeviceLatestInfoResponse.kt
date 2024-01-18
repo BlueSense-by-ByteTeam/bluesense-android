@@ -26,10 +26,10 @@ data class Data(
 data class Log(
 
 	@field:SerializedName("tds")
-	val tds: Int? = null,
+	val tds: Double? = null,
 
 	@field:SerializedName("ph")
-	val ph: Int? = null,
+	val ph: Double? = null,
 
 	@field:SerializedName("created_at")
 	val createdAt: String? = null

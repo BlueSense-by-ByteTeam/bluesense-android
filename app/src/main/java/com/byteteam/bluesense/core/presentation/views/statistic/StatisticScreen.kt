@@ -1,5 +1,8 @@
 package com.byteteam.bluesense.core.presentation.views.statistic
 
+import android.os.Build
+import androidx.annotation.RequiresApi
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -28,6 +31,7 @@ import com.byteteam.bluesense.R
 import com.byteteam.bluesense.core.data.common.Resource
 import com.byteteam.bluesense.core.domain.model.LogEntity
 import com.byteteam.bluesense.core.domain.model.LogHistoryEntity
+import com.byteteam.bluesense.core.helper.parseDateStringWithTimeZoneGMT7
 import com.byteteam.bluesense.core.presentation.tokens.SortData
 import com.byteteam.bluesense.core.presentation.tokens.SortDateLog
 import com.byteteam.bluesense.core.presentation.views.statistic.widgets.ChartTemplate
@@ -37,6 +41,7 @@ import com.byteteam.bluesense.core.presentation.views.statistic.widgets.OptionSo
 import com.byteteam.bluesense.core.presentation.views.statistic.widgets.OptionStatTemplate
 import com.byteteam.bluesense.core.presentation.views.statistic.widgets.StatsTextTemplate
 import com.byteteam.bluesense.ui.theme.BlueSenseTheme
+import com.patrykandpatrick.vico.core.entry.ChartEntry
 import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
 import com.patrykandpatrick.vico.core.entry.FloatEntry
 import com.patrykandpatrick.vico.core.entry.entryOf
@@ -46,6 +51,7 @@ import kotlin.random.Random
 
 val df = DecimalFormat("#.##")
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun StatisticScreen(
     getHistoryToday: () -> Unit,
@@ -116,9 +122,10 @@ fun StatisticScreen(
                     isFetchingData = false
                     Column(
                         Modifier.height(194.dp).fillMaxWidth(),
-                        horizontalAlignment = Alignment.CenterHorizontally
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
                     ) {
-                        Text(text = "Gagal mengambil data riwayat log perangkat")
+                        Text(text = it?.message ?: "Gagal mengambil data riwayat log perangkat")
                         Button(onClick = { getHistoryToday() }) {
                             Text(text = "Muat ulang")
                         }
@@ -127,9 +134,10 @@ fun StatisticScreen(
 
                 is Resource.Success -> {
                     isFetchingData = false
-                    val entries = getEntriesData(selectedData, it?.data?.logs)
+                    val entries = getEntriesData(selectedData, it?.data?.logs).asReversed()
                     val stats = getMinMaxAverage(selectedData, it?.data)
-                    ChartTemplate(chartEntryModelProducer = ChartEntryModelProducer(entries))
+                    val dateTimes = (it?.data?.logs?.map { it.createdAt.parseDateStringWithTimeZoneGMT7() } ?: listOf()).asReversed()
+                    ChartTemplate(dateTimes = dateTimes, chartEntryModelProducer = ChartEntryModelProducer(entries))
                     if (selectedData == SortData.STATUS || selectedData == SortData.QUALITY) LegendTemplate()
                     OptionStatTemplate(
                         disabledClick = isFetchingData,
@@ -173,7 +181,7 @@ fun StatisticScreen(
     }
 }
 
-fun getEntriesData(selectedData: SortData?, logs: List<LogEntity>?): List<FloatEntry> =
+fun getEntriesData(selectedData: SortData?, logs: List<LogEntity>?): List<ChartEntry> =
     when (selectedData) {
         SortData.PH -> logs?.mapIndexed { index, logEntity ->
             entryOf(index, logEntity.ph)

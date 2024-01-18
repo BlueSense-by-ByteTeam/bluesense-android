@@ -59,4 +59,12 @@ class DateTimeKtTest{
         val expected = "invalid"
         assertEquals(expected, result)
     }
+
+    @Test
+    fun `parse date from UTC format`(){
+        val strDate = "2024-01-18T11:11:21.618Z"
+        val result = strDate.parseDateStringWithTimeZoneGMT7()
+        val expected = "18/01/2024 18:11"
+        assertEquals(expected, result)
+    }
 }
