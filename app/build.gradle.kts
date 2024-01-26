@@ -17,8 +17,8 @@ android {
         applicationId = "com.byteteam.bluesense"
         minSdk = 25
         targetSdk = 34
-        versionCode = 8
-        versionName = "1.7"
+        versionCode = 9
+        versionName = "1.8"
 
         val keystoreFile = project.rootProject.file("local.properties")
         val properties = Properties()

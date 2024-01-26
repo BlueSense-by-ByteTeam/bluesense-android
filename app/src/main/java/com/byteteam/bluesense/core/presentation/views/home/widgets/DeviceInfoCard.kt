@@ -42,6 +42,7 @@ import com.byteteam.bluesense.core.domain.model.DeviceLatestInfoEntity
 import com.byteteam.bluesense.ui.theme.Green
 import com.byteteam.bluesense.ui.theme.Yellow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectIndexed
 
 @Composable
 fun DeviceInfoCard(
@@ -267,6 +268,9 @@ fun DeviceInfoCard(
                                 when {
                                     statusDevice.collectAsState().value && waterStatusRealtime.collectAsState().value == "baik" || it.data?.status == "baik" -> "Dapat diminum"
                                     statusDevice.collectAsState().value && waterStatusRealtime.collectAsState().value == "buruk" || it.data?.status == "buruk" -> "Tidak Dapat diminum"
+                                    waterStatusRealtime.collectAsState().value == null && it.data?.status != null -> {
+                                        if(it.data?.status == "aman") "Dapat diminum" else "Tidak dapat diminum"
+                                    }
                                     else -> "-"
                                 },
                                 color = if (it.data?.quality != null) MaterialTheme.colorScheme.onPrimary else Color.Black,
