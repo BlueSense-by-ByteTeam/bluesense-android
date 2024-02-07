@@ -90,8 +90,6 @@ fun AddDeviceFormScreen(
             .fillMaxWidth()
             .verticalScroll(rememberScrollState())
             .padding(horizontal = 20.dp),
-//            .wrapContentHeight(align = Alignment.Top)
-//            .fillMaxHeight()
         verticalArrangement = Arrangement.Top
     ) {
         errorMessage?.let {
@@ -124,39 +122,39 @@ fun AddDeviceFormScreen(
                 onUpdate = addDeviceScreenData.updateId,
                 modifier = Modifier.fillMaxWidth()
             )
-            DropDownInput(
-                label = stringResource(R.string.province),
-                options = provinces.map { Pair(it.text, it.id.toIntOrNull() ?: 0) },
-                callbakOnSelect = { id, text ->
-                    provinceId = id
-                    addDeviceScreenData.updateProvince(text)
-                },
-                modifier = Modifier.fillMaxWidth()
-            )
-            DropDownInput(
-                label = stringResource(R.string.city),
-                options = cities.map { Pair(it.text, it.id.toIntOrNull() ?: 0) },
-                callbakOnSelect = { id, text ->
-                    cityId = id
-                    addDeviceScreenData.updateCity(text)
-                },
-                modifier = Modifier.fillMaxWidth()
-            )
-            DropDownInput(
-                label = stringResource(R.string.district),
-                options = districs.map { Pair(it.text, it.id.toIntOrNull() ?: 0) },
-                callbakOnSelect = { id, text ->
-                    districtId = id
-                    addDeviceScreenData.updateDistrict(text)
-                },
-                modifier = Modifier.fillMaxWidth()
-            )
-            InputField(
-                errorMessage = addDeviceScreenData.address.errorMessage,
-                label = stringResource(R.string.address), value = addDeviceScreenData.address.data,
-                onUpdate = addDeviceScreenData.updateAddress,
-                modifier = Modifier.fillMaxWidth()
-            )
+//            DropDownInput(
+//                label = stringResource(R.string.province),
+//                options = provinces.map { Pair(it.text, it.id.toIntOrNull() ?: 0) },
+//                callbakOnSelect = { id, text ->
+//                    provinceId = id
+//                    addDeviceScreenData.updateProvince(text)
+//                },
+//                modifier = Modifier.fillMaxWidth()
+//            )
+//            DropDownInput(
+//                label = stringResource(R.string.city),
+//                options = cities.map { Pair(it.text, it.id.toIntOrNull() ?: 0) },
+//                callbakOnSelect = { id, text ->
+//                    cityId = id
+//                    addDeviceScreenData.updateCity(text)
+//                },
+//                modifier = Modifier.fillMaxWidth()
+//            )
+//            DropDownInput(
+//                label = stringResource(R.string.district),
+//                options = districs.map { Pair(it.text, it.id.toIntOrNull() ?: 0) },
+//                callbakOnSelect = { id, text ->
+//                    districtId = id
+//                    addDeviceScreenData.updateDistrict(text)
+//                },
+//                modifier = Modifier.fillMaxWidth()
+//            )
+//            InputField(
+//                errorMessage = addDeviceScreenData.address.errorMessage,
+//                label = stringResource(R.string.address), value = addDeviceScreenData.address.data,
+//                onUpdate = addDeviceScreenData.updateAddress,
+//                modifier = Modifier.fillMaxWidth()
+//            )
             InputField(
                 errorMessage = addDeviceScreenData.waterSource.errorMessage,
                 label = stringResource(R.string.water_source),

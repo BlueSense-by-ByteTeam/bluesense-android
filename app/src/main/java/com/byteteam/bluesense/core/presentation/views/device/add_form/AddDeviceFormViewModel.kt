@@ -123,7 +123,7 @@ class AddDeviceFormViewModel @Inject constructor(
 
     private fun updateButtonEnabled() {
         _buttonEnabled.value =
-            name.value.data.isNotEmpty() && id.value.data.isNotEmpty() && province.value.data.isNotEmpty() && city.value.data.isNotEmpty() && district.value.data.isNotEmpty() && address.value.data.isNotEmpty() && waterSource.value.data.isNotEmpty()
+            name.value.data.isNotEmpty() && id.value.data.isNotEmpty() && waterSource.value.data.isNotEmpty()
     }
 
     fun postDevice(callbackOnSuccess: () -> Unit = {}) {
@@ -133,10 +133,10 @@ class AddDeviceFormViewModel @Inject constructor(
                 val data = DevicePost(
                     deviceId = id.value.data,
                     name = name.value.data,
-                    province = province.value.data,
-                    city = city.value.data,
-                    district = district.value.data,
-                    address = address.value.data,
+                    province = "-",
+                    city = "-",
+                    district = "-",
+                    address = "-",
                     waterSource = waterSource.value.data,
                 )
                 deviceRepository.postDevice(data).catch {
