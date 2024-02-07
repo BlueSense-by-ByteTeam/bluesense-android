@@ -72,7 +72,7 @@ fun DetailProductScreen(
                     )
                     NamePriceRatingTemplate(
                         name = stringResource(id = R.string.water_clean_detection),
-                        price = "Rp${it.data.price.formatPrice()}",
+                        price = "Rp${650000L.formatPrice()}",
                         rating = it.data.rating
                     )
                     DescProductTemplate(desc = it.data.description)

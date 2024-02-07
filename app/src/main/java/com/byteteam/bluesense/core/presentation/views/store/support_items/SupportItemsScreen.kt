@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Surface
@@ -65,9 +66,9 @@ fun SupportItemsScreen(
                                 Text(text = "Belum ada data filter air")
                             }
                         }
-                        items(it.data ?: listOf()) { item ->
+                        itemsIndexed(it.data ?: listOf()) { index, item ->
                             WaterFilterItem(
-                                waterFilterEntity = item,
+                                waterFilterEntity = if (index == 0) item.copy(price = 650000L) else item,
                                 onTap = {
                                     selectedProduct = item
                                 }

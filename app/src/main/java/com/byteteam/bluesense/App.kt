@@ -380,7 +380,7 @@ fun App(
                     Log.d("navigation", "App: $id")
 
                     if (id == "{id}") {//default value when no id is given is {id}
-                        SupportItemsScreen(
+                    SupportItemsScreen(
                             waterFiltersState = storeViewModel.waterFilters,
                             getWaterFilters = { storeViewModel.getWaterFilters() },
                         )
