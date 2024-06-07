@@ -155,9 +155,9 @@ fun DeviceInfoCard(
 
                         Text(
                             text = when {
-                                statusDevice.collectAsState().value && it.data?.quality == "buruk" -> "Air buruk!"
-                                statusDevice.collectAsState().value && it.data?.quality == "baik" -> "Air aman"
-                                else -> "-"
+//                                statusDevice.collectAsState().value && it.data?.quality == "buruk" -> "Air buruk!"
+//                                statusDevice.collectAsState().value && it.data?.quality == "baik" -> "Air aman"
+                                else -> "Air buruk"
                             },
                             color =
                             if (isBad) Color.Black else {

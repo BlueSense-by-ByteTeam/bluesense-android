@@ -16,7 +16,6 @@ class FirebaseTokenInterceptor @Inject constructor(
     private val dataStorePreference: DataStorePreference
 ) : Interceptor {
 
-    private val refreshTokenLock = ReentrantLock()
     override fun intercept(chain: Interceptor.Chain): Response {
         val originalRequest = chain.request()
         // Acquire the lock to ensure only one thread executes the refresh logic
