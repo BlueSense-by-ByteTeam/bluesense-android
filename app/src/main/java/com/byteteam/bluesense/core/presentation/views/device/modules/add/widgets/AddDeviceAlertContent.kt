@@ -1,4 +1,4 @@
-package com.byteteam.bluesense.core.presentation.views.device.add.widgets
+package com.byteteam.bluesense.core.presentation.views.device.modules.add.widgets
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image

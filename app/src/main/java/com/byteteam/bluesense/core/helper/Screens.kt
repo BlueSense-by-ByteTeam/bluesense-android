@@ -31,4 +31,5 @@ sealed class Screens(val route: String) {
     object ResetPassword : Screens(route = "reset_password")
     object SuccessResetPassword: Screens(route = "success_reset_password")
     object Scan : Screens(route = "scan_qr")
+    object ChatBot : Screens(route = "chat_bot")
 }

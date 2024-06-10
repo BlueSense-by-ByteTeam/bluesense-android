@@ -1,4 +1,4 @@
-package com.byteteam.bluesense.core.presentation.views.device.detail.widgets
+package com.byteteam.bluesense.core.presentation.views.device.modules.detail.widgets
 
 import android.util.Log
 import androidx.compose.foundation.background

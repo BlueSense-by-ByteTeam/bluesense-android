@@ -9,6 +9,7 @@ import com.byteteam.bluesense.core.data.source.remote.services.bluesense.History
 import com.byteteam.bluesense.core.data.source.remote.services.bluesense.WaterFilterServices
 import com.byteteam.bluesense.core.data.source.remote.services.bluesense.WaterSupplierServices
 import com.byteteam.bluesense.core.data.source.remote.services.fcm.FCMServices
+import com.byteteam.bluesense.core.data.source.remote.services.gemini.GeminiServices
 import com.byteteam.bluesense.core.data.source.remote.services.location.IndonesianLocationAddressService
 import dagger.Module
 import dagger.Provides
@@ -91,5 +92,11 @@ object NetworkModule {
     fun provideFCMApiServices(retrofitBuilder: Retrofit.Builder): FCMServices = retrofitBuilder.baseUrl(
         "https://iid.googleapis.com/iid/").build().create(
         FCMServices::class.java
+    )
+    @Provides
+    @Singleton
+    fun provideGeminiApiServices(retrofitBuilder: Retrofit.Builder): GeminiServices = retrofitBuilder.baseUrl(
+        "https://generativelanguage.googleapis.com/").build().create(
+        GeminiServices::class.java
     )
 }

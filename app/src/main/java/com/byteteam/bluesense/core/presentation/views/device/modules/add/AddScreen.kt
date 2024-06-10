@@ -1,4 +1,4 @@
-package com.byteteam.bluesense.core.presentation.views.device.add
+package com.byteteam.bluesense.core.presentation.views.device.modules.add
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -30,7 +30,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.byteteam.bluesense.R
 import com.byteteam.bluesense.core.helper.Screens
-import com.byteteam.bluesense.core.presentation.views.device.add.widgets.AddDeviceAlertContent
+import com.byteteam.bluesense.core.presentation.views.device.modules.add.widgets.AddDeviceAlertContent
 import com.byteteam.bluesense.core.presentation.widgets.BottomDialog
 import com.byteteam.bluesense.ui.theme.BlueSenseTheme
 

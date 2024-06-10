@@ -238,6 +238,30 @@ fun Topbars(actions: Map<String, () -> Unit>, route: String, navHostController: 
                 )
             },
         )
+        Screens.ChatBot.route -> TopAppBar(
+            colors = topAppBarColors,
+            navigationIcon = {
+                IconButton(onClick = {
+                    navHostController.navigate(Screens.SignIn.route) {
+                        popUpTo(Screens.SuccessResetPassword.route) {
+                            inclusive = true
+                        }
+                    }
+                }) {
+                    Icon(
+                        imageVector = Icons.Default.ArrowBack,
+                        contentDescription = stringResource(R.string.back_icon)
+                    )
+                }
+            },
+            title = {
+                Text(
+                    modifier = Modifier.padding(start = 8.dp),
+                    fontWeight = FontWeight.Bold,
+                    text = "Chatbot"
+                )
+            },
+        )
 
         else -> null
     }

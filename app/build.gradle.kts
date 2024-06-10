@@ -30,6 +30,7 @@ android {
         val firebaseServerClientId = properties.getProperty("FIREBASE_SERVER_CLIENT_ID") ?: ""
         val fcmAccessKey = properties.getProperty("FCM_ACCESS_KEY") ?: ""
         val bluesenseBaseUrl = properties.getProperty("BLUESENSE_BASE_URL") ?: ""
+        val geminiAPIKey = properties.getProperty("GEMINI_API_KEY") ?: ""
 
         buildConfigField(
             type = "String",
@@ -60,6 +61,11 @@ android {
             type = "String",
             name = "BLUESENSE_BASE_URL",
             value = bluesenseBaseUrl
+        )
+        buildConfigField(
+            type = "String",
+            name = "GEMINI_API_KEY",
+            value = geminiAPIKey
         )
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"

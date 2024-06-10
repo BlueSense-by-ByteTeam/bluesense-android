@@ -1,4 +1,4 @@
-package com.byteteam.bluesense.core.presentation.views.device.detail
+package com.byteteam.bluesense.core.presentation.views.device.modules.detail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

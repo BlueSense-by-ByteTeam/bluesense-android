@@ -1,4 +1,4 @@
-package com.byteteam.bluesense.core.presentation.views.device.detail
+package com.byteteam.bluesense.core.presentation.views.device.modules.detail
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
@@ -19,9 +19,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.byteteam.bluesense.R
 import com.byteteam.bluesense.core.domain.model.SensorData
-import com.byteteam.bluesense.core.presentation.views.device.detail.widgets.BannerWaterStatus
-import com.byteteam.bluesense.core.presentation.views.device.detail.widgets.CardStatusTemplate
-import com.byteteam.bluesense.core.presentation.views.device.detail.widgets.DeleteDeviceAlertContent
+import com.byteteam.bluesense.core.presentation.views.device.modules.detail.widgets.BannerWaterStatus
+import com.byteteam.bluesense.core.presentation.views.device.modules.detail.widgets.CardStatusTemplate
+import com.byteteam.bluesense.core.presentation.views.device.modules.detail.widgets.DeleteDeviceAlertContent
 import com.byteteam.bluesense.core.presentation.views.profile.widgets.SignOutDialogContent
 import com.byteteam.bluesense.core.presentation.widgets.BottomDialog
 import com.byteteam.bluesense.ui.theme.BlueSenseTheme

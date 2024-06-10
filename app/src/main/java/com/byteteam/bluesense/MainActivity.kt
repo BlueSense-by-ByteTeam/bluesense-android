@@ -23,9 +23,9 @@ import com.byteteam.bluesense.core.domain.model.DeviceEntity
 import com.byteteam.bluesense.core.domain.model.SensorData
 import com.byteteam.bluesense.core.helper.Screens
 import com.byteteam.bluesense.core.presentation.helper.GoogleSignInClientHelper
-import com.byteteam.bluesense.core.presentation.views.device.add_form.AddDeviceFormViewModel
-import com.byteteam.bluesense.core.presentation.views.device.add_form.AddDeviceViewModel
-import com.byteteam.bluesense.core.presentation.views.device.detail.DetailDeviceViewModel
+import com.byteteam.bluesense.core.presentation.views.device.modules.add_form.AddDeviceFormViewModel
+import com.byteteam.bluesense.core.presentation.views.device.modules.add_form.AddDeviceViewModel
+import com.byteteam.bluesense.core.presentation.views.device.modules.detail.DetailDeviceViewModel
 import com.byteteam.bluesense.core.presentation.views.home.HomeViewModel
 import com.byteteam.bluesense.core.presentation.views.notification.NotificationViewModel
 import com.byteteam.bluesense.core.presentation.views.onboard.OnBoardViewModel

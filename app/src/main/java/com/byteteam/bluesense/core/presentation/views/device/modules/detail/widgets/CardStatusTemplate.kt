@@ -1,4 +1,4 @@
-package com.byteteam.bluesense.core.presentation.views.device.detail.widgets
+package com.byteteam.bluesense.core.presentation.views.device.modules.detail.widgets
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

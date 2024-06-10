@@ -1,4 +1,4 @@
-package com.byteteam.bluesense.core.presentation.views.device.add_form
+package com.byteteam.bluesense.core.presentation.views.device.modules.add_form
 
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
