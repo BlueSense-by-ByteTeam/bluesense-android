@@ -1,4 +1,5 @@
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -24,7 +25,9 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawOutline
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import dev.jeziellago.compose.markdowntext.MarkdownText
 
 
 data class Chat(
@@ -33,8 +36,15 @@ data class Chat(
     val text: String,
     val isMe: Boolean
 )
+
 @Composable
-fun ChatBubble(data: Chat, onCopy: () -> Unit = {}, onRetry: () -> Unit = {}, onThumbDown: () -> Unit = {}, modifier: Modifier = Modifier){
+fun ChatBubble(
+    data: Chat,
+    onCopy: () -> Unit = {},
+    onRetry: () -> Unit = {},
+    onThumbDown: () -> Unit = {},
+    modifier: Modifier = Modifier
+) {
     val blueColor = MaterialTheme.colorScheme.primary;
     Column {
         Box(modifier.fillMaxWidth()) {
@@ -81,19 +91,17 @@ fun ChatBubble(data: Chat, onCopy: () -> Unit = {}, onRetry: () -> Unit = {}, on
                 Column(
                     Modifier
                         .widthIn(max = 244.dp)
-                        .padding(12.dp)) {
-                    Text(
-                        text = data.text, modifier = Modifier.align(
+                        .padding(12.dp)
+                ) {
+                    MarkdownText(
+                        markdown = data.text,
+                        modifier = Modifier.align(
                             if (data.isMe) Alignment.End else Alignment.Start
+                        ).background(Color.Transparent),
+                        style = TextStyle(
+                            color = if (data.isMe) Color.White else Color.Black
                         ),
-                        color = if (data.isMe) Color.White else Color.Black
                     )
-                    //                Text(
-                    //                    text = data.created, modifier = Modifier.align(
-                    //                        if (!data.isMe) Alignment.End else Alignment.Start
-                    //                    ),
-                    //                    color = if (!data.isMe) Color(0xFF547288) else Color.White
-                    //                )
                 }
             }
 
@@ -117,18 +125,28 @@ fun ChatBubble(data: Chat, onCopy: () -> Unit = {}, onRetry: () -> Unit = {}, on
             }
         }
         //
-        if(!data.isMe) Row {
+        if (!data.isMe) Row {
             IconButton(onClick = onCopy) {
-                Icon(imageVector = Icons.Filled.CopyAll, contentDescription = null, tint = Color.Gray)
+                Icon(
+                    imageVector = Icons.Filled.CopyAll,
+                    contentDescription = null,
+                    tint = Color.Gray
+                )
             }
             IconButton(onClick = onThumbDown) {
-                Icon(imageVector = Icons.Default.ThumbDown, contentDescription = null, tint = Color.Gray)
+                Icon(
+                    imageVector = Icons.Default.ThumbDown,
+                    contentDescription = null,
+                    tint = Color.Gray
+                )
             }
             IconButton(onClick = onRetry) {
-                Icon(imageVector = Icons.Default.Cached, contentDescription = null, tint = Color.Gray)
+                Icon(
+                    imageVector = Icons.Default.Cached,
+                    contentDescription = null,
+                    tint = Color.Gray
+                )
             }
         }
-
-
     }
 }

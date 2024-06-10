@@ -193,6 +193,8 @@ dependencies {
     implementation("androidx.compose.runtime:runtime-livedata:1.2.1")
     annotationProcessor ("androidx.room:room-compiler:$room_version")
     kapt("androidx.room:room-compiler:$room_version")
+
+    implementation("com.github.jeziellago:compose-markdown:0.5.0")
 }
 // Allow references to generated code
 kapt {

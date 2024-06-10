@@ -80,9 +80,9 @@ fun ChatBotScreen(
 
     Column(modifier.fillMaxSize()) {
         if (chats.isEmpty()) {
-            InitialTemplate(
-                modifier = Modifier.weight(1f),
-                templatePrompts = templatePrompts, onTemplatePress = {
+            InitialTemplate(modifier = Modifier.weight(1f),
+                templatePrompts = templatePrompts,
+                onTemplatePress = {
                     Log.d(TAG, "template message: $it")
                 })
         } else {
@@ -140,6 +140,15 @@ val withDataUiState: StateFlow<List<ChatEntity>> = MutableStateFlow(
         ChatEntity(
             text = "ini balasan chatku", created = LocalDateTime.now(), isMe = false
         ),
+        ChatEntity(
+            text = """  
+# Sample  
+* Markdown  panjang banget
+* [Link](https://example.com)  
+![Image](https://example.com/img.png)  
+<a href="https://www.google.com/">Google</a>  
+""", created = LocalDateTime.now(), isMe = false
+        ),
     )
 )
 
@@ -150,8 +159,7 @@ private fun PreviewNull() {
     BlueSenseTheme {
         Surface {
             ChatBotScreen(
-                chats = emptyUiState.collectAsState().value,
-                newChatUiState = loadingNewChatUiState
+                chats = emptyUiState.collectAsState().value, newChatUiState = loadingNewChatUiState
             )
 
         }
