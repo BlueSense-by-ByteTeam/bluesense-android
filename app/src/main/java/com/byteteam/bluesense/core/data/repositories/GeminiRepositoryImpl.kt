@@ -16,19 +16,26 @@ import javax.inject.Inject
 class GeminiRepositoryImpl @Inject constructor(
     private val geminiApiServices: GeminiServices
 ) : GeminiRepository {
-    override suspend fun postChat(message: String): Flow<Resource<String>> = flow {
-        emit(Resource.Loading())
-        // TODO: buat repository 
+    override suspend fun postChat(message: String): Flow<String> = flow {
         try {
-            val postData = GeminiChatPost(contents = listOf(
-                Content(parts = listOf(
-                    Part(text = message)
-                ))
-            ))
+            val postData = GeminiChatPost(
+                contents = listOf(
+                    Content(
+                        parts = listOf(
+                            Part(text = message)
+                        )
+                    )
+                )
+            )
             val response = geminiApiServices.postChat(chatPost = postData)
-            emit(Resource.Success("response"))
-        }catch (e: Exception){
-            emit(Resource.Error(e.message ?: "Error saat mengambil data history"))
+            val textResponse: String? = response.candidates?.first()?.content?.parts?.first()?.text
+            if (textResponse != null) {
+                emit(textResponse)
+            } else {
+                throw Exception("Response is null!")
+            }
+        } catch (e: Exception) {
+            throw e
         }
     }
 }

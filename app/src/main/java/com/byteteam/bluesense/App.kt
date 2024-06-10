@@ -1,6 +1,7 @@
 package com.byteteam.bluesense
 
-import android.util.Log
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -17,14 +18,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.byteteam.bluesense.core.data.common.Resource
+import com.byteteam.bluesense.core.domain.model.ChatEntity
 import com.byteteam.bluesense.core.domain.model.DeviceEntity
 import com.byteteam.bluesense.core.helper.Screens
 import com.byteteam.bluesense.core.helper.Topbars
 import com.byteteam.bluesense.core.helper.bottomNavigationItems
+import com.byteteam.bluesense.core.presentation.views.chatbot.ChatBotScreen
+import com.byteteam.bluesense.core.presentation.views.chatbot.ChatBotViewModel
 import com.byteteam.bluesense.core.presentation.views.device.modules.add.AddScreen
 import com.byteteam.bluesense.core.presentation.views.device.modules.add_form.AddDeviceFormScreen
 import com.byteteam.bluesense.core.presentation.views.device.modules.add_form.AddDeviceFormViewModel
@@ -58,7 +62,11 @@ import com.byteteam.bluesense.core.presentation.views.store.support_items.Suppor
 import com.byteteam.bluesense.core.presentation.views.store.water_supplier.WaterSupplierScreen
 import com.byteteam.bluesense.core.presentation.views.success_reset_pass.SuccessResetPassScreen
 import com.byteteam.bluesense.core.presentation.widgets.BottomBar
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import java.time.LocalDateTime
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun App(
     currentRoute: String?,
@@ -78,6 +86,7 @@ fun App(
     resetPasswordViewModel: ResetPasswordViewModel,
     historyViewModel: StatisticHistoryViewModel,
     notificationViewModel: NotificationViewModel,
+    chatBotViewModel: ChatBotViewModel,
 ) {
     var mqttTopic by remember { mutableStateOf("") }
     Scaffold(topBar = {
@@ -108,7 +117,8 @@ fun App(
                     Screens.OnBoarding.route
                 } else {
                     if (isSigned) {
-                        Screens.Home.route
+//                        Screens.Home.route
+                        Screens.ChatBot.route
                     } else if (isPressRegisterFirst) {
                         Screens.SignUp.route
                     } else {
@@ -210,8 +220,6 @@ fun App(
                     )
                 }
                 composable(Screens.Home.route) {
-                    val context = LocalContext.current
-
                     HomeScreen(
                         waterQualityRealtime = detailDeviceViewModel.waterQuality,
                         waterStatusRealtime = detailDeviceViewModel.waterStatus,
@@ -272,7 +280,6 @@ fun App(
                         })
                 }
                 composable(Screens.AddDevice.route) {
-                    val context = LocalContext.current
                     var barcode: String? by remember {
                         mutableStateOf(null)
                     }
@@ -347,7 +354,6 @@ fun App(
                 composable(Screens.DetailDevice.route) {
                     val id = it.arguments?.getString("id")
                     val mqttTopic = it.arguments?.getString("mqttTopic")
-//                    val mqttTopic = homeViewModel.devices?.collectAsState()?.value?.data?.get(0)?.mqttTopic
                     DetailDeviceScreen(
                         statusDevice = detailDeviceViewModel.isConnected,
                         sensorData = detailDeviceViewModel.data,
@@ -376,10 +382,7 @@ fun App(
                 }
                 composable(Screens.FilterRecommendation.route) {
                     val id = it.arguments?.getString("id")
-
-                    Log.d("navigation", "App: $id")
-
-                    if (id == "{id}") {//default value when no id is given is {id}
+                    if (id == "{id}") {
                     SupportItemsScreen(
                             waterFiltersState = storeViewModel.waterFilters,
                             getWaterFilters = { storeViewModel.getWaterFilters() },
@@ -422,7 +425,47 @@ fun App(
                         }
                     )
                 }
+                composable(Screens.ChatBot.route) {
+                    ChatBotScreen(
+                        onRetryPrompt = { chatIndex -> chatBotViewModel.retryPromptChatAt(chatIndex)},
+                        onPostNewPrompt = { chatBotViewModel.postNewPrompt(it) },
+                        chats = chatBotViewModel.chats,
+                        newChatUiState = chatBotViewModel.newChat
+                    )
+                }
             }
         }
     }
 }
+
+
+@RequiresApi(Build.VERSION_CODES.O)
+val loadingNewChatUiState: StateFlow<Resource<ChatEntity>> = MutableStateFlow(
+    Resource.Success(
+        ChatEntity(
+            isMe = true, text = "", created = LocalDateTime.now()
+        )
+    )
+)
+
+
+@RequiresApi(Build.VERSION_CODES.O)
+val withDataUiState: StateFlow<List<ChatEntity>> = MutableStateFlow(
+    listOf(
+        ChatEntity(
+            text = "ini chatku", created = LocalDateTime.now(), isMe = true
+        ),
+        ChatEntity(
+            text = "ini balasan chatku", created = LocalDateTime.now(), isMe = false
+        ),
+        ChatEntity(
+            text = """  
+# Sample  
+* Markdown  panjang banget
+* [Link](https://example.com)  
+![Image](https://example.com/img.png)  
+<a href="https://www.google.com/">Google</a>  
+""", created = LocalDateTime.now(), isMe = false
+        ),
+    )
+)

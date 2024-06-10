@@ -23,6 +23,7 @@ import com.byteteam.bluesense.core.domain.model.DeviceEntity
 import com.byteteam.bluesense.core.domain.model.SensorData
 import com.byteteam.bluesense.core.helper.Screens
 import com.byteteam.bluesense.core.presentation.helper.GoogleSignInClientHelper
+import com.byteteam.bluesense.core.presentation.views.chatbot.ChatBotViewModel
 import com.byteteam.bluesense.core.presentation.views.device.modules.add_form.AddDeviceFormViewModel
 import com.byteteam.bluesense.core.presentation.views.device.modules.add_form.AddDeviceViewModel
 import com.byteteam.bluesense.core.presentation.views.device.modules.detail.DetailDeviceViewModel
@@ -62,6 +63,7 @@ class MainActivity : ComponentActivity() {
     private val resetPasswordViewModel: ResetPasswordViewModel by viewModels()
     private val historyViewModel: StatisticHistoryViewModel by viewModels()
     private val notificationViewModel: NotificationViewModel by viewModels()
+    private val chatBotViewModel: ChatBotViewModel by viewModels()
 
     @Inject
     lateinit var googleAuthUiClient: GoogleSignInClientHelper
@@ -171,6 +173,7 @@ class MainActivity : ComponentActivity() {
                     resetPasswordViewModel = resetPasswordViewModel,
                     historyViewModel = historyViewModel,
                     notificationViewModel = notificationViewModel,
+                    chatBotViewModel = chatBotViewModel,
                     callbackOnDisconnectDevice = { callbackOndisconnectDevice(it) }
                 )
             }
