@@ -42,7 +42,6 @@ fun ChatBubble(
     data: Chat,
     onCopy: () -> Unit = {},
     onRetry: () -> Unit = {},
-    onThumbDown: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val blueColor = MaterialTheme.colorScheme.primary;
@@ -129,13 +128,6 @@ fun ChatBubble(
             IconButton(onClick = onCopy) {
                 Icon(
                     imageVector = Icons.Filled.CopyAll,
-                    contentDescription = null,
-                    tint = Color.Gray
-                )
-            }
-            IconButton(onClick = onThumbDown) {
-                Icon(
-                    imageVector = Icons.Default.ThumbDown,
                     contentDescription = null,
                     tint = Color.Gray
                 )
