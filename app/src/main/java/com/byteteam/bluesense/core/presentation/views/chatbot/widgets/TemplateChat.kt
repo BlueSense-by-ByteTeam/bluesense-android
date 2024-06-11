@@ -1,6 +1,7 @@
 package com.byteteam.bluesense.core.presentation.views.chatbot.widgets
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.height
@@ -24,11 +25,11 @@ fun TemplateChat(list: List<String>, onPressed: (String) -> Unit, modifier: Modi
         items(list) {
             Box(
                 modifier = modifier
-
                     .padding(end = 8.dp)
                     .widthIn(max = 240.dp)
                     .clip(RoundedCornerShape(12.dp))
                     .background(Color(0xFF3E00FF).copy(alpha = 0.1f))
+                    .clickable { onPressed(it) }
                     .padding(12.dp)
             ) {
                 Text(text = it)

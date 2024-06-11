@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.dp
 
 
 @Composable
-fun MessageTextField(onSend: () -> Unit, modifier: Modifier = Modifier) {
+fun MessageTextField(onSend: (String) -> Unit, modifier: Modifier = Modifier) {
     var message by remember {
         mutableStateOf("")
     }
@@ -54,7 +54,10 @@ fun MessageTextField(onSend: () -> Unit, modifier: Modifier = Modifier) {
             ),
         )
         IconButton(
-            onClick = onSend,
+            onClick = {
+                onSend(message)
+                message = ""
+            },
             modifier = Modifier.size(48.dp),
             colors = IconButtonDefaults.iconButtonColors(containerColor = MaterialTheme.colorScheme.primary)
         ) {

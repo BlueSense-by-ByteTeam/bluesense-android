@@ -51,8 +51,6 @@ fun HomeScreenContent(
             fontWeight = FontWeight.SemiBold,
             modifier = Modifier.padding(bottom = 20.dp)
         )
-        WaterFilterBanner(modifier = Modifier.clickable {
-            navHostController.navigate(Screens.ChatBot.route)
-        })
+        BlueBuddyChatBotBanner(navigateToChatBotScreen = { navHostController.navigate(Screens.ChatBot.route)})
     }
 }

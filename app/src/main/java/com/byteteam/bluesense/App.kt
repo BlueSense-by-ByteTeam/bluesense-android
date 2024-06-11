@@ -117,8 +117,7 @@ fun App(
                     Screens.OnBoarding.route
                 } else {
                     if (isSigned) {
-//                        Screens.Home.route
-                        Screens.ChatBot.route
+                        Screens.Home.route
                     } else if (isPressRegisterFirst) {
                         Screens.SignUp.route
                     } else {

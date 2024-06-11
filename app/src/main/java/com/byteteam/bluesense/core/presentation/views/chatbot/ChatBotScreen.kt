@@ -51,7 +51,7 @@ fun ChatBotScreen(
             InitialTemplate(modifier = Modifier.weight(1f),
                 templatePrompts = templatePrompts,
                 onTemplatePress = {
-                    Log.d(TAG, "template message: $it")
+                    onPostNewPrompt(it)
                 })
         } else {
             LazyColumn(
@@ -78,7 +78,7 @@ fun ChatBotScreen(
                 }
             }
         }
-        MessageTextField(onSend = { onPostNewPrompt("siapakah presiden pertama di Indonesia?") }, modifier = Modifier.padding(horizontal = 24.dp))
+        MessageTextField(onSend = { onPostNewPrompt(it) }, modifier = Modifier.padding(horizontal = 24.dp))
     }
 }
 

@@ -97,4 +97,7 @@
     <string name="permission_camera_rejeected">Untuk bisa menggunakan fitur ini anda harus mengizinkan akses permission kamera. Buka setting aplikasi untuk mengizinkan permission kamera.</string>
     <string name="no_notification">Tidak ada notifikasi</string>
     <string name="no_notification_desc">Tidak ada notifikasi yang perlu diperhatikan saat ini.</string>
+    <string name="ask_now">Tanya sekarang</string>
+    <string name="chat_bot_banner_desc">Belajar tentang air bersih bersama Blue Buddy.</string>
+    <string name="blue_buddy">BLUE BUDDY</string>
 </resources>

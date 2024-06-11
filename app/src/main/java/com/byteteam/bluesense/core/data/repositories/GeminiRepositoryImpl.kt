@@ -18,11 +18,14 @@ class GeminiRepositoryImpl @Inject constructor(
 ) : GeminiRepository {
     override suspend fun postChat(message: String): Flow<String> = flow {
         try {
+            val prompt = """
+                Bluesense merupakan aplikasi untuk memonitoring kualitas air minum dengan memanfaatkan IoT (dengan sensor PH dan TDS) dan Android mobile app. Sebagai seseorang yang ahli dalam bidang kesehatan dan kualitas air minum, jawablah pertanyaan berikut. Catatan, apabila pertanyaan yang diajukan tidak berkaitan dengan kualitas air minum ataupun topik kesehatan yang masih berkaitan dengan kualitas air minum, tolong berikan respon untuk mengajak pengguna untuk menanyakan hal yang tidak keluar topik permasalahan dari aplikasi Bluesense. Berikut pertanyaannya: $message 
+            """.trimIndent()
             val postData = GeminiChatPost(
                 contents = listOf(
                     Content(
                         parts = listOf(
-                            Part(text = message)
+                            Part(text = prompt)
                         )
                     )
                 )
