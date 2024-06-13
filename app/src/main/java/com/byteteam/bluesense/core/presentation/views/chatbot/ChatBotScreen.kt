@@ -35,6 +35,7 @@ fun ChatBotScreen(
     chats: List<ChatEntity>,
     onPostNewPrompt: (String) -> Unit,
     onRetryPrompt: (Int) -> Unit,
+    onCopyResult: (String) -> Unit,
     newChatUiState: StateFlow<Resource<ChatEntity>>,
     modifier: Modifier = Modifier,
 ) {
@@ -65,6 +66,7 @@ fun ChatBotScreen(
                     ChatBubble(
                         modifier = Modifier.padding(bottom = 12.dp),
                         onRetry = {onRetryPrompt(index)},
+                        onCopy = onCopyResult,
                         data = Chat(
                             id = "", created = "", text = it.text, isMe = it.isMe
                         )
@@ -130,6 +132,7 @@ private fun PreviewNull() {
     BlueSenseTheme {
         Surface {
             ChatBotScreen(
+                onCopyResult = {},
                 chats = emptyUiState.collectAsState().value,
                 onPostNewPrompt = {},
                 onRetryPrompt = {},
@@ -150,6 +153,7 @@ private fun PreviewWithData() {
                 chats = withDataUiState.collectAsState().value,
                 onRetryPrompt = {},
                 onPostNewPrompt = {},
+                onCopyResult = {},
                 newChatUiState = loadingNewChatUiState,
             )
         }

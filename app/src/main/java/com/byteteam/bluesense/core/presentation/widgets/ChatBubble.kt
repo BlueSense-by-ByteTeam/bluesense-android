@@ -40,7 +40,7 @@ data class Chat(
 @Composable
 fun ChatBubble(
     data: Chat,
-    onCopy: () -> Unit = {},
+    onCopy: (String) -> Unit = {},
     onRetry: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
@@ -94,9 +94,11 @@ fun ChatBubble(
                 ) {
                     MarkdownText(
                         markdown = data.text,
-                        modifier = Modifier.align(
-                            if (data.isMe) Alignment.End else Alignment.Start
-                        ).background(Color.Transparent),
+                        modifier = Modifier
+                            .align(
+                                if (data.isMe) Alignment.End else Alignment.Start
+                            )
+                            .background(Color.Transparent),
                         style = TextStyle(
                             color = if (data.isMe) Color.White else Color.Black
                         ),
@@ -123,9 +125,8 @@ fun ChatBubble(
                 }
             }
         }
-        //
         if (!data.isMe) Row {
-            IconButton(onClick = onCopy) {
+            IconButton(onClick = { onCopy(data.text) }) {
                 Icon(
                     imageVector = Icons.Filled.CopyAll,
                     contentDescription = null,

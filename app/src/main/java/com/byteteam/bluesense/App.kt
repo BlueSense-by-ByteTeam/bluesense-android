@@ -1,6 +1,7 @@
 package com.byteteam.bluesense
 
 import android.os.Build
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,6 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -89,6 +91,7 @@ fun App(
     chatBotViewModel: ChatBotViewModel,
 ) {
     var mqttTopic by remember { mutableStateOf("") }
+    val context = LocalContext.current
     Scaffold(topBar = {
         Topbars(
             route = currentRoute ?: "",
@@ -382,7 +385,7 @@ fun App(
                 composable(Screens.FilterRecommendation.route) {
                     val id = it.arguments?.getString("id")
                     if (id == "{id}") {
-                    SupportItemsScreen(
+                        SupportItemsScreen(
                             waterFiltersState = storeViewModel.waterFilters,
                             getWaterFilters = { storeViewModel.getWaterFilters() },
                         )
@@ -426,7 +429,18 @@ fun App(
                 }
                 composable(Screens.ChatBot.route) {
                     ChatBotScreen(
-                        onRetryPrompt = { chatIndex -> chatBotViewModel.retryPromptChatAt(chatIndex)},
+                        onCopyResult = { text ->
+                            chatBotViewModel.copyToClipBoard(text, onSuccess = {
+                                Toast.makeText(
+                                    context,
+                                    "Berhasil menyalin text chatbot🎉",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }, onFail = { error ->
+                                Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
+                            })
+                        },
+                        onRetryPrompt = { chatIndex -> chatBotViewModel.retryPromptChatAt(chatIndex) },
                         onPostNewPrompt = { chatBotViewModel.postNewPrompt(it) },
                         chats = chatBotViewModel.chats,
                         newChatUiState = chatBotViewModel.newChat
