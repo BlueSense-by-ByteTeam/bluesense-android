@@ -14,6 +14,5 @@ val bottomNavigationItems = listOf(
     BottomNavItem(Screens.Home.route, Icons.Default.Home, "Home"),
     BottomNavItem(Screens.History.route, Icons.Default.History, "History"),
     BottomNavItem(Screens.Store.route, Icons.Default.ShoppingBag, "Store"),
-    BottomNavItem(Screens.Store.route, Icons.Default.Chat, "Chat bot"),
     BottomNavItem(Screens.Profile.route, Icons.Default.Person, "Profile"),
 )

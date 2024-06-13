@@ -242,11 +242,7 @@ fun Topbars(actions: Map<String, () -> Unit>, route: String, navHostController: 
             colors = topAppBarColors,
             navigationIcon = {
                 IconButton(onClick = {
-                    navHostController.navigate(Screens.SignIn.route) {
-                        popUpTo(Screens.SuccessResetPassword.route) {
-                            inclusive = true
-                        }
-                    }
+                    navHostController.popBackStack()
                 }) {
                     Icon(
                         imageVector = Icons.Default.ArrowBack,
