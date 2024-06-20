@@ -103,8 +103,6 @@ class RegisterViewModel @Inject constructor(private val authRepository: AuthRepo
     fun register(callbackOnSuccess: () -> Unit) {
         buttonEnabled.value = false
         viewModelScope.launch {
-//            try {
-
             authRepository.signUpEmail(name.value.data, email.value.data, password.value.data)
                 .catch {
                     Log.d("TAG", "register: ${it.message}")
@@ -118,9 +116,6 @@ class RegisterViewModel @Inject constructor(private val authRepository: AuthRepo
                 buttonEnabled.value = true
                 if (it?.data != null) callbackOnSuccess()
             }
-//            }catch (e: Exception){
-//                errorEvetMessage.send(SingleEvent.MessageEvent(e.message ?: "Error when register new account! Please check your data."))
-//            }
         }
     }
 

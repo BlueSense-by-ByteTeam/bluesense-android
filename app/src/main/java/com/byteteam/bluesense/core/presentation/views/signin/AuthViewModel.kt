@@ -11,12 +11,15 @@ import com.byteteam.bluesense.core.domain.repositories.AuthRepository
 import com.byteteam.bluesense.core.presentation.tokens.EMAIL_REGEX
 import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import okhttp3.Dispatcher
 import javax.inject.Inject
 
 @HiltViewModel
@@ -114,7 +117,9 @@ class AuthViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 repository.signOut()
-                callbackOnSignOut()
+                withContext(Dispatchers.Main) {
+                    callbackOnSignOut()
+                }
             } catch (e: Exception) {
                 e.printStackTrace()
             }

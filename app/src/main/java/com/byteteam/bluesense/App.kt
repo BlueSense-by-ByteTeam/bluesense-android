@@ -66,6 +66,7 @@ import com.byteteam.bluesense.core.presentation.views.success_reset_pass.Success
 import com.byteteam.bluesense.core.presentation.widgets.BottomBar
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import okhttp3.Dispatcher
 import java.text.SimpleDateFormat
 import java.util.Calendar
 
@@ -271,7 +272,7 @@ fun App(
                 composable(Screens.Profile.route) {
                     fun callbackOnSuccessSignout() {
                         navController.navigate(Screens.SignIn.route) {
-                            popUpTo(Screens.Profile.route) {
+                            popUpTo(Screens.Home.route) {
                                 inclusive = true
                             }
                         }
