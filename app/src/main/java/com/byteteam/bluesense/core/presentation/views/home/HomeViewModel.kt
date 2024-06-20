@@ -34,6 +34,7 @@ class HomeViewModel @Inject constructor(
     val detailDeviceLatestInfo: StateFlow<Resource<DeviceLatestInfoEntity?>> = _detailDeviceInfo
 
     fun getDevices() {
+        Log.d("TAG", "getDevices:SFSFSDF ")
         viewModelScope.launch(Dispatchers.IO) {
             _devices.value = Resource.Loading()
             try {

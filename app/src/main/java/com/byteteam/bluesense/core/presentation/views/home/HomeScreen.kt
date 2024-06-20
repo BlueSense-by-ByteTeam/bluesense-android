@@ -75,9 +75,6 @@ fun HomeScreen(
         getDevices()
     }
 
-//    LaunchedEffect(Unit){
-//        fetchData()
-//    }
 
     Column(
         modifier
@@ -104,7 +101,11 @@ fun HomeScreen(
 
                     is Resource.Success -> {
                         fetchingApi = false
-                        if (it.data?.size != 0 && it.data?.get(0) != null) dataEntity = it.data[0]
+                        if (it.data?.size != 0 && it.data?.get(0) != null) {
+                            Log.d("TAG", "HomeScreen: REFETCH")
+                            cbOnDeviceConnected(it.data[0])
+                            dataEntity = it.data[0]
+                        }
                         HomeScreenContent(
                             statusDevice = statusDevice,
                             deviceEntity = if (it.data?.size != 0) it.data?.get(0) else null,

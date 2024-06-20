@@ -6,7 +6,6 @@ import android.app.Activity
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -45,10 +44,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
-import com.google.firebase.messaging.FirebaseMessaging
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.tasks.await
-import okhttp3.internal.wait
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -174,7 +169,10 @@ class MainActivity : ComponentActivity() {
                     historyViewModel = historyViewModel,
                     notificationViewModel = notificationViewModel,
                     chatBotViewModel = chatBotViewModel,
-                    callbackOnDisconnectDevice = { callbackOndisconnectDevice(it) }
+                    callbackOnDisconnectDevice = {
+                        callbackOndisconnectDevice(it)
+                                                 },
+                    cbSuccessAddDevice = {detailDeviceViewModel.updateDeviceStatus(true)}
                 )
             }
         }

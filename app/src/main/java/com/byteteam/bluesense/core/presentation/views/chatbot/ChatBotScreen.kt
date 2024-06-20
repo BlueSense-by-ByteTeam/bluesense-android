@@ -28,7 +28,9 @@ import com.byteteam.bluesense.core.presentation.views.chatbot.widgets.NewChatUIH
 import com.byteteam.bluesense.ui.theme.BlueSenseTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import java.text.SimpleDateFormat
 import java.time.LocalDateTime
+import java.util.Calendar
 
 @Composable
 fun ChatBotScreen(
@@ -98,7 +100,7 @@ val emptyUiState: StateFlow<List<ChatEntity>> = MutableStateFlow(listOf())
 val loadingNewChatUiState: StateFlow<Resource<ChatEntity>> = MutableStateFlow(
     Resource.Success(
         ChatEntity(
-            isMe = true, text = "", created = LocalDateTime.now()
+            isMe = true, text = "", created = SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().time)
         )
     )
 )
@@ -108,10 +110,10 @@ val loadingNewChatUiState: StateFlow<Resource<ChatEntity>> = MutableStateFlow(
 val withDataUiState: StateFlow<List<ChatEntity>> = MutableStateFlow(
     listOf(
         ChatEntity(
-            text = "ini chatku", created = LocalDateTime.now(), isMe = true
+            text = "ini chatku", created = SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().time), isMe = true
         ),
         ChatEntity(
-            text = "ini balasan chatku", created = LocalDateTime.now(), isMe = false
+            text = "ini balasan chatku", created = SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().time), isMe = false
         ),
         ChatEntity(
             text = """  
@@ -120,7 +122,7 @@ val withDataUiState: StateFlow<List<ChatEntity>> = MutableStateFlow(
 * [Link](https://example.com)  
 ![Image](https://example.com/img.png)  
 <a href="https://www.google.com/">Google</a>  
-""", created = LocalDateTime.now(), isMe = false
+""", created = SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().time), isMe = false
         ),
     )
 )

@@ -66,7 +66,8 @@ import com.byteteam.bluesense.core.presentation.views.success_reset_pass.Success
 import com.byteteam.bluesense.core.presentation.widgets.BottomBar
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import java.time.LocalDateTime
+import java.text.SimpleDateFormat
+import java.util.Calendar
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -89,6 +90,7 @@ fun App(
     historyViewModel: StatisticHistoryViewModel,
     notificationViewModel: NotificationViewModel,
     chatBotViewModel: ChatBotViewModel,
+    cbSuccessAddDevice: () -> Unit = {}
 ) {
     var mqttTopic by remember { mutableStateOf("") }
     val context = LocalContext.current
@@ -328,12 +330,13 @@ fun App(
                         eventMessage = addDeviceFormViewModel.eventFlow,
                         postDevice = {
                             addDeviceFormViewModel.postDevice(callbackOnSuccess = {
+                                homeViewModel.getDevices()
+                                cbSuccessAddDevice()
                                 navController.navigate(Screens.Home.route) {
                                     popUpTo(Screens.AddDeviceForm.route) {
                                         inclusive = true
                                     }
                                 }
-                                homeViewModel.getDevices()
                             })
                         },
                     )
@@ -456,7 +459,7 @@ fun App(
 val loadingNewChatUiState: StateFlow<Resource<ChatEntity>> = MutableStateFlow(
     Resource.Success(
         ChatEntity(
-            isMe = true, text = "", created = LocalDateTime.now()
+            isMe = true, text = "", created = SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().time)
         )
     )
 )
@@ -466,10 +469,10 @@ val loadingNewChatUiState: StateFlow<Resource<ChatEntity>> = MutableStateFlow(
 val withDataUiState: StateFlow<List<ChatEntity>> = MutableStateFlow(
     listOf(
         ChatEntity(
-            text = "ini chatku", created = LocalDateTime.now(), isMe = true
+            text = "ini chatku", created = SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().time), isMe = true
         ),
         ChatEntity(
-            text = "ini balasan chatku", created = LocalDateTime.now(), isMe = false
+            text = "ini balasan chatku", created = SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().time), isMe = false
         ),
         ChatEntity(
             text = """  
@@ -478,7 +481,7 @@ val withDataUiState: StateFlow<List<ChatEntity>> = MutableStateFlow(
 * [Link](https://example.com)  
 ![Image](https://example.com/img.png)  
 <a href="https://www.google.com/">Google</a>  
-""", created = LocalDateTime.now(), isMe = false
+""", created = SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().time), isMe = false
         ),
     )
 )

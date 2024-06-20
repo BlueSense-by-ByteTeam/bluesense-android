@@ -25,7 +25,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.text.SimpleDateFormat
 import java.time.LocalDateTime
+import java.util.Calendar
 import javax.inject.Inject
 
 
@@ -39,30 +41,31 @@ class ChatBotViewModel @Inject constructor(
         mutableStateListOf()
     val chats: SnapshotStateList<ChatEntity> = _chats
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private var _newChatUi: MutableStateFlow<Resource<ChatEntity>> = MutableStateFlow(
         Resource.Success(
-            ChatEntity("", created = LocalDateTime.now(), isMe = true)
+            ChatEntity("", created = SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().time), isMe = true)
         )
     )
 
-    @RequiresApi(Build.VERSION_CODES.O)
     val newChat: StateFlow<Resource<ChatEntity>> = _newChatUi
     fun postNewPrompt(prompt: String) {
         viewModelScope.launch(Dispatchers.IO) {
             Log.d("ChatBotViewModel", "postNewPrompt: $prompt")
             _newChatUi.value = Resource.Loading()
             try {
-                val sentChat = ChatEntity(text = prompt, created = LocalDateTime.now(), isMe = true)
+                val nowSent = SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime())
+
+                val sentChat = ChatEntity(text = prompt, created = nowSent, isMe = true)
                 _chats.add(sentChat)
 
                 geminiRepository.postChat(prompt).catch { e ->
                     _newChatUi.value = Resource.Error(e.message ?: "Error when posting new prompt!")
                 }.collect { data ->
+                    val now = SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime())
                     val responseChat =
                         ChatEntity(
                             text = data,
-                            created = LocalDateTime.now(),
+                            created = now,
                             isMe = false,
                             prompt = prompt
                         )

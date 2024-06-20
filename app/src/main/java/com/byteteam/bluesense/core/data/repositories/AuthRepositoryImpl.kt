@@ -11,6 +11,7 @@ import com.byteteam.bluesense.core.domain.repositories.AuthRepository
 import com.byteteam.bluesense.core.helper.getTopics
 import com.byteteam.bluesense.core.presentation.helper.GoogleSignInClientHelper
 import com.google.firebase.Firebase
+import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.auth
 import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.flow.Flow
@@ -67,10 +68,10 @@ class AuthRepositoryImpl @Inject constructor(
         email: String,
         password: String
     ): Flow<SignInResult?> {
-        val result = Firebase.auth.createUserWithEmailAndPassword(email, password).await()
+        var result: AuthResult? = null
         try {
+            result = Firebase.auth.createUserWithEmailAndPassword(email, password).await()
             val idToken = result.user!!.getIdToken(true).await()
-            //todo add register user endpoint
             val signUpPost = SignUpPost(
                 name = name,
                 email = email

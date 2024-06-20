@@ -7,7 +7,7 @@ import java.util.Date
 
 data class ChatEntity(
     val text: String,
-    val created: LocalDateTime,
+    val created: String,
     val isMe: Boolean,
     val prompt: String? = null
 )

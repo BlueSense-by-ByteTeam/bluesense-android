@@ -103,17 +103,24 @@ class RegisterViewModel @Inject constructor(private val authRepository: AuthRepo
     fun register(callbackOnSuccess: () -> Unit) {
         buttonEnabled.value = false
         viewModelScope.launch {
+//            try {
+
             authRepository.signUpEmail(name.value.data, email.value.data, password.value.data)
-                .catch { }.collect {
+                .catch {
+                    Log.d("TAG", "register: ${it.message}")
+                }.collect {
                 val gson = Gson()
                 val json = gson.toJson(it)
                 Log.d("TAG", "onCreate: signed user $json")
-                if (it?.data != null) callbackOnSuccess()
                 it?.errorMessage?.let {
                     errorEvetMessage.send(SingleEvent.MessageEvent(it))
                 }
                 buttonEnabled.value = true
+                if (it?.data != null) callbackOnSuccess()
             }
+//            }catch (e: Exception){
+//                errorEvetMessage.send(SingleEvent.MessageEvent(e.message ?: "Error when register new account! Please check your data."))
+//            }
         }
     }
 
