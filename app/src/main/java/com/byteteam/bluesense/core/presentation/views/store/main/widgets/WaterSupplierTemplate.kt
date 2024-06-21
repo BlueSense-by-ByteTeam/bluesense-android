@@ -17,12 +17,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.byteteam.bluesense.R
 import com.byteteam.bluesense.core.domain.model.WaterSupplierEntity
+import com.byteteam.bluesense.core.helper.Screens
 
 @Composable
 fun WaterSupplierTemplate(
     waterSupplierEntities: List<WaterSupplierEntity>,
+    navHostController: NavHostController,
     navigateWaterSupplierRecommendations: () -> Unit
 ) {
     Column {
@@ -58,7 +61,9 @@ fun WaterSupplierTemplate(
                 }
             }
             items(waterSupplierEntities) {
-                SupplierItem(it)
+                SupplierItem(it, onTap = {
+                    navHostController.navigate(Screens.WaterSupplierRecommendation.createRoute(it.id))
+                })
             }
         }
     }

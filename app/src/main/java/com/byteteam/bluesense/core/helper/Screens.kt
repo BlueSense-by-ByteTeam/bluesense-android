@@ -23,8 +23,10 @@ sealed class Screens(val route: String) {
     object DetailFilterDevice : Screens(route = "filter_recommendation/{id}") {
         fun createRoute(id: String) = "filter_recommendation/$id"
     }
+    object WaterSupplierRecommendation : Screens(route = "water_supplier_recommendation/{id}"){
+        fun createRoute(id: String) = "water_supplier_recommendation/$id"
 
-    object WaterSupplierRecommendation : Screens(route = "water_supplier_recommendation")
+    }
     object Notification : Screens(route = "notification")
     object OnBoarding : Screens(route = "onboarding")
     object GetStarted : Screens(route = "get_started")

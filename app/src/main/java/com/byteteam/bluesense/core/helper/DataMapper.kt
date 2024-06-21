@@ -99,7 +99,7 @@ fun GetWaterFilters.toWaterFilterEntities(): List<WaterFilterEntity> = this.data
 
 fun GetWaterSuppliers.toWaterSupplierEntities(): List<WaterSupplierEntity> = this.data?.map {
     WaterSupplierEntity(
-        id = it?.id!!,
+        id = it?.idWaterSupplierUser ?: "",
         name = it?.name!!,
         phone = it?.phone ?: "-",
         instagramUrl = it?.instagramUrl ?: "-",

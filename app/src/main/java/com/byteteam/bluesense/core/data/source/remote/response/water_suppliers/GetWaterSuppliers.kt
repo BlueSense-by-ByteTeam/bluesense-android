@@ -13,6 +13,9 @@ data class WaterSupplierItem(
 	@field:SerializedName("instagram_url")
 	val instagramUrl: String? = null,
 
+	@field:SerializedName("id_user_water_supplier")
+	val idWaterSupplierUser: String? = null,
+
 	@field:SerializedName("phone")
 	val phone: String? = null,
 

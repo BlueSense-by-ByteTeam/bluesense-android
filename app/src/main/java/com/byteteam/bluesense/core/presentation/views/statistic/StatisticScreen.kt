@@ -43,7 +43,6 @@ import com.byteteam.bluesense.core.presentation.views.statistic.widgets.StatsTex
 import com.byteteam.bluesense.ui.theme.BlueSenseTheme
 import com.patrykandpatrick.vico.core.entry.ChartEntry
 import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
-import com.patrykandpatrick.vico.core.entry.FloatEntry
 import com.patrykandpatrick.vico.core.entry.entryOf
 import kotlinx.coroutines.flow.StateFlow
 import java.text.DecimalFormat

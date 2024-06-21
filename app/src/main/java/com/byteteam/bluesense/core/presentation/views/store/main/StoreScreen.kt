@@ -147,6 +147,7 @@ fun StoreScreen(
                     fetchingWaterSupplier = false
                     WaterSupplierTemplate(
                         waterSupplierEntities = it.data ?: listOf(),
+                        navHostController = navHostController,
                         navigateWaterSupplierRecommendations = {
                             navHostController.navigate(Screens.WaterSupplierRecommendation.route)
                         }

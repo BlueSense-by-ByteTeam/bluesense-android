@@ -2,6 +2,7 @@ package com.byteteam.bluesense.core.data.repositories
 
 import com.byteteam.bluesense.core.data.common.Resource
 import com.byteteam.bluesense.core.data.datastore.DataStorePreference
+import com.byteteam.bluesense.core.data.source.remote.response.water_supplier_detail.WaterSupplierDetailResponse
 import com.byteteam.bluesense.core.data.source.remote.services.bluesense.WaterFilterServices
 import com.byteteam.bluesense.core.data.source.remote.services.bluesense.WaterSupplierServices
 import com.byteteam.bluesense.core.domain.model.WaterFilterEntity
@@ -48,6 +49,17 @@ class StoreRepositoryImpl @Inject constructor(
             emit(Resource.Success(response.toWaterFilterEntities().get(0)))
         } catch (e: Exception) {
             emit(Resource.Error(e.message ?: "Error saat mengambil data produk filter air!"))
+        }
+    }
+
+    override suspend fun getWaterSupplierDetail(id: String): Flow<Resource<WaterSupplierDetailResponse>> =  flow {
+        emit(Resource.Loading())
+        try {
+            val token = dataStorePreference.getAuthToken()
+            val response = waterSupplierServices.getWaterSupplier("Bearer $token", id)
+            emit(Resource.Success(response))
+        } catch (e: Exception) {
+            emit(Resource.Error(e.message ?: "Error saat mengambil detail supplier"))
         }
     }
 }

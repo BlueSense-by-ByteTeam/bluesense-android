@@ -1,5 +1,6 @@
 package com.byteteam.bluesense
 
+import DetailWaterSupplier
 import android.os.Build
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -66,7 +67,6 @@ import com.byteteam.bluesense.core.presentation.views.success_reset_pass.Success
 import com.byteteam.bluesense.core.presentation.widgets.BottomBar
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import okhttp3.Dispatcher
 import java.text.SimpleDateFormat
 import java.util.Calendar
 
@@ -383,8 +383,16 @@ fun App(
                     )
                 }
                 composable(Screens.WaterSupplierRecommendation.route) {
-                    WaterSupplierScreen(waterSuppliersState = storeViewModel.waterSuppliers,
-                        getWaterSupplier = { storeViewModel.getWaterSuppliers() })
+                    val id = it.arguments?.getString("id")
+                    if (id == "{id}") {
+                        WaterSupplierScreen(waterSuppliersState = storeViewModel.waterSuppliers,
+                            getWaterSupplier = { storeViewModel.getWaterSuppliers() })
+                    } else {
+                        DetailWaterSupplier(
+                            getWaterSupplierDetail = { storeViewModel.getDetailSupplier(id ?: "") },
+                            waterSupplierState = storeViewModel.waterSupplierDetail,
+                        )
+                    }
                 }
                 composable(Screens.FilterRecommendation.route) {
                     val id = it.arguments?.getString("id")
@@ -460,7 +468,9 @@ fun App(
 val loadingNewChatUiState: StateFlow<Resource<ChatEntity>> = MutableStateFlow(
     Resource.Success(
         ChatEntity(
-            isMe = true, text = "", created = SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().time)
+            isMe = true,
+            text = "",
+            created = SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().time)
         )
     )
 )
@@ -470,10 +480,14 @@ val loadingNewChatUiState: StateFlow<Resource<ChatEntity>> = MutableStateFlow(
 val withDataUiState: StateFlow<List<ChatEntity>> = MutableStateFlow(
     listOf(
         ChatEntity(
-            text = "ini chatku", created = SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().time), isMe = true
+            text = "ini chatku",
+            created = SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().time),
+            isMe = true
         ),
         ChatEntity(
-            text = "ini balasan chatku", created = SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().time), isMe = false
+            text = "ini balasan chatku",
+            created = SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().time),
+            isMe = false
         ),
         ChatEntity(
             text = """  

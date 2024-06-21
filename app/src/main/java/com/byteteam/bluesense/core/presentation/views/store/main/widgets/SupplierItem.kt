@@ -2,6 +2,7 @@ package com.byteteam.bluesense.core.presentation.views.store.main.widgets
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -25,7 +26,7 @@ import com.byteteam.bluesense.R
 import com.byteteam.bluesense.core.domain.model.WaterSupplierEntity
 
 @Composable
-fun SupplierItem(waterSupplierEntity: WaterSupplierEntity, modifier: Modifier = Modifier){
+fun SupplierItem(waterSupplierEntity: WaterSupplierEntity, onTap: () -> Unit, modifier: Modifier = Modifier){
     Card(
         border = BorderStroke(
             width = 1.dp,
@@ -35,7 +36,9 @@ fun SupplierItem(waterSupplierEntity: WaterSupplierEntity, modifier: Modifier = 
             containerColor = MaterialTheme.colorScheme.surface
         ),
         modifier = modifier
+
             .padding(end = 8.dp)
+            .clickable { onTap()  }
             .clip(RoundedCornerShape(12.dp))
             .width(150.dp)
             .height(194.dp)
